@@ -66,8 +66,8 @@ void __fastcall TForm1::Timer1Timer(TObject *Sender)
 
 void __fastcall TForm1::myNew()
 {
-    X1 = random(9)+1;
-    X2 = random(9)+1;
+    X1 = random(8)+2;
+    X2 = random(8)+2;
     E_Answer->Text = "";
     Text = String(X1) +"x"+ String(X2) + "=?";
     PB->Top = GB_Info->Top+GB_Info->Height;
