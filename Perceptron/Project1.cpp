@@ -5,6 +5,9 @@
 USERES("Project1.res");
 USEFORM("Unit1.cpp", Form1);
 USEUNIT("TPers.cpp");
+USEUNIT("TNeyron.cpp");
+USEUNIT("TLayer.cpp");
+USEUNIT("TGrid.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

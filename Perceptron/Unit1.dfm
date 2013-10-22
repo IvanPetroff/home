@@ -14,8 +14,8 @@ object Form1: TForm1
   PixelsPerInch = 96
   TextHeight = 13
   object Button1: TButton
-    Left = 200
-    Top = 56
+    Left = 8
+    Top = 264
     Width = 75
     Height = 25
     Caption = 'Button1'
@@ -23,8 +23,6 @@ object Form1: TForm1
     OnClick = Button1Click
   end
   object Timer1: TTimer
-    Enabled = False
-    Interval = 100
     OnTimer = Timer1Timer
     Left = 88
     Top = 40

@@ -5,13 +5,15 @@
 
 #include "Unit1.h"
 #include "TPers.h"
+#include "TGrid.h"
 #include <vector>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
-TPers myPers(100,3,5);
+TPers myPers(100,1,20);
+TGrid myGrid(2,100,10);
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
@@ -21,6 +23,12 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 
 void __fastcall TForm1::Timer1Timer(TObject *Sender)
 {
+        for (int T = 0; T < myPers.cnt_lay; T++) {
+            myPers.DrawLinks(Form1->Canvas, TRect(200+T*200,200,300+T*200,300),T);
+            myPers.DrawLayer(Form1->Canvas, TRect(300+T*200,200,400+T*200,300),T+1);
+        }
+return;
+
     TPoint p = Mouse->CursorPos;
     p.x++;
     Mouse->CursorPos = p;
@@ -42,8 +50,11 @@ void __fastcall TForm1::Timer1Timer(TObject *Sender)
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
     for (;;)
-    for (int I = 0; I < 10; I++) {
-        ImageList1->Draw(Form1->Canvas,0,I*20,I,true);
+//    for (int I = 0; I < 10; I++)
+    {
+        int I = random(10);
+        Form1->Canvas->TextOut(0,I*20,IntToStr(I)+"   ");
+//        ImageList1->Draw(Form1->Canvas,0,I*20,I,true);
         Application->ProcessMessages();
         int C = 0;
         for (int T = 0; T < 10; T++) {
@@ -51,12 +62,17 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
                 double Col = Form1->Canvas->Pixels[T][J+I*20];
                 double maxCol = RGB(255,255,255);
                 if (Col > maxCol) Col = maxCol;
-                myPers.in[C++] = Col / maxCol;
+                Col = Col / maxCol;
+                myGrid.in[C++] = Col;
             }
         }
-        myPers.Run();
-        Form1->Canvas->TextOut(20,I*20,FloatToStr(myPers.out));
-        myPers.Fine((I==5)?10:0);
+        myGrid.Transfer();
+        myGrid.DrawLayer(Form1->Canvas,0,200,I*20);
+        myGrid.DrawLayer(Form1->Canvas,1,400,I*20);
+        myGrid.DrawLayer(Form1->Canvas,2,600,I*20);
+        Form1->Canvas->Brush->Color = clWhite;
+        Form1->Canvas->TextOut(20,I*20,FloatToStr(myGrid.out[0]));
+        myGrid.Learn((I==1)?1:0);
     }
 }
 //---------------------------------------------------------------------------
