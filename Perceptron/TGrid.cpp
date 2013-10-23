@@ -25,6 +25,7 @@ __fastcall TGrid::~TGrid()
     }
 }
 
+
 double __fastcall TGrid::getIn(int index)
 {
     return l[0]->out[index];

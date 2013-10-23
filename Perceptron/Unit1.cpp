@@ -13,7 +13,7 @@
 TForm1 *Form1;
 
 TPers myPers(100,1,20);
-TGrid myGrid(2,100,10);
+TGrid myGrid(2,256,256);
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
@@ -53,12 +53,14 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 //    for (int I = 0; I < 10; I++)
     {
         int I = random(10);
-        Form1->Canvas->TextOut(0,I*20,IntToStr(I)+"   ");
-//        ImageList1->Draw(Form1->Canvas,0,I*20,I,true);
+//        Form1->Canvas->TextOut(0,I*20,IntToStr(I)+"   ");
+        Form1->Canvas->Brush->Color = clBlack;
+        Form1->Canvas->FillRect(TRect(0,I*20,16,I*20+16));
+        ImageList1->Draw(Form1->Canvas,0,I*20,I,true);
         Application->ProcessMessages();
         int C = 0;
-        for (int T = 0; T < 10; T++) {
-            for (int J = 0; J < 10; J++) {
+        for (int T = 0; T < 16; T++) {
+            for (int J = 0; J < 16; J++) {
                 double Col = Form1->Canvas->Pixels[T][J+I*20];
                 double maxCol = RGB(255,255,255);
                 if (Col > maxCol) Col = maxCol;
@@ -68,11 +70,11 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
         }
         myGrid.Transfer();
         myGrid.DrawLayer(Form1->Canvas,0,200,I*20);
-        myGrid.DrawLayer(Form1->Canvas,1,400,I*20);
-        myGrid.DrawLayer(Form1->Canvas,2,600,I*20);
+        myGrid.DrawLayer(Form1->Canvas,1,200+300,I*20);
+        myGrid.DrawLayer(Form1->Canvas,2,200+300+300,I*20);
         Form1->Canvas->Brush->Color = clWhite;
         Form1->Canvas->TextOut(20,I*20,FloatToStr(myGrid.out[0]));
-        myGrid.Learn((I==1)?1:0);
+        myGrid.Learn(I/10.0);
     }
 }
 //---------------------------------------------------------------------------

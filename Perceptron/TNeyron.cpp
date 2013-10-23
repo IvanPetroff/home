@@ -69,7 +69,8 @@ void __fastcall TNeyron::Learn()
         TNeyron* posl = bs[I];
         for (int T = 0; T<posl->s.size(); T++) {
             if (posl->s[T] != this) continue;
-            posl->w[T] = posl->w[T] + 1 * posl->Err * out;
+            double kLearn = (random(1000)+1)/1000.0;
+            posl->w[T] = posl->w[T] + kLearn * posl->Err * out;
         }
     }
 }
