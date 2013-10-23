@@ -3,6 +3,7 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <inifiles.hpp>
 #include "TGrid.h"
 
 //---------------------------------------------------------------------------
@@ -11,12 +12,27 @@ __fastcall TGrid::TGrid(int cnt_layers, int cnt_neyrons, int cnt_sinaps)
     TLayer* myLayer = new TLayer(cnt_neyrons, 0, 0);
     l.push_back(myLayer);
     for (int I = 0; I < cnt_layers; I++) {
-        myLayer = new TLayer(cnt_neyrons, 5, myLayer);
+        myLayer = new TLayer(cnt_neyrons, cnt_sinaps, myLayer);
         l.push_back(myLayer);
     }
     myLayer = new TLayer(1, cnt_neyrons, myLayer);
     l.push_back(myLayer);
 }
+
+__fastcall TGrid::TGrid(AnsiString FileName)
+{
+    std::auto_ptr<TIniFile> F(new TIniFile(FileName));
+    int LayersCount = F->ReadInteger( "GRID", "LAYERS", 0);
+
+    TLayer* myLayer = 0;
+    for (int I = 0; I < LayersCount; I++) {
+        myLayer = new TLayer(F.get(), "LAYER_"+String(I), myLayer);
+        l.push_back(myLayer);
+    }
+}
+
+
+
 
 __fastcall TGrid::~TGrid()
 {
@@ -71,6 +87,18 @@ void __fastcall TGrid::DrawLayer(TCanvas* Canvas, int layer_number, int X, int Y
         Canvas->Pen->Color = RGB(255,255,255) * l[layer_number]->out[I];
         Canvas->MoveTo(X+I, Y);
         Canvas->LineTo(X+I, Y+10);
+    }
+}
+
+
+
+void __fastcall TGrid::SaveToFile(AnsiString FileName)
+{
+    DeleteFile(FileName);
+    std::auto_ptr<TIniFile> F(new TIniFile(FileName));
+    F->WriteInteger( "GRID", "LAYERS", l.size());
+    for (int I = 0; I < l.size(); I++) {
+        l[I]->Save(F.get(), "LAYER_"+String(I));
     }
 }
 

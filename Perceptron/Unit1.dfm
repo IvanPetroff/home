@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 262
   Top = 171
   Width = 1232
-  Height = 580
+  Height = 339
   Caption = 'Form1'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -11,17 +11,94 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   FormStyle = fsStayOnTop
+  KeyPreview = True
   OldCreateOrder = False
+  OnKeyPress = FormKeyPress
   PixelsPerInch = 96
   TextHeight = 13
-  object Button1: TButton
-    Left = 8
-    Top = 264
-    Width = 75
-    Height = 25
-    Caption = 'Button1'
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 1224
+    Height = 312
+    ActivePage = TS_Test
+    Align = alClient
     TabOrder = 0
-    OnClick = Button1Click
+    object TS_Learn: TTabSheet
+      Caption = 'Обучение'
+      object PaintBox1: TPaintBox
+        Left = 0
+        Top = 0
+        Width = 1216
+        Height = 243
+        Align = alClient
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 243
+        Width = 1216
+        Height = 41
+        Align = alBottom
+        Caption = 'Panel2'
+        TabOrder = 0
+        object Button5: TButton
+          Left = 408
+          Top = 16
+          Width = 75
+          Height = 25
+          Caption = 'New'
+          TabOrder = 0
+          OnClick = Button5Click
+        end
+        object Button4: TButton
+          Left = 320
+          Top = 16
+          Width = 75
+          Height = 25
+          Caption = 'Load'
+          TabOrder = 1
+          OnClick = Button4Click
+        end
+        object Button2: TButton
+          Left = 224
+          Top = 16
+          Width = 75
+          Height = 25
+          Caption = 'Save'
+          TabOrder = 2
+          OnClick = Button2Click
+        end
+        object Button3: TButton
+          Left = 96
+          Top = 16
+          Width = 75
+          Height = 25
+          Caption = 'Stop'
+          TabOrder = 3
+          OnClick = Button3Click
+        end
+        object Button1: TButton
+          Left = 8
+          Top = 16
+          Width = 75
+          Height = 25
+          Caption = 'Start'
+          TabOrder = 4
+          OnClick = Button1Click
+        end
+      end
+    end
+    object TS_Test: TTabSheet
+      Caption = 'Тест'
+      ImageIndex = 1
+      object PB_Test: TPaintBox
+        Left = 0
+        Top = 0
+        Width = 1216
+        Height = 284
+        Align = alClient
+      end
+    end
   end
   object Timer1: TTimer
     OnTimer = Timer1Timer

@@ -16,7 +16,9 @@ void __fastcall TNeyron::InitWeights()
 void __fastcall TNeyron::InitSinaps(vector<TNeyron*> &Layer)
 {
     for (int I = 0; I < s.size(); I++) {
-        s[I] = (Layer.size()==s.size())?Layer[I]:Layer[random(Layer.size())];
+        int NeyronNumber = (Layer.size()==s.size())?I:random(Layer.size());
+        sn[I] = NeyronNumber;
+        s[I] = Layer[NeyronNumber];
         s[I]->bs.push_back(this);
     }
 }
@@ -25,10 +27,52 @@ void __fastcall TNeyron::InitSinaps(vector<TNeyron*> &Layer)
 __fastcall TNeyron::TNeyron(int cnt_inputs, vector<TNeyron*> &Layer)
 {
     w.resize(cnt_inputs);
-    InitWeights();
     s.resize(cnt_inputs);
+    sn.resize(cnt_inputs);
+    InitWeights();
     InitSinaps(Layer);
 }
+
+
+__fastcall TNeyron::TNeyron(TIniFile* F, AnsiString SectionName, vector<TNeyron*> &Layer)
+{
+    int cnt_inputs = F->ReadInteger( SectionName, "SYNAPSES", 0);
+    w.resize(cnt_inputs);
+    s.resize(cnt_inputs);
+    sn.resize(cnt_inputs);
+    LoadWeights(F, SectionName);
+    LoadSynapses(F, SectionName, Layer);
+}
+
+
+void __fastcall TNeyron::LoadSynapses(TIniFile* F, AnsiString SectionName, vector<TNeyron*> &Layer)
+{
+    for (int I = 0; I < s.size(); I++) {
+        int NeyronNumber = F->ReadInteger( SectionName, "SYNAPS_"+String(I), 0);
+        sn[I] = NeyronNumber;
+        s[I] = Layer[NeyronNumber];
+        s[I]->bs.push_back(this);
+    }
+}
+
+
+void __fastcall TNeyron::LoadWeights(TIniFile* F, AnsiString SectionName)
+{
+    for (int I = 0; I < w.size(); I++) {
+        w[I] = F->ReadFloat( SectionName, "WEIGHT_"+String(I), 0);
+    }
+}
+
+
+void __fastcall TNeyron::Save(TIniFile* F, AnsiString SectionName)
+{
+    F->WriteInteger( SectionName, "SYNAPSES", s.size());
+    for (int I = 0; I < s.size(); I++) {
+        F->WriteInteger( SectionName, "SYNAPS_"+String(I), sn[I]);
+        F->WriteFloat( SectionName, "WEIGHT_"+String(I), w[I]);
+    }
+}
+
 
 void __fastcall TNeyron::Transfer()
 {
@@ -74,6 +118,8 @@ void __fastcall TNeyron::Learn()
         }
     }
 }
+
+
 
 
 #pragma package(smart_init)

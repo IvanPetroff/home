@@ -16,11 +16,13 @@ private:
 
 public:
     __fastcall TLayer(int cnt_neyrons, int cnt_sinaps, TLayer* PredLayer);
+    __fastcall TLayer(TIniFile* F, AnsiString SectionName, TLayer* PredLayer);
     __fastcall ~TLayer();
     void __fastcall Transfer();
     __property double out[int] = {read=getOut,write=setOut};
     __property double err[int] = {read=getErr,write=setErr};
     __property int count = {read=getCount};
+    void __fastcall Save(TIniFile* F, AnsiString SectionName);
 
     void __fastcall Learn();
 
