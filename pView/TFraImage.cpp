@@ -26,6 +26,7 @@ __fastcall TFraImage::~TFraImage()
 
 void __fastcall TFraImage::LoadJpeg()
 {
+    if (FileName.IsEmpty()) return;
     l_jpg->Scale = 1;
     l_jpg->LoadFromFile(FileName);
     l_jpg->DIBNeeded();

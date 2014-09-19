@@ -14,7 +14,7 @@ object FormImage: TFormImage
   OldCreateOrder = False
   Position = poDesktopCenter
   WindowState = wsMaximized
-  OnKeyPress = FormKeyPress
+  OnKeyDown = FormKeyDown
   PixelsPerInch = 96
   TextHeight = 13
   inline FraImage1: TFraImage
@@ -39,6 +39,16 @@ object FormImage: TFormImage
     Height = 19
     Panels = <>
     SimplePanel = True
+  end
+  object FileListBox1: TFileListBox
+    Left = 120
+    Top = 224
+    Width = 145
+    Height = 97
+    ItemHeight = 13
+    Mask = '*.jpg'
+    TabOrder = 2
+    Visible = False
   end
   object Timer1: TTimer
     Enabled = False
