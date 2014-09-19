@@ -19,6 +19,7 @@ __published:	// IDE-managed Components
     TTimer *Timer1;
     TStatusBar *msg;
     void __fastcall Timer1Timer(TObject *Sender);
+    void __fastcall FormKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
 public:		// User declarations
     __fastcall TFormImage(TComponent* Owner);

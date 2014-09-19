@@ -33,3 +33,11 @@ void __fastcall TFormImage::Timer1Timer(TObject *Sender)
     this->FraImage1->ShowImage(1);
 }
 //---------------------------------------------------------------------------
+void __fastcall TFormImage::FormKeyPress(TObject *Sender, char &Key)
+{
+    if (Key==VK_ESCAPE) {
+        Application->Terminate();
+    }
+}
+//---------------------------------------------------------------------------
+
