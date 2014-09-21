@@ -1,5 +1,4 @@
 inherited FraImage: TFraImage
-  OnResize = FrameResize
   object img: TImage
     Left = 0
     Top = 19

@@ -5,7 +5,7 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="pView.exe"/>
     <OBJFILES value="pView.obj TFormBrowse.obj TFraPreview.obj TFraBase.obj TFraImage.obj 
-      TFormImage.obj"/>
+      TFormImage.obj TImgThread.obj"/>
     <RESFILES value="pView.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

@@ -14,15 +14,13 @@ TFormImage *FormImage;
 __fastcall TFormImage::TFormImage(TComponent* Owner)
     : TForm(Owner)
 {
-//    this->DoubleBuffered = true;
+    imgThread.reset( new TImgThread(true));
 }
 //---------------------------------------------------------------------------
 
 
-
-void __fastcall TFormImage::LoadImage(AnsiString inFileName)
+void __fastcall TFormImage::LoadListBox(AnsiString inFileName)
 {
-    this->FraImage1->LoadImage(inFileName);
     AnsiString FileName = ExtractFileName(inFileName).UpperCase();
     FileListBox1->Directory = ExtractFileDir(inFileName);
     for (int I = 0; I < FileListBox1->Items->Count; I++) {
@@ -31,30 +29,45 @@ void __fastcall TFormImage::LoadImage(AnsiString inFileName)
             break;
         }
     }
-//    Timer1->Enabled = true;
+}
+
+
+void __fastcall TFormImage::LoadImage(AnsiString inFileName)
+{
+    Timer1->Enabled = false;
+    if (inFileName != FileName) {
+        imgThread->Terminate();
+        delete imgThread.get();
+        imgThread.reset( new TImgThread(true));
+    }
+    FileName = inFileName;
+
+    this->FraImage1->pFileName->Caption = inFileName;
+    imgThread->LoadJpeg(FileName, 3);
+    imgThread->GetBitmap(this->FraImage1->img, 3);
+    Timer1->Enabled = true;
+    LoadListBox(inFileName);
 }
 
 
 void __fastcall TFormImage::Timer1Timer(TObject *Sender)
 {
     Timer1->Enabled = false;
-    this->FraImage1->ShowImage(1);
+    imgThread->GetBitmap(this->FraImage1->img,1);
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TFormImage::NextFile()
 {
     FileListBox1->ItemIndex++;
-    this->FraImage1->LoadImage( FileListBox1->FileName);
-    this->FraImage1->OnResize(0);
+    LoadImage( FileListBox1->FileName);
 }
 
 void __fastcall TFormImage::PrevFile()
 {
     if ( FileListBox1->ItemIndex==0) return;
     FileListBox1->ItemIndex--;
-    this->FraImage1->LoadImage( FileListBox1->FileName);
-    this->FraImage1->OnResize(0);
+    LoadImage( FileListBox1->FileName);
 }
 
 
@@ -62,6 +75,7 @@ void __fastcall TFormImage::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
     if (Key==VK_ESCAPE) {
+        imgThread->Terminate();
         Application->Terminate();
     }
     if (Key==VK_SPACE || Key==VK_RIGHT) {
@@ -70,6 +84,22 @@ void __fastcall TFormImage::FormKeyDown(TObject *Sender, WORD &Key,
     if (Key==VK_BACK || Key==VK_LEFT) {
         PrevFile();
     }
+}
+//---------------------------------------------------------------------------
+
+
+
+void __fastcall TFormImage::FormResize(TObject *Sender)
+{
+    imgThread->GetBitmap(this->FraImage1->img,3);
+    Timer1->Enabled = true;
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TFormImage::FormCloseQuery(TObject *Sender, bool &CanClose)
+{
+    imgThread->Terminate();
 }
 //---------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 object FormImage: TFormImage
-  Left = 336
-  Top = 205
+  Left = 364
+  Top = 107
   Width = 1244
   Height = 623
   Caption = 'Fast Image Viewer'
@@ -14,7 +14,9 @@ object FormImage: TFormImage
   OldCreateOrder = False
   Position = poDesktopCenter
   WindowState = wsMaximized
+  OnCloseQuery = FormCloseQuery
   OnKeyDown = FormKeyDown
+  OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 13
   inline FraImage1: TFraImage
@@ -52,7 +54,7 @@ object FormImage: TFormImage
   end
   object Timer1: TTimer
     Enabled = False
-    Interval = 100
+    Interval = 500
     OnTimer = Timer1Timer
     Left = 232
     Top = 72

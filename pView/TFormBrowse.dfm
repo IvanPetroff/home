@@ -1,6 +1,6 @@
 object FormBrowse: TFormBrowse
-  Left = 424
-  Top = 139
+  Left = 317
+  Top = 207
   AutoScroll = False
   Caption = 'Картинки'
   ClientHeight = 596

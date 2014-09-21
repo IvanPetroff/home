@@ -17,7 +17,6 @@ class TFraImage : public TFraBase
 __published:	// IDE-managed Components
     TImage *img;
     TPanel *pFileName;
-    void __fastcall FrameResize(TObject *Sender);
 private:	// User declarations
     TJPEGImage * l_jpg;
     AnsiString FileName;

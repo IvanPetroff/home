@@ -10,6 +10,7 @@ USEFORM("TFraPreview.cpp", FraPreview); /* TFrame: File Type */
 USEFORM("TFraBase.cpp", FraBase); /* TFrame: File Type */
 USEFORM("TFraImage.cpp", FraImage); /* TFrame: File Type */
 USEFORM("TFormImage.cpp", FormImage);
+USEUNIT("TImgThread.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR cmdline, int)
 {
@@ -24,6 +25,7 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR cmdline, int)
              if (sCmd.SubString(1,1)=="\"") sCmd = sCmd.SubString(2,sCmd.Length());
              if (sCmd.SubString(sCmd.Length(),1)=="\"") sCmd = sCmd.SubString(1,sCmd.Length()-1);
              Application->CreateForm(__classid(TFormImage), &FormImage);
+             Application->ProcessMessages();
              FormImage->LoadImage(sCmd);
          }
          Application->Run();
