@@ -30,12 +30,15 @@ __published:	// IDE-managed Components
 private:	// User declarations
     void __fastcall NextFile();
     void __fastcall PrevFile();
-    void __fastcall LoadListBox(AnsiString inFileName);
+    void __fastcall LoadFileListBox(AnsiString inFileName);
     std::auto_ptr<TImgThread> imgThread;
+    std::auto_ptr<TImgThread> imgThreadPrev;
+    std::auto_ptr<TImgThread> imgThreadNext;
+    void __fastcall ShowImage(TImgThread* imgThread);
     AnsiString FileName;
 public:		// User declarations
     __fastcall TFormImage(TComponent* Owner);
-    void __fastcall LoadImage(AnsiString FileName);
+    void __fastcall LoadImage(AnsiString FileName, TImgThread* imgThread);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TFormImage *FormImage;

@@ -20,19 +20,24 @@
 //      }
 //---------------------------------------------------------------------------
 
-__fastcall TImgThread::TImgThread(bool CreateSuspended)
-    : TThread(CreateSuspended)
+__fastcall TImgThread::TImgThread()
+    : TThread(true)
 {
     l_jpg.reset(new TJPEGImage);
+    Bitmap.reset(new Graphics::TBitmap);
     flgRun = false;
+    FileName = "";
+    cmd = CMD_NONE;
 }
 //---------------------------------------------------------------------------
+
+
 void __fastcall TImgThread::Execute()
 {
     //---- Place thread code here ----
     while ( !this->Terminated) {
         if (cmd==CMD_LOAD) {
-            this->Synchronize( _LoadJpeg);
+            this->Synchronize( _LoadJpegFile);
         }
         if (cmd==CMD_BITMAP) {
             this->Synchronize( _GetBitmap);
@@ -45,47 +50,65 @@ void __fastcall TImgThread::Execute()
 //---------------------------------------------------------------------------
 
 
-void __fastcall TImgThread::_LoadJpeg()
+void __fastcall TImgThread::_LoadJpegFile()
 {
     if (FileName.IsEmpty()) return;
     if (Quality >= 0) l_jpg->Scale = Quality;
     l_jpg->LoadFromFile(FileName);
     l_jpg->DIBNeeded();
 }
+//---------------------------------------------------------------------------
+
 
 void __fastcall TImgThread::_SetLoadCmd()
 {
     cmd = CMD_LOAD;
+    flgRun = true;
 }
+//---------------------------------------------------------------------------
+
 
 void __fastcall TImgThread::_SetBitmapCmd()
 {
     cmd = CMD_BITMAP;
+    flgRun = true;
 }
+//---------------------------------------------------------------------------
 
-void __fastcall TImgThread::LoadJpeg(AnsiString inFileName, int inQuality)
+
+void __fastcall TImgThread::_WaitForThreadSuspended()
 {
-    while (!this->Suspended  || flgRun) {}
+    while (!this->Suspended  || flgRun)
+    {
+        Application->ProcessMessages();
+    }
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TImgThread::LoadJpegFile(AnsiString inFileName, int inQuality)
+{
+    _WaitForThreadSuspended();
     FileName = inFileName;
     Quality = inQuality;
     this->Synchronize( _SetLoadCmd);
-    flgRun = true;
     this->Resume();
 }
+//---------------------------------------------------------------------------
 
-void __fastcall TImgThread::GetBitmap(TImage* inImage, int inQuality)
+
+void __fastcall TImgThread::GetBitmap(TImage* toImage, int inQuality)
 {
-    while (!this->Suspended || flgRun) {
-        Application->ProcessMessages();
-    }
-    img = inImage;
+    _WaitForThreadSuspended();
+    img = toImage;
     if (inQuality>=0) {
         Quality = inQuality;
     }
     this->Synchronize( _SetBitmapCmd);
-    flgRun = true;
     this->Resume();
 }
+//---------------------------------------------------------------------------
+
 
 void __fastcall TImgThread::_GetBitmap()
 {
@@ -93,15 +116,11 @@ void __fastcall TImgThread::_GetBitmap()
         return;
     }
 
-    std::auto_ptr<Graphics::TBitmap> Bitmap(new Graphics::TBitmap);
     if (Quality != l_jpg->Scale) l_jpg->Scale = Quality;
     Bitmap->Assign(l_jpg.get());
 
     int myWidth = img->Width;
     int myHeight = img->Height;
-    while (img->Width==0 || img->Height==0) {
-        Application->ProcessMessages();
-    }
     img->Picture->Bitmap->Width = img->Width;
     img->Picture->Bitmap->Height = img->Height;
 
