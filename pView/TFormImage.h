@@ -16,6 +16,8 @@
 #include <memory.h>
 #include "TmyThreadShow.h"
 //---------------------------------------------------------------------------
+#define CNT_PRELOAD_FILES 3
+
 class TFormImage : public TForm
 {
 __published:	// IDE-managed Components

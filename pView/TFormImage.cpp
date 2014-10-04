@@ -37,28 +37,30 @@ void __fastcall TFormImage::LoadFileListBox(AnsiString inFileName)
 
 void __fastcall TFormImage::LoadNextFile()
 {
-    if (FileListBox1->ItemIndex < (FileListBox1->Items->Count-1)) {
-        AnsiString FileName = FileListBox1->Directory;
-        if (FileListBox1->Directory.SubString(FileListBox1->Directory.Length(),1) != "\\") {
-            FileName = FileName + "\\";
+    for (int I = 0; I < CNT_PRELOAD_FILES; I++) {
+        if (FileListBox1->ItemIndex < (FileListBox1->Items->Count-1-I)) {
+            AnsiString FileName = FileListBox1->Directory;
+            if (FileListBox1->Directory.SubString(FileListBox1->Directory.Length(),1) != "\\") {
+                FileName = FileName + "\\";
+            }
+            FileName = FileName + FileListBox1->Items->Strings[FileListBox1->ItemIndex+1+I];
+            myThreadShow->LoadFile( FileName, (I==0)?tpLowest:tpIdle);
         }
-        FileName = FileName + FileListBox1->Items->Strings[FileListBox1->ItemIndex+1];
-//ShowMessage(String(__FUNC__) + " " + FileName);
-        myThreadShow->LoadFile( FileName);
     }
 }
 
 
 void __fastcall TFormImage::LoadPrevFile()
 {
-    if (FileListBox1->ItemIndex >0) {
-        AnsiString FileName = FileListBox1->Directory;
-        if (FileListBox1->Directory.SubString(FileListBox1->Directory.Length(),1) != "\\") {
-            FileName = FileName + "\\";
+    for (int I = 0; I < CNT_PRELOAD_FILES; I++) {
+        if (FileListBox1->ItemIndex >(0+I)) {
+            AnsiString FileName = FileListBox1->Directory;
+            if (FileListBox1->Directory.SubString(FileListBox1->Directory.Length(),1) != "\\") {
+                FileName = FileName + "\\";
+            }
+            FileName = FileName + FileListBox1->Items->Strings[FileListBox1->ItemIndex-1-I];
+            myThreadShow->LoadFile( FileName, (I==0)?tpLowest:tpIdle);
         }
-        FileName = FileName + FileListBox1->Items->Strings[FileListBox1->ItemIndex-1];
-//ShowMessage(String(__FUNC__) + " " + FileName);
-        myThreadShow->LoadFile( FileName);
     }
 }
 
