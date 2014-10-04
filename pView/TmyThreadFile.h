@@ -14,7 +14,7 @@ private:
     void __fastcall _LoadFile();
     void __fastcall _GetBitmap();
     std::auto_ptr<Graphics::TBitmap> Bitmap;
-    std::auto_ptr<TJPEGImage> jpg;
+    TJPEGImage* jpg;
     int SizeX;
     int SizeY;
 //    char* cFileName;

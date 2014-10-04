@@ -23,8 +23,6 @@
 __fastcall TmyThreadFile::TmyThreadFile(AnsiString inFileName, int inSizeX, int inSizeY)
     : TThread(true)
 {
-//    FileName = inFileName;
-    jpg.reset(new TJPEGImage);
     FileName = inFileName; // иначе AnsiString неадекватно себя ведёт даже в пределах одного класса
     SizeX = inSizeX;
     SizeY = inSizeY;
@@ -40,12 +38,10 @@ __fastcall TmyThreadFile::TmyThreadFile(AnsiString inFileName, int inSizeX, int 
 void __fastcall TmyThreadFile::Execute()
 {
     //---- Place thread code here ----
-//    FileName;
-//    _LoadFile();
+    std::auto_ptr<TJPEGImage> jpg(new TJPEGImage);
+    this->jpg = jpg.get();
     try {
         _LoadFile();
-//        _GetBitmap();
-//        this->Synchronize( _LoadFile);
         this->Synchronize( _GetBitmap);
         isComplete = true;
     }
@@ -82,7 +78,7 @@ void __fastcall TmyThreadFile::_GetBitmap()
 //    if (FileName.IsEmpty()) return;
 //    if (Quality != l_jpg->Scale) l_jpg->Scale = Quality;
     std::auto_ptr<Graphics::TBitmap> tmpBitmap(new Graphics::TBitmap);
-    tmpBitmap->Assign(jpg.get());
+    tmpBitmap->Assign(jpg);
 
     int myWidth = Bitmap->Width;
     int myHeight = Bitmap->Height;
