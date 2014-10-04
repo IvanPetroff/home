@@ -54,7 +54,6 @@ object FormImage: TFormImage
   object Timer1: TTimer
     Enabled = False
     Interval = 500
-    OnTimer = Timer1Timer
     Left = 232
     Top = 72
   end

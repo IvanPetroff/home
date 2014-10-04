@@ -18,11 +18,6 @@ __fastcall TFormImage::TFormImage(TComponent* Owner)
 
     myThreadShow.reset(new TmyThreadShow(0));
     myThreadShow->SetImage(FraImage1->img);
-//    myThreadShow->ShowFile(sCmd);
-return;
-    imgThread.reset( new TImgThread);
-    imgThreadPrev.reset( new TImgThread);
-    imgThreadNext.reset( new TImgThread);
 }
 //---------------------------------------------------------------------------
 
@@ -53,36 +48,12 @@ void __fastcall TFormImage::LoadImage(AnsiString inFileName)
     LoadFileListBox(inFileName);
     myThreadShow->ShowFile( FileListBox1->FileName);
     LoadNextFile();
-
-return;
-    Timer1->Enabled = false;
-//    if (inFileName != FileName) {
-//        imgThread->Terminate();
-//        delete imgThread.get();
-//        imgThread.reset( new TImgThread);
-//    }
-    FileName = inFileName;
-
-    imgThread->LoadJpegFile(FileName, 3);
-//    LoadListBox(inFileName);
 }
 //---------------------------------------------------------------------------
 
 
-void __fastcall TFormImage::ShowImage(TImgThread* imgThread)
+void __fastcall TFormImage::ShowImage(AnsiString FileName)
 {
-    imgThread->GetBitmap(this->FraImage1->img, 3);
-    this->FraImage1->pFileName->Caption = imgThread->FileName;
-//    Timer1->Enabled = true;
-}
-//---------------------------------------------------------------------------
-
-
-void __fastcall TFormImage::Timer1Timer(TObject *Sender)
-{
-return;
-    Timer1->Enabled = false;
-    imgThread->GetBitmap(this->FraImage1->img,1);
 }
 //---------------------------------------------------------------------------
 
@@ -90,13 +61,7 @@ return;
 void __fastcall TFormImage::NextFile()
 {
     FileListBox1->ItemIndex++;
-
-    TImgThread* tmpImg = imgThread.release();
-    imgThread.reset(imgThreadNext.release());
-    imgThreadNext.reset(tmpImg);
-
-//    LoadImage( FileListBox1->FileName, imgThreadNext.get());
-//    ShowImage( imgThread);
+    myThreadShow->ShowFile( FileListBox1->FileName);
 }
 //---------------------------------------------------------------------------
 
@@ -105,8 +70,7 @@ void __fastcall TFormImage::PrevFile()
 {
     if ( FileListBox1->ItemIndex==0) return;
     FileListBox1->ItemIndex--;
-//    LoadImage( FileListBox1->FileName);
-//    ShowImage( imgThread);
+    myThreadShow->ShowFile( FileListBox1->FileName);
 }
 //---------------------------------------------------------------------------
 
@@ -115,7 +79,6 @@ void __fastcall TFormImage::FormKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
     if (Key==VK_ESCAPE) {
-        imgThread->Terminate();
         Application->Terminate();
     }
     if (Key==VK_SPACE || Key==VK_RIGHT) {
@@ -131,8 +94,6 @@ void __fastcall TFormImage::FormKeyDown(TObject *Sender, WORD &Key,
 void __fastcall TFormImage::FormResize(TObject *Sender)
 {
     myThreadShow->SetImage(FraImage1->img);
-//    imgThread->GetBitmap(this->FraImage1->img,3);
-//    Timer1->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
@@ -140,7 +101,6 @@ void __fastcall TFormImage::FormResize(TObject *Sender)
 void __fastcall TFormImage::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
     myThreadShow->Terminate();
-//    imgThread->Terminate();
 }
 //---------------------------------------------------------------------------
 

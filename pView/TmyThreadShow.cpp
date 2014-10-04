@@ -159,7 +159,7 @@ void __fastcall TmyThreadShow::WaitToStop()
     while (!this->Suspended) {
         SendStopSignal();
         Application->ProcessMessages();
-        Sleep(10);
+        Sleep(100);
     }
 }
 //---------------------------------------------------------------------------
@@ -192,11 +192,6 @@ void __fastcall TmyThreadShow::LoadFile(AnsiString FileName, TThreadPriority Pri
     if (img==0) return;
     if (FileName.IsEmpty()) return;
 
-//Files[1] = Files[0];
-//Files[0] = new TmyThreadFile(FileName, img->Width, img->Height);
-//Files[0]->FileName = FileName;
-//Files[0]->Resume();
-//return;
 
     if (MoveUpFileCacheSlot(FileName)) {
         return;

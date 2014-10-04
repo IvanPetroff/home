@@ -9,7 +9,7 @@
 #include <Forms.hpp>
 #include "TFraBase.h"
 #include "TFraImage.h"
-#include "TImgThread.h"
+
 #include <ExtCtrls.hpp>
 #include <ComCtrls.hpp>
 #include <FileCtrl.hpp>
@@ -23,7 +23,6 @@ __published:	// IDE-managed Components
     TTimer *Timer1;
     TStatusBar *msg;
     TFileListBox *FileListBox1;
-    void __fastcall Timer1Timer(TObject *Sender);
     void __fastcall FormKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
     void __fastcall FormResize(TObject *Sender);
@@ -32,10 +31,7 @@ private:	// User declarations
     void __fastcall NextFile();
     void __fastcall PrevFile();
     void __fastcall LoadFileListBox(AnsiString inFileName);
-    std::auto_ptr<TImgThread> imgThread;
-    std::auto_ptr<TImgThread> imgThreadPrev;
-    std::auto_ptr<TImgThread> imgThreadNext;
-    void __fastcall ShowImage(TImgThread* imgThread);
+    void __fastcall ShowImage(AnsiString FileName);
     AnsiString FileName;
 
     std::auto_ptr <TmyThreadShow> myThreadShow;
