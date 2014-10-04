@@ -11,6 +11,7 @@
 #include <ExtCtrls.hpp>
 #include <vector.h>
 #include "TmyThreadFile.h"
+#include "TmyThreadShow.h"
 
 
 #define MAX_CACHED_SIZE 2
@@ -64,6 +65,9 @@ public:		// User declarations
 
     bool isCurrentImageLoaded;
     bool isNextImageLoaded;
+
+    TmyThreadShow* myThreadShow;
+
     __fastcall TForm1(TComponent* Owner);
 };
 //---------------------------------------------------------------------------

@@ -16,6 +16,12 @@ TJPEGImage* jpg;
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
+    myThreadShow = new TmyThreadShow(Image1);
+    myThreadShow->LoadFile("S:\\IMG_5733.JPG");
+    myThreadShow->LoadFile("S:\\IMG_5435.JPG");
+    myThreadShow->ShowFile("S:\\IMG_5733.JPG");
+return;
+
     Init();
     LoadFile("S:\\IMG_5733.JPG");
     LoadFile("S:\\IMG_5435.JPG");
@@ -213,6 +219,14 @@ void __fastcall TForm1::ShowFile(AnsiString FileName)
 
 void __fastcall TForm1::Image1Click(TObject *Sender)
 {
+    if (random(2)==0) {
+        myThreadShow->ShowFile("S:\\IMG_6344.JPG");
+    }
+    else {
+        myThreadShow->ShowFile("S:\\IMG_5435.JPG");
+    }
+return;
+
     ShowFile("S:\\IMG_5733.JPG");
 return;
     this->ShowNextImage(Image1);
@@ -221,6 +235,8 @@ return;
 
 void __fastcall TForm1::Image1DblClick(TObject *Sender)
 {
+    myThreadShow->ShowFile("S:\\IMG_5733.JPG");
+return;
     ShowFile("S:\\IMG_5435.JPG");
 
 }

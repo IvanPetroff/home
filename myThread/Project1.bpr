@@ -4,14 +4,15 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="Project1.exe"/>
-    <OBJFILES value="Project1.obj Unit1.obj TmyThread.obj TmyUnpackThread.obj TmyThreadFile.obj"/>
+    <OBJFILES value="Project1.obj Unit1.obj TmyThread.obj TmyUnpackThread.obj TmyThreadFile.obj 
+      TmyThreadShow.obj"/>
     <RESFILES value="Project1.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Unit1.dfm"/>
     <LIBFILES value=""/>
-    <LIBRARIES value=""/>
+    <LIBRARIES value="Vclx50.lib Vcl50.lib"/>
     <SPARELIBS value="Vcl50.lib Vclx50.lib"/>
     <PACKAGES value="Vcl50.bpi Vclx50.bpi bcbsmp50.bpi Vcldb50.bpi vclado50.bpi ibsmp50.bpi 
       VCLBDE50.bpi vcldbx50.bpi Qrpt50.bpi TeeUI50.bpi TeeDB50.bpi Tee50.bpi 
@@ -28,14 +29,14 @@
     <RELEASELIBPATH value="$(BCB)\lib\release"/>
     <LINKER value="tlink32"/>
     <USERDEFINES value="_DEBUG"/>
-    <SYSDEFINES value="_RTLDLL;NO_STRICT;USEPACKAGES"/>
+    <SYSDEFINES value="_RTLDLL;NO_STRICT"/>
     <MAINSOURCE value="Project1.cpp"/>
-    <INCLUDEPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects&quot;;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects&quot; -I$(BCB)\include 
+    <IDLCFLAGS value="-I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -I$(BCB)\include 
       -I$(BCB)\include\vcl -src_suffix cpp -D_DEBUG -boa"/>
     <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c 
       -tW -tWM"/>
@@ -45,7 +46,7 @@
     <LFLAGS value="-D&quot;&quot; -aa -Tpe -x -Gn -v"/>
   </OPTIONS>
   <LINKER>
-    <ALLOBJ value="c0w32.obj $(PACKAGES) Memmgr.Lib sysinit.obj $(OBJFILES)"/>
+    <ALLOBJ value="c0w32.obj Memmgr.Lib sysinit.obj $(OBJFILES)"/>
     <ALLRES value="$(RESFILES)"/>
     <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mti.lib"/>
   </LINKER>

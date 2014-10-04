@@ -7,6 +7,7 @@ USEFORM("Unit1.cpp", Form1);
 USEUNIT("TmyThread.cpp");
 USEUNIT("TmyUnpackThread.cpp");
 USEUNIT("TmyThreadFile.cpp");
+USEUNIT("TmyThreadShow.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
