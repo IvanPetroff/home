@@ -165,6 +165,7 @@ void __fastcall TmyThreadShow::WaitToStop()
 void __fastcall TmyThreadShow::ShowFile(AnsiString FileName)
 {
     if (img==0) return;
+    if (FileName.IsEmpty()) return;
     if (!MoveUpFileCacheSlot(FileName)) {
         LoadFile(FileName);
         if (!MoveUpFileCacheSlot(FileName)) {
@@ -185,6 +186,7 @@ void __fastcall TmyThreadShow::ShowFile(AnsiString FileName)
 void __fastcall TmyThreadShow::LoadFile(AnsiString FileName)
 {
     if (img==0) return;
+    if (FileName.IsEmpty()) return;
     if (MoveUpFileCacheSlot(FileName)) {
         return;
     }

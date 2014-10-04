@@ -14,6 +14,8 @@ TFormImage *FormImage;
 __fastcall TFormImage::TFormImage(TComponent* Owner)
     : TForm(Owner)
 {
+    FraImage1->OnResize = TFormImage::FormResize;
+
     myThreadShow.reset(new TmyThreadShow(0));
     myThreadShow->SetImage(FraImage1->img);
 //    myThreadShow->ShowFile(sCmd);
@@ -132,4 +134,5 @@ void __fastcall TFormImage::FormCloseQuery(TObject *Sender, bool &CanClose)
 //    imgThread->Terminate();
 }
 //---------------------------------------------------------------------------
+
 

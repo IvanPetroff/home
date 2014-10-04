@@ -16,6 +16,7 @@ private:
     TJPEGImage* jpg;
     int SizeX;
     int SizeY;
+    char* cFileName;
 protected:
     void __fastcall Execute();
 public:

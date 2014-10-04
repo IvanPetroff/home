@@ -24,6 +24,7 @@ __fastcall TmyThreadFile::TmyThreadFile(AnsiString inFileName, int inSizeX, int 
     : TThread(false)
 {
     FileName = inFileName;
+    cFileName = FileName.c_str(); // иначе AnsiString неадекватно себя ведёт даже в пределах одного класса
     SizeX = inSizeX;
     SizeY = inSizeY;
     isComplete = false;
@@ -48,7 +49,7 @@ void __fastcall TmyThreadFile::_LoadFile()
 {
     jpg->Performance = jpBestSpeed;
     jpg->Scale = 2;
-    jpg->LoadFromFile(FileName);
+    jpg->LoadFromFile(cFileName);
     jpg->DIBNeeded();
 
 }
