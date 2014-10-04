@@ -119,6 +119,8 @@ void __fastcall TFormImage::FormKeyDown(TObject *Sender, WORD &Key,
 void __fastcall TFormImage::FormResize(TObject *Sender)
 {
     myThreadShow->SetImage(FraImage1->img);
+    LoadNextFile();
+    LoadPrevFile();
 }
 //---------------------------------------------------------------------------
 
