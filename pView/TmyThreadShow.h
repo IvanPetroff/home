@@ -8,20 +8,7 @@
 #include "TmyThreadFile.h"
 //---------------------------------------------------------------------------
 
-#define MAX_CACHED_SIZE 2
-class TmyFile {
-private:
-public:
-    TmyFile() {
-        FileName = "";
-        cntUse = 0;
-    }
-
-    AnsiString FileName;
-    int cntUse;
-};
-
-
+#define MAX_CACHED_SIZE 4
 
 class TmyThreadShow : public TThread
 {

@@ -38,7 +38,27 @@ void __fastcall TFormImage::LoadFileListBox(AnsiString inFileName)
 void __fastcall TFormImage::LoadNextFile()
 {
     if (FileListBox1->ItemIndex < (FileListBox1->Items->Count-1)) {
-        myThreadShow->LoadFile( FileListBox1->Directory + FileListBox1->Items->Strings[FileListBox1->ItemIndex+1]);
+        AnsiString FileName = FileListBox1->Directory;
+        if (FileListBox1->Directory.SubString(FileListBox1->Directory.Length(),1) != "\\") {
+            FileName = FileName + "\\";
+        }
+        FileName = FileName + FileListBox1->Items->Strings[FileListBox1->ItemIndex+1];
+//ShowMessage(String(__FUNC__) + " " + FileName);
+        myThreadShow->LoadFile( FileName);
+    }
+}
+
+
+void __fastcall TFormImage::LoadPrevFile()
+{
+    if (FileListBox1->ItemIndex >0) {
+        AnsiString FileName = FileListBox1->Directory;
+        if (FileListBox1->Directory.SubString(FileListBox1->Directory.Length(),1) != "\\") {
+            FileName = FileName + "\\";
+        }
+        FileName = FileName + FileListBox1->Items->Strings[FileListBox1->ItemIndex-1];
+//ShowMessage(String(__FUNC__) + " " + FileName);
+        myThreadShow->LoadFile( FileName);
     }
 }
 
@@ -46,6 +66,7 @@ void __fastcall TFormImage::LoadNextFile()
 void __fastcall TFormImage::LoadImage(AnsiString inFileName)
 {
     LoadFileListBox(inFileName);
+//ShowMessage(String(__FUNC__) + " " + FileListBox1->FileName);
     myThreadShow->ShowFile( FileListBox1->FileName);
     LoadNextFile();
 }
@@ -61,7 +82,9 @@ void __fastcall TFormImage::ShowImage(AnsiString FileName)
 void __fastcall TFormImage::NextFile()
 {
     FileListBox1->ItemIndex++;
+//ShowMessage(String(__FUNC__) + " " + FileListBox1->FileName);
     myThreadShow->ShowFile( FileListBox1->FileName);
+    LoadNextFile();
 }
 //---------------------------------------------------------------------------
 
@@ -70,7 +93,9 @@ void __fastcall TFormImage::PrevFile()
 {
     if ( FileListBox1->ItemIndex==0) return;
     FileListBox1->ItemIndex--;
+//ShowMessage(String(__FUNC__) + " " + FileListBox1->FileName);
     myThreadShow->ShowFile( FileListBox1->FileName);
+    LoadPrevFile();
 }
 //---------------------------------------------------------------------------
 

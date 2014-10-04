@@ -57,7 +57,7 @@ void __fastcall TmyThreadFile::_LoadFile()
 {
 //    if (FileName.IsEmpty()) return;
     jpg->Performance = jpBestSpeed;
-    jpg->Scale = 2;
+    jpg->Scale = 1;
 //    AnsiString S = "S:\\IMG_5733.JPG";
     jpg->LoadFromFile(FileName);
     jpg->DIBNeeded();

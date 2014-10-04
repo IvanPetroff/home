@@ -36,6 +36,7 @@ private:	// User declarations
 
     std::auto_ptr <TmyThreadShow> myThreadShow;
     void __fastcall LoadNextFile();
+    void __fastcall LoadPrevFile();
 
 public:		// User declarations
     __fastcall TFormImage(TComponent* Owner);
