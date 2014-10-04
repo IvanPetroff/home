@@ -16,7 +16,6 @@ object FormImage: TFormImage
   WindowState = wsMaximized
   OnCloseQuery = FormCloseQuery
   OnKeyDown = FormKeyDown
-  OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 13
   inline FraImage1: TFraImage

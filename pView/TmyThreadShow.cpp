@@ -48,6 +48,7 @@ void __fastcall TmyThreadShow::ClearCache()
 {
     for (int I = 0; I < MAX_CACHED_SIZE; I++) {
         if ( Files[I] == 0) continue;
+        Files[I]->Terminate();
         delete Files[I];
         Files[I] = 0;
     }
