@@ -40,10 +40,19 @@ void __fastcall TFormImage::LoadFileListBox(AnsiString inFileName)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TFormImage::LoadNextFile()
+{
+    if (FileListBox1->ItemIndex < (FileListBox1->Items->Count-1)) {
+        myThreadShow->LoadFile( FileListBox1->Directory + FileListBox1->Items->Strings[FileListBox1->ItemIndex+1]);
+    }
+}
+
 
 void __fastcall TFormImage::LoadImage(AnsiString inFileName)
 {
-    myThreadShow->ShowFile(inFileName);
+    LoadFileListBox(inFileName);
+    myThreadShow->ShowFile( FileListBox1->FileName);
+    LoadNextFile();
 
 return;
     Timer1->Enabled = false;

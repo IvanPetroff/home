@@ -39,6 +39,7 @@ private:	// User declarations
     AnsiString FileName;
 
     std::auto_ptr <TmyThreadShow> myThreadShow;
+    void __fastcall LoadNextFile();
 
 public:		// User declarations
     __fastcall TFormImage(TComponent* Owner);

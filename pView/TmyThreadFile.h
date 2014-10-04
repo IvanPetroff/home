@@ -6,6 +6,7 @@
 #include <Classes.hpp>
 #include <jpeg.hpp>
 #include <memory>
+#include <string>
 //---------------------------------------------------------------------------
 class TmyThreadFile : public TThread
 {
@@ -13,10 +14,10 @@ private:
     void __fastcall _LoadFile();
     void __fastcall _GetBitmap();
     std::auto_ptr<Graphics::TBitmap> Bitmap;
-    TJPEGImage* jpg;
+    std::auto_ptr<TJPEGImage> jpg;
     int SizeX;
     int SizeY;
-    char* cFileName;
+//    char* cFileName;
 protected:
     void __fastcall Execute();
 public:
