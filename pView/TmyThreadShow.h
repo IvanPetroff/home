@@ -8,7 +8,7 @@
 #include "TmyThreadFile.h"
 //---------------------------------------------------------------------------
 
-#define MAX_CACHED_SIZE 4
+#define MAX_CACHED_SIZE 10
 
 class TmyThreadShow : public TThread
 {
