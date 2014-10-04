@@ -4,6 +4,8 @@
 #pragma hdrstop
 #include "TFormBrowse.h"
 #include "TFormImage.h"
+#include "TmyThreadShow.h"
+
 USERES("pView.res");
 USEFORM("TFormBrowse.cpp", FormBrowse);
 USEFORM("TFraPreview.cpp", FraPreview); /* TFrame: File Type */
@@ -11,7 +13,11 @@ USEFORM("TFraBase.cpp", FraBase); /* TFrame: File Type */
 USEFORM("TFraImage.cpp", FraImage); /* TFrame: File Type */
 USEFORM("TFormImage.cpp", FormImage);
 USEUNIT("TImgThread.cpp");
+USEUNIT("TmyThreadFile.cpp");
+USEUNIT("TmyThreadShow.cpp");
 //---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR cmdline, int)
 {
     AnsiString sCmd = String(cmdline).Trim();
@@ -24,6 +30,8 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR cmdline, int)
          else {
              if (sCmd.SubString(1,1)=="\"") sCmd = sCmd.SubString(2,sCmd.Length());
              if (sCmd.SubString(sCmd.Length(),1)=="\"") sCmd = sCmd.SubString(1,sCmd.Length()-1);
+//             FormImage = new TFormImage(Application);
+//             FormImage->Show();
              Application->CreateForm(__classid(TFormImage), &FormImage);
              Application->ProcessMessages();
              FormImage->LoadImage(sCmd);

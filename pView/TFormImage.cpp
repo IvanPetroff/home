@@ -14,6 +14,10 @@ TFormImage *FormImage;
 __fastcall TFormImage::TFormImage(TComponent* Owner)
     : TForm(Owner)
 {
+    myThreadShow.reset(new TmyThreadShow(0));
+    myThreadShow->SetImage(FraImage1->img);
+//    myThreadShow->ShowFile(sCmd);
+return;
     imgThread.reset( new TImgThread);
     imgThreadPrev.reset( new TImgThread);
     imgThreadNext.reset( new TImgThread);
@@ -35,8 +39,11 @@ void __fastcall TFormImage::LoadFileListBox(AnsiString inFileName)
 //---------------------------------------------------------------------------
 
 
-void __fastcall TFormImage::LoadImage(AnsiString inFileName, TImgThread* imgThread)
+void __fastcall TFormImage::LoadImage(AnsiString inFileName)
 {
+    myThreadShow->ShowFile(inFileName);
+
+return;
     Timer1->Enabled = false;
 //    if (inFileName != FileName) {
 //        imgThread->Terminate();
@@ -46,7 +53,7 @@ void __fastcall TFormImage::LoadImage(AnsiString inFileName, TImgThread* imgThre
     FileName = inFileName;
 
     imgThread->LoadJpegFile(FileName, 3);
-    LoadListBox(inFileName);
+//    LoadListBox(inFileName);
 }
 //---------------------------------------------------------------------------
 
@@ -62,6 +69,7 @@ void __fastcall TFormImage::ShowImage(TImgThread* imgThread)
 
 void __fastcall TFormImage::Timer1Timer(TObject *Sender)
 {
+return;
     Timer1->Enabled = false;
     imgThread->GetBitmap(this->FraImage1->img,1);
 }
@@ -76,8 +84,8 @@ void __fastcall TFormImage::NextFile()
     imgThread.reset(imgThreadNext.release());
     imgThreadNext.reset(tmpImg);
 
-    LoadImage( FileListBox1->FileName, imgThreadNext.get());
-    ShowImage( imgThread);
+//    LoadImage( FileListBox1->FileName, imgThreadNext.get());
+//    ShowImage( imgThread);
 }
 //---------------------------------------------------------------------------
 
@@ -86,8 +94,8 @@ void __fastcall TFormImage::PrevFile()
 {
     if ( FileListBox1->ItemIndex==0) return;
     FileListBox1->ItemIndex--;
-    LoadImage( FileListBox1->FileName);
-    ShowImage( imgThread);
+//    LoadImage( FileListBox1->FileName);
+//    ShowImage( imgThread);
 }
 //---------------------------------------------------------------------------
 
@@ -111,15 +119,17 @@ void __fastcall TFormImage::FormKeyDown(TObject *Sender, WORD &Key,
 
 void __fastcall TFormImage::FormResize(TObject *Sender)
 {
-    imgThread->GetBitmap(this->FraImage1->img,3);
-    Timer1->Enabled = true;
+    myThreadShow->SetImage(FraImage1->img);
+//    imgThread->GetBitmap(this->FraImage1->img,3);
+//    Timer1->Enabled = true;
 }
 //---------------------------------------------------------------------------
 
 
 void __fastcall TFormImage::FormCloseQuery(TObject *Sender, bool &CanClose)
 {
-    imgThread->Terminate();
+    myThreadShow->Terminate();
+//    imgThread->Terminate();
 }
 //---------------------------------------------------------------------------
 

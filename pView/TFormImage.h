@@ -14,6 +14,7 @@
 #include <ComCtrls.hpp>
 #include <FileCtrl.hpp>
 #include <memory.h>
+#include "TmyThreadShow.h"
 //---------------------------------------------------------------------------
 class TFormImage : public TForm
 {
@@ -36,9 +37,12 @@ private:	// User declarations
     std::auto_ptr<TImgThread> imgThreadNext;
     void __fastcall ShowImage(TImgThread* imgThread);
     AnsiString FileName;
+
+    std::auto_ptr <TmyThreadShow> myThreadShow;
+
 public:		// User declarations
     __fastcall TFormImage(TComponent* Owner);
-    void __fastcall LoadImage(AnsiString FileName, TImgThread* imgThread);
+    void __fastcall LoadImage(AnsiString FileName);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TFormImage *FormImage;
