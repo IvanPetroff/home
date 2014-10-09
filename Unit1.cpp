@@ -157,17 +157,12 @@ void __fastcall TForm1::Timer1Timer(TObject *Sender)
 //  return;
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::DBG_SodExit(TObject *Sender)
-{
-    Caption = Caption + ".";
-}
-//---------------------------------------------------------------------------
 
 
 void __fastcall TForm1::BeginEdit()
 {
     if (DBG_Sod->EditorMode) {
-        Timer1->Enabled = false;
+      if (Q_Sod->State==dsBrowse) Q_Sod->Edit();
         DBG_Sod->EditorMode = false;
         std::auto_ptr<TmyInplaceEditor> my(new TmyInplaceEditor(this));
 
@@ -178,8 +173,9 @@ void __fastcall TForm1::BeginEdit()
     Rect.Top = LeftTop.y;
     Rect.Right = RightBottom.x;
     Rect.Bottom = RightBottom.y;
+        my->E_Cell->Text = DBG_Sod->InplaceEditor->Text;
         my->ShowModal( Rect, false);
-        Timer1->Enabled = true;
+
         return;
 
 
@@ -207,11 +203,12 @@ void __fastcall TForm1::DBG_SodMouseDown(TObject *Sender,
 
 
 
-void __fastcall TForm1::DBG_SodKeyUp(TObject *Sender, WORD &Key,
-      TShiftState Shift)
-{
-//    BeginEdit();
 
+
+void __fastcall TForm1::DBG_SodKeyPress(TObject *Sender, char &Key)
+{
+    BeginEdit();
+    
 }
 //---------------------------------------------------------------------------
 
