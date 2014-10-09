@@ -18,6 +18,26 @@ TForm1 *Form1;
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
+    try {
+        std::auto_ptr<TStringList> SL(new TStringList);
+        SL->LoadFromFile("c:\\db_asu.txt");
+        for (int I = 0; I < SL->Count; I++) {
+            if (SL->Strings[I].SubString(1,1)=="#") continue;
+            db->ConnectString = SL->Strings[I];
+            break;
+        }
+        db->LoginPrompt = false;
+        db->Options->Direct = true;
+        Caption = Caption + " [" + db->Server.Trim() + "]";
+    }
+    catch (...) {
+    }
+    db->Connected = true;
+    TmyQuery Q(db,"ALTER SESSION SET NLS_NUMERIC_CHARACTERS='.,'");
+    Q->ExecSQL();
+
+    Q_Sod->Open();                   
+
     Q_KodOper->Close();
     for (Q_KodOper->Open(); !Q_KodOper->Eof; Q_KodOper->Next()) {
         CB_KodOper->Items->Add( Q_KodOper->FieldByName("txt")->AsString);
@@ -135,6 +155,17 @@ void __fastcall TForm1::DBG_SloAvtoMouseMove(TObject *Sender,
 void __fastcall TForm1::Timer1Timer(TObject *Sender)
 {
 //  return;
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::DBG_SodExit(TObject *Sender)
+{
+    Caption = Caption + ".";
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TForm1::BeginEdit()
+{
     if (DBG_Sod->EditorMode) {
         Timer1->Enabled = false;
         DBG_Sod->EditorMode = false;
@@ -160,10 +191,27 @@ void __fastcall TForm1::Timer1Timer(TObject *Sender)
         Edit1->SelLength = DBG_Sod->InplaceEditor->SelLength;
 //        Edit1->SelText = DBG_Sod->InplaceEditor->SelText;
     }
+
+
 }
-//---------------------------------------------------------------------------
-void __fastcall TForm1::DBG_SodExit(TObject *Sender)
+
+
+
+void __fastcall TForm1::DBG_SodMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-    Caption = Caption + ".";    
+    BeginEdit();
+
 }
 //---------------------------------------------------------------------------
+
+
+
+void __fastcall TForm1::DBG_SodKeyUp(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+//    BeginEdit();
+
+}
+//---------------------------------------------------------------------------
+

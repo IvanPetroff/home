@@ -216,6 +216,8 @@ object Form1: TForm1
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
         OnExit = DBG_SodExit
+        OnKeyUp = DBG_SodKeyUp
+        OnMouseDown = DBG_SodMouseDown
         Columns = <
           item
             EditButtons = <>
@@ -479,13 +481,13 @@ object Form1: TForm1
       end
     end
   end
-  object OraSession1: TOraSession
+  object db: TOraSession
     Options.Direct = True
     Left = 628
     Top = 24
   end
   object OraQuery1: TOraQuery
-    Session = OraSession1
+    Session = db
     Left = 660
     Top = 24
   end
@@ -494,7 +496,7 @@ object Form1: TForm1
     Top = 24
   end
   object Q_KodOper: TOraQuery
-    Session = OraSession1
+    Session = db
     SQL.Strings = (
       
         'select lpad(op,3,'#39' '#39')||'#39' - '#39'||naim txt from asu_spr_op where wid' +
@@ -503,7 +505,7 @@ object Form1: TForm1
     Top = 4
   end
   object OraQuery2: TOraQuery
-    Session = OraSession1
+    Session = db
     SQL.Strings = (
       
         'select lpad(op,3,'#39' '#39')||'#39' - '#39'||naim txt from asu_spr_op where wid' +
@@ -512,7 +514,7 @@ object Form1: TForm1
     Top = 4
   end
   object Q_Benzin: TOraQuery
-    Session = OraSession1
+    Session = db
     SQL.Strings = (
       
         'select o.mestoh||'#39'-'#39'||s.naim||'#39' '#39'||s.marka||'#39' ['#39'||s.m_kod||'#39']'#39' t' +
@@ -528,7 +530,7 @@ object Form1: TForm1
       end>
   end
   object Q_Sod: TOraQuery
-    Session = OraSession1
+    Session = db
     SQL.Strings = (
       'select * from asu_sod_dok --where nz_zag=:nz_zag'
       'where rownum<10')
@@ -542,7 +544,7 @@ object Form1: TForm1
     Top = 261
   end
   object Q_SloAvto: TOraQuery
-    Session = OraSession1
+    Session = db
     SQL.Strings = (
       'select marka, n_gai, id from asu_slo_avto')
     FetchAll = True
@@ -555,7 +557,7 @@ object Form1: TForm1
     Top = 265
   end
   object Timer1: TTimer
-    Interval = 100
+    Interval = 50
     OnTimer = Timer1Timer
     Left = 276
     Top = 273

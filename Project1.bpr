@@ -5,7 +5,8 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="Project1.exe"/>
     <OBJFILES value="Project1.obj Unit1.obj ..\..\lib\TInplaceEditorBase\TInplaceEditorBase.obj 
-      TmyInplaceEditor.obj ..\..\lib\TInplaceEditorBase\THorizont.obj"/>
+      TmyInplaceEditor.obj ..\..\lib\TInplaceEditorBase\THorizont.obj 
+      ..\..\lib\TmyQuery\TmyQuery.obj ..\..\lib\TmyStringList\TmyStringList.obj"/>
     <RESFILES value="Project1.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
@@ -21,7 +22,7 @@
       Inet50.bpi NMFast50.bpi webmid50.bpi bcbie50.bpi dclocx50.bpi 
       bcb2kaxserver50.bpi EHLIBB50.bpi EHLIBDATADRIVERSB50.bpi DAC50.bpi 
       CrControls50.bpi ODAC50.bpi oraprov50.bpi CaptionButtonCB5.bpi"/>
-    <PATHCPP value=".;..\..\lib\TInplaceEditorBase"/>
+    <PATHCPP value=".;..\..\lib\TInplaceEditorBase;..\..\lib\TmyQuery;..\..\lib\TmyStringList"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -31,12 +32,13 @@
     <USERDEFINES value="_DEBUG"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="Project1.cpp"/>
-    <INCLUDEPATH value="..\..\lib\TInplaceEditorBase;&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib;..\..\lib"/>
-    <LIBPATH value="..\..\lib\TInplaceEditorBase;&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib"/>
+    <INCLUDEPATH value="..\..\lib\TmyStringList;..\..\lib\TmyQuery;..\..\lib\TInplaceEditorBase;&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib;..\..\lib"/>
+    <LIBPATH value="..\..\lib\TmyStringList;..\..\lib\TmyQuery;..\..\lib\TInplaceEditorBase;&quot;C:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I..\..\lib\TInplaceEditorBase 
+    <IDLCFLAGS value="-I..\..\lib\TmyStringList -I..\..\lib\TmyQuery 
+      -I..\..\lib\TInplaceEditorBase 
       -I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -I$(BCB)\ODAC\Include 
       -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\EhLib -I..\..\lib 
       -src_suffix cpp -D_DEBUG -boa"/>

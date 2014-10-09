@@ -19,11 +19,12 @@
 #include <ToolWin.hpp>
 #include <Buttons.hpp>
 #include "TmyInplaceEditor.h"
+#include "TmyQuery.h"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
-    TOraSession *OraSession1;
+    TOraSession *db;
     TOraQuery *OraQuery1;
     TOraDataSource *OraDataSource1;
     TGroupBox *GroupBox1;
@@ -75,7 +76,12 @@ __published:	// IDE-managed Components
           TShiftState Shift, int X, int Y);
     void __fastcall Timer1Timer(TObject *Sender);
     void __fastcall DBG_SodExit(TObject *Sender);
+    void __fastcall DBG_SodMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y);
+    void __fastcall DBG_SodKeyUp(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 private:	// User declarations
+    void __fastcall BeginEdit();
 public:		// User declarations
     __fastcall TForm1(TComponent* Owner);
 };
