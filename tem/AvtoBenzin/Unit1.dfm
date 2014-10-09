@@ -215,8 +215,7 @@ object Form1: TForm1
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
-        OnExit = DBG_SodExit
-        OnKeyUp = DBG_SodKeyUp
+        OnKeyPress = DBG_SodKeyPress
         OnMouseDown = DBG_SodMouseDown
         Columns = <
           item

@@ -75,11 +75,9 @@ __published:	// IDE-managed Components
     void __fastcall DBG_SloAvtoMouseMove(TObject *Sender,
           TShiftState Shift, int X, int Y);
     void __fastcall Timer1Timer(TObject *Sender);
-    void __fastcall DBG_SodExit(TObject *Sender);
     void __fastcall DBG_SodMouseDown(TObject *Sender, TMouseButton Button,
           TShiftState Shift, int X, int Y);
-    void __fastcall DBG_SodKeyUp(TObject *Sender, WORD &Key,
-          TShiftState Shift);
+    void __fastcall DBG_SodKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
     void __fastcall BeginEdit();
 public:		// User declarations
