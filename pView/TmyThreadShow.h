@@ -8,20 +8,7 @@
 #include "TmyThreadFile.h"
 //---------------------------------------------------------------------------
 
-#define MAX_CACHED_SIZE 2
-class TmyFile {
-private:
-public:
-    TmyFile() {
-        FileName = "";
-        cntUse = 0;
-    }
-
-    AnsiString FileName;
-    int cntUse;
-};
-
-
+#define MAX_CACHED_SIZE 10
 
 class TmyThreadShow : public TThread
 {
@@ -45,7 +32,7 @@ protected:
     vector<TmyThreadFile*> Files;
 public:
     __fastcall TmyThreadShow(TImage* img);
-    void __fastcall LoadFile(AnsiString FileName);
+    void __fastcall LoadFile(AnsiString FileName, TThreadPriority Priority = tpLowest);
     void __fastcall ShowFile(AnsiString FileName);
     void __fastcall SetImage(TImage* img);
     TImage* img;

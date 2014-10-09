@@ -21,35 +21,41 @@
 //---------------------------------------------------------------------------
 
 __fastcall TmyThreadFile::TmyThreadFile(AnsiString inFileName, int inSizeX, int inSizeY)
-    : TThread(false)
+    : TThread(true)
 {
-    FileName = inFileName;
-    cFileName = FileName.c_str(); // иначе AnsiString неадекватно себя ведёт даже в пределах одного класса
+    FileName = inFileName; // иначе AnsiString неадекватно себя ведёт даже в пределах одного класса
     SizeX = inSizeX;
     SizeY = inSizeY;
     isComplete = false;
     Bitmap.reset(new Graphics::TBitmap);
     Bitmap->Width = SizeX;
     Bitmap->Height = SizeY;
-    this->Priority = tpLower;
+    this->Priority = tpNormal;
 }
 //---------------------------------------------------------------------------
+
+
 void __fastcall TmyThreadFile::Execute()
 {
     //---- Place thread code here ----
     std::auto_ptr<TJPEGImage> jpg(new TJPEGImage);
     this->jpg = jpg.get();
-    this->Synchronize( _LoadFile);
-    this->Synchronize( _GetBitmap);
-    isComplete = true;
+    try {
+        _LoadFile();
+        this->Synchronize( _GetBitmap);
+        isComplete = true;
+    }
+    catch(...) {}
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TmyThreadFile::_LoadFile()
 {
+//    if (FileName.IsEmpty()) return;
     jpg->Performance = jpBestSpeed;
-    jpg->Scale = 2;
-    jpg->LoadFromFile(cFileName);
+    jpg->Scale = 1;
+//    AnsiString S = "S:\\IMG_5733.JPG";
+    jpg->LoadFromFile(FileName);
     jpg->DIBNeeded();
 
 }
@@ -69,6 +75,7 @@ void __fastcall TmyThreadFile::ShowImage(TImage* toImg)
 
 void __fastcall TmyThreadFile::_GetBitmap()
 {
+//    if (FileName.IsEmpty()) return;
 //    if (Quality != l_jpg->Scale) l_jpg->Scale = Quality;
     std::auto_ptr<Graphics::TBitmap> tmpBitmap(new Graphics::TBitmap);
     tmpBitmap->Assign(jpg);

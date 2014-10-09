@@ -6,6 +6,7 @@
 #include <Classes.hpp>
 #include <jpeg.hpp>
 #include <memory>
+#include <string>
 //---------------------------------------------------------------------------
 class TmyThreadFile : public TThread
 {
@@ -16,7 +17,7 @@ private:
     TJPEGImage* jpg;
     int SizeX;
     int SizeY;
-    char* cFileName;
+//    char* cFileName;
 protected:
     void __fastcall Execute();
 public:

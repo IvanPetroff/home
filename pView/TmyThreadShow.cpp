@@ -31,6 +31,8 @@ __fastcall TmyThreadShow::TmyThreadShow(TImage* img)
     this->FileToShow = 0;
     this->LastShow = "";
     SetImage( img);
+    this->Priority = tpIdle;
+
 }
 //---------------------------------------------------------------------------
 
@@ -48,6 +50,7 @@ void __fastcall TmyThreadShow::ClearCache()
 {
     for (int I = 0; I < MAX_CACHED_SIZE; I++) {
         if ( Files[I] == 0) continue;
+        Files[I]->Terminate();
         delete Files[I];
         Files[I] = 0;
     }
@@ -156,7 +159,7 @@ void __fastcall TmyThreadShow::WaitToStop()
     while (!this->Suspended) {
         SendStopSignal();
         Application->ProcessMessages();
-        Sleep(10);
+        Sleep(100);
     }
 }
 //---------------------------------------------------------------------------
@@ -166,8 +169,9 @@ void __fastcall TmyThreadShow::ShowFile(AnsiString FileName)
 {
     if (img==0) return;
     if (FileName.IsEmpty()) return;
+
     if (!MoveUpFileCacheSlot(FileName)) {
-        LoadFile(FileName);
+        LoadFile(FileName, tpLower);
         if (!MoveUpFileCacheSlot(FileName)) {
             return;
         }
@@ -183,10 +187,12 @@ void __fastcall TmyThreadShow::ShowFile(AnsiString FileName)
 //---------------------------------------------------------------------------
 
 
-void __fastcall TmyThreadShow::LoadFile(AnsiString FileName)
+void __fastcall TmyThreadShow::LoadFile(AnsiString FileName, TThreadPriority Priority)
 {
     if (img==0) return;
     if (FileName.IsEmpty()) return;
+
+
     if (MoveUpFileCacheSlot(FileName)) {
         return;
     }
@@ -195,5 +201,8 @@ void __fastcall TmyThreadShow::LoadFile(AnsiString FileName)
     ShiftDownCacheSlots();
 
     Files[0] = new TmyThreadFile(FileName, img->Width, img->Height);
+    Files[0]->FileName = FileName;
+    Files[0]->Priority = Priority;
+    Files[0]->Resume();
 }
 //---------------------------------------------------------------------------

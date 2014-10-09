@@ -12,12 +12,9 @@ USEFORM("TFraPreview.cpp", FraPreview); /* TFrame: File Type */
 USEFORM("TFraBase.cpp", FraBase); /* TFrame: File Type */
 USEFORM("TFraImage.cpp", FraImage); /* TFrame: File Type */
 USEFORM("TFormImage.cpp", FormImage);
-USEUNIT("TImgThread.cpp");
 USEUNIT("TmyThreadFile.cpp");
 USEUNIT("TmyThreadShow.cpp");
 //---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR cmdline, int)
 {
     AnsiString sCmd = String(cmdline).Trim();
