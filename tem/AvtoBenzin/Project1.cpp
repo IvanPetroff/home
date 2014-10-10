@@ -9,6 +9,7 @@ USEFORM("TmyInplaceEditor.cpp", myInplaceEditor); /* TFrame: File Type */
 USEUNIT("..\..\lib\TInplaceEditorBase\THorizont.cpp");
 USEUNIT("..\..\lib\TmyQuery\TmyQuery.cpp");
 USEUNIT("..\..\lib\TmyStringList\TmyStringList.cpp");
+USEFORM("TEditorBase.cpp", EditorBase); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

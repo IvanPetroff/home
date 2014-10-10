@@ -20,6 +20,7 @@
 #include <Buttons.hpp>
 #include "TmyInplaceEditor.h"
 #include "TmyQuery.h"
+#include "TEditorBase.h"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -63,8 +64,8 @@ __published:	// IDE-managed Components
     TDBGridEh *DBG_SloAvto;
     TPanel *Panel3;
     TTimer *Timer1;
-    TPanel *Panel4;
-    TEdit *Edit1;
+    TStaticText *Edit1;
+    TEditorBase *EditorBase1;
     void __fastcall DBG_SloAvtoSortMarkingChanged(TObject *Sender);
     void __fastcall DBG_SloAvtoApplyFilter(TObject *Sender);
     void __fastcall SpeedButton1Click(TObject *Sender);
@@ -75,9 +76,6 @@ __published:	// IDE-managed Components
     void __fastcall DBG_SloAvtoMouseMove(TObject *Sender,
           TShiftState Shift, int X, int Y);
     void __fastcall Timer1Timer(TObject *Sender);
-    void __fastcall DBG_SodMouseDown(TObject *Sender, TMouseButton Button,
-          TShiftState Shift, int X, int Y);
-    void __fastcall DBG_SodKeyPress(TObject *Sender, char &Key);
 private:	// User declarations
     void __fastcall BeginEdit();
 public:		// User declarations

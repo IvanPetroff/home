@@ -18,6 +18,7 @@ inherited myInplaceEditor: TmyInplaceEditor
       BorderStyle = bsNone
       TabOrder = 0
       Text = 'E_Cell'
+      OnKeyDown = E_CellKeyDown
     end
   end
 end

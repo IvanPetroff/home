@@ -39,3 +39,12 @@ void __fastcall TmyInplaceEditor::LoadVal()
 {
 }
 
+void __fastcall TmyInplaceEditor::E_CellKeyDown(TObject *Sender, WORD &Key,
+      TShiftState Shift)
+{
+    if (Key==VK_RETURN) {
+        ModalResult = mrOk;
+    }
+}
+//---------------------------------------------------------------------------
+
