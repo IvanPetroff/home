@@ -15,6 +15,8 @@ class TmyInplaceEditor : public TInplaceEditorBase
 __published:	// IDE-managed Components
     TPanel *Panel1;
     TEdit *E_Cell;
+    void __fastcall E_CellKeyDown(TObject *Sender, WORD &Key,
+          TShiftState Shift);
 private:	// User declarations
     virtual void        __fastcall Show         (TRect Rect);
     virtual void        __fastcall SaveVal      ();

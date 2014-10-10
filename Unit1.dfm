@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 369
-  Top = 168
+  Left = 600
+  Top = 119
   Width = 887
   Height = 591
   Caption = 'Отпуск топлива'
@@ -10,6 +10,7 @@ object Form1: TForm1
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  KeyPreview = True
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
@@ -209,15 +210,20 @@ object Form1: TForm1
         FooterFont.Height = -11
         FooterFont.Name = 'MS Sans Serif'
         FooterFont.Style = []
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
         TabOrder = 0
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
         TitleFont.Name = 'MS Sans Serif'
         TitleFont.Style = []
-        OnKeyPress = DBG_SodKeyPress
-        OnMouseDown = DBG_SodMouseDown
         Columns = <
+          item
+            EditButtons = <>
+            FieldName = 'DTR'
+            Footers = <>
+            Visible = False
+          end
           item
             EditButtons = <>
             FieldName = 'IZD'
@@ -265,11 +271,6 @@ object Form1: TForm1
           item
             EditButtons = <>
             FieldName = 'SHPZ'
-            Footers = <>
-          end
-          item
-            EditButtons = <>
-            FieldName = 'DTR'
             Footers = <>
           end
           item
@@ -353,22 +354,29 @@ object Form1: TForm1
             Footers = <>
           end>
       end
-      object Panel4: TPanel
-        Left = 180
-        Top = 120
-        Width = 185
-        Height = 41
-        Caption = 'Panel4'
+      object Edit1: TStaticText
+        Left = 320
+        Top = 80
+        Width = 197
+        Height = 17
+        AutoSize = False
+        Caption = 'Edit1'
+        Color = clHighlight
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
         TabOrder = 1
-        object Edit1: TEdit
-          Left = 28
-          Top = 8
-          Width = 121
-          Height = 21
-          AutoSelect = False
-          TabOrder = 0
-          Text = 'Edit1'
-        end
+        Visible = False
+      end
+      inline EditorBase1: TEditorBase
+        Left = 184
+        Top = 108
+        TabOrder = 2
+        Visible = False
       end
     end
     object GroupBox4: TGroupBox
@@ -532,7 +540,7 @@ object Form1: TForm1
     Session = db
     SQL.Strings = (
       'select * from asu_sod_dok --where nz_zag=:nz_zag'
-      'where rownum<10')
+      'where rownum<100')
     CachedUpdates = True
     Left = 136
     Top = 261

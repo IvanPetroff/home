@@ -3,6 +3,13 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include <fstream>
+#include <streambuf>
+#include <istream>
+#include <memory>
+#include <vector>
+#include <string>
+
 #include "Unit1.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -12,12 +19,24 @@
 #pragma link "DBGridEh"
 #pragma link "GridsEh"
 #pragma link "DataDriverEh"
+#pragma link "TEditorBase"
 #pragma resource "*.dfm"
 TForm1 *Form1;
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
+
+//std::string v(
+//  (std::istreambuf_iterator<char>(
+//    *(std::auto_ptr<std::ifstream>(
+//      new std::ifstream("testfile.txt")
+//    )).get()
+//  )),
+//  std::istreambuf_iterator<char>()
+//);
+
+
     try {
         std::auto_ptr<TStringList> SL(new TStringList);
         SL->LoadFromFile("c:\\db_asu.txt");
@@ -36,7 +55,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
     TmyQuery Q(db,"ALTER SESSION SET NLS_NUMERIC_CHARACTERS='.,'");
     Q->ExecSQL();
 
-    Q_Sod->Open();                   
+    Q_Sod->Open();
 
     Q_KodOper->Close();
     for (Q_KodOper->Open(); !Q_KodOper->Eof; Q_KodOper->Next()) {
@@ -49,6 +68,11 @@ __fastcall TForm1::TForm1(TComponent* Owner)
         CB_Benzin->Items->Add( Q_Benzin->FieldByName("txt")->AsString);
     }
     CB_Benzin->ItemIndex = 0;
+
+    EditorBase1->Parent = DBG_Sod;
+//    EditorBase1->Parent->RemoveControl(EditorBase1);
+//    DBG_Sod->InsertControl(EditorBase1);
+    EditorBase1->BringToFront();
 }
 //---------------------------------------------------------------------------
 
@@ -174,18 +198,21 @@ void __fastcall TForm1::BeginEdit()
     Rect.Right = RightBottom.x;
     Rect.Bottom = RightBottom.y;
         my->E_Cell->Text = DBG_Sod->InplaceEditor->Text;
-        my->ShowModal( Rect, false);
+        int MR = my->ShowModal( Rect, false);
+        if (MR==mrOk) {
+            DBG_Sod->SelectedField->AsString = my->E_Cell->Text;
+        }
 
         return;
 
 
 
-//        DBG_Sod->EditorMode = false;
-        Edit1->SetFocus();
-        Edit1->Text = DBG_Sod->InplaceEditor->Text;
-        Edit1->SelStart = DBG_Sod->InplaceEditor->SelStart;
-        Edit1->SelLength = DBG_Sod->InplaceEditor->SelLength;
-//        Edit1->SelText = DBG_Sod->InplaceEditor->SelText;
+////        DBG_Sod->EditorMode = false;
+//        Edit1->SetFocus();
+//        Edit1->Text = DBG_Sod->InplaceEditor->Text;
+//        Edit1->SelStart = DBG_Sod->InplaceEditor->SelStart;
+//        Edit1->SelLength = DBG_Sod->InplaceEditor->SelLength;
+////        Edit1->SelText = DBG_Sod->InplaceEditor->SelText;
     }
 
 
@@ -193,22 +220,13 @@ void __fastcall TForm1::BeginEdit()
 
 
 
-void __fastcall TForm1::DBG_SodMouseDown(TObject *Sender,
-      TMouseButton Button, TShiftState Shift, int X, int Y)
-{
-    BeginEdit();
-
-}
-//---------------------------------------------------------------------------
 
 
 
 
 
-void __fastcall TForm1::DBG_SodKeyPress(TObject *Sender, char &Key)
-{
-    BeginEdit();
-    
-}
-//---------------------------------------------------------------------------
+
+
+
+
 

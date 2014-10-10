@@ -6,13 +6,14 @@
     <PROJECT value="Project1.exe"/>
     <OBJFILES value="Project1.obj Unit1.obj ..\..\lib\TInplaceEditorBase\TInplaceEditorBase.obj 
       TmyInplaceEditor.obj ..\..\lib\TInplaceEditorBase\THorizont.obj 
-      ..\..\lib\TmyQuery\TmyQuery.obj ..\..\lib\TmyStringList\TmyStringList.obj"/>
+      ..\..\lib\TmyQuery\TmyQuery.obj ..\..\lib\TmyStringList\TmyStringList.obj 
+      TEditorBase.obj"/>
     <RESFILES value="Project1.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Unit1.dfm ..\..\lib\TInplaceEditorBase\TInplaceEditorBase.dfm 
-      TmyInplaceEditor.dfm"/>
+      TmyInplaceEditor.dfm TEditorBase.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="EHLIBB50.lib VCLBDE50.lib ODAC50.lib DAC50.lib Vcldb50.lib Vcl50.lib"/>
     <SPARELIBS value="Vcl50.lib Vcldb50.lib DAC50.lib ODAC50.lib VCLBDE50.lib EHLIBB50.lib"/>
@@ -42,7 +43,7 @@
       -I&quot;C:\Program Files\Borland\CBuilder5\Projects\.&quot; -I$(BCB)\ODAC\Include 
       -I$(BCB)\include -I$(BCB)\include\vcl -I$(BCB)\EhLib -I..\..\lib 
       -src_suffix cpp -D_DEBUG -boa"/>
-    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -tWC 
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi -tWC 
       -tWM -c"/>
     <PFLAGS value="-$YD -$W -$O- -v -JPHNE -M"/>
     <RFLAGS value=""/>
@@ -82,24 +83,26 @@ ProductName=
 ProductVersion=1.0.0.0
 
 [HistoryLists\hlIncludePath]
-Count=8
-Item0=..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib;..\..\lib
-Item1=..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
-Item2=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
-Item3=$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
-Item4=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
-Item5=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl
-Item6=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl
-Item7=$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl
+Count=9
+Item0=..\..\lib\TmyStringList;..\..\lib\TmyQuery;..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib;..\..\lib
+Item1=..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib;..\..\lib
+Item2=..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
+Item3=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
+Item4=$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
+Item5=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl;$(BCB)\EhLib
+Item6=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl
+Item7=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl
+Item8=$(BCB)\ODAC\Include;$(BCB)\include;$(BCB)\include\vcl
 
 [HistoryLists\hlLibraryPath]
-Count=6
-Item0=..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib
-Item1=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib
-Item2=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib
-Item3=$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib
-Item4=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib
-Item5=$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
+Count=7
+Item0=..\..\lib\TmyStringList;..\..\lib\TmyQuery;..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib
+Item1=..\..\lib\TInplaceEditorBase;C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib
+Item2=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib;$(BCB)\Ehlib
+Item3=C:\Program Files\Borland\CBuilder5\Projects;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib
+Item4=$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib
+Item5=C:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\ODAC\Lib
+Item6=$(BCB)\ODAC\Include;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib
 
 [HistoryLists\hlDebugSourcePath]
 Count=1
