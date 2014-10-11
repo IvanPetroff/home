@@ -18,10 +18,10 @@ __published:	// IDE-managed Components
     TStaticText *StaticText1;
     void __fastcall FrameResize(TObject *Sender);
     void __fastcall StaticText1Click(TObject *Sender);
-    void __fastcall Edit1Exit(TObject *Sender);
     void __fastcall Edit1KeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
     void __fastcall Edit1KeyPress(TObject *Sender, char &Key);
+    void __fastcall FrameExit(TObject *Sender);
 private:	// User declarations
     virtual void __fastcall SetParent(TWinControl* AParent);
     void __fastcall EditorBaseKeyPress(TObject *Sender, char &Key);
