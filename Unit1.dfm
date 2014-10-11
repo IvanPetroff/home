@@ -10,7 +10,6 @@ object Form1: TForm1
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
-  KeyPreview = True
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
@@ -565,8 +564,8 @@ object Form1: TForm1
     Top = 265
   end
   object Timer1: TTimer
+    Enabled = False
     Interval = 50
-    OnTimer = Timer1Timer
     Left = 276
     Top = 273
   end

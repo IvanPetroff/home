@@ -62,8 +62,8 @@ void __fastcall TEditorBase::SetAlignment(TAlignment al)
 
 void __fastcall TEditorBase::SetViewMode()
 {
-    Edit1->Visible = false;
-    StaticText1->Visible = true;
+    Edit1->Hide();
+    StaticText1->Show();
     StaticText1->BringToFront();
     Color = StaticText1->Color;
 }
@@ -71,8 +71,8 @@ void __fastcall TEditorBase::SetViewMode()
 
 void __fastcall TEditorBase::SetEditMode()
 {
-    StaticText1->Visible = false;
-    Edit1->Visible = true;
+    StaticText1->Hide();
+    Edit1->Show();
     Edit1->BringToFront();
     Edit1->SetFocus();
     Color = Edit1->Color;
@@ -126,8 +126,8 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::Edit1KeyPress(TObject *Sender, char &Key)
 {
-    if (Edit1->Focused()) {
-        ((TDBGridEh*)this->Parent)->DataSource->Edit();
+    if (Edit1->Focused() && ((TDBGridEh*)this->Parent)->DataSource->DataSet->State==dsBrowse) {
+        ((TDBGridEh*)this->Parent)->DataSource->DataSet->Edit();
     }
 }
 //---------------------------------------------------------------------------
@@ -194,6 +194,17 @@ bool __fastcall TEditorBase::isViewMode()
 }
 
 
+void __fastcall TEditorBase::Show()
+{
+    if (Visible) return;
+    TFrame::Show();
+}
+
+void __fastcall TEditorBase::Hide()
+{
+    TFrame::Hide();
+}
+
 
 void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
@@ -203,23 +214,25 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
 
     TDBGridEh* DBG = (TDBGridEh*)Sender;
     if (DBG->LeftCol > (DBG->SelectedIndex+1)) {
-        this->Visible = false;
+        Hide();
         return;
     }
     if ((DBG->VisibleColCount+DBG->LeftCol) < (DBG->SelectedIndex)) {
-        this->Visible = false;
+        Hide();
         return;
     }
     if (State.Contains(gdSelected)) {
-        if (isViewMode()) this->Visible = false;
+        if (isViewMode()) {
+            Hide();
+        }
         this->SetRect(Rect);
-        this->SetVal(Column->Field->AsString);
+        if (isViewMode()) this->SetVal(Column->Field->AsString);
         this->SetAlignment(Column->Alignment);
-        this->Visible = true;
+        Show();
     }
     else {
         if (isFrameInRect(Rect) && this->Visible) {
-            this->Visible = false;
+            Hide();
         }
     }
 }
@@ -228,4 +241,5 @@ void __fastcall TEditorBase::FrameExit(TObject *Sender)
     SetViewMode();
 }
 //---------------------------------------------------------------------------
+
 
