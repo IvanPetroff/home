@@ -85,11 +85,6 @@ void __fastcall TEditorBase::StaticText1Click(TObject *Sender)
     SetEditMode();
 }
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::Edit1Exit(TObject *Sender)
-{
-    SetViewMode();
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TEditorBase::myKeyPress(char &Key)
 {
@@ -228,3 +223,9 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         }
     }
 }
+void __fastcall TEditorBase::FrameExit(TObject *Sender)
+{
+    SetViewMode();
+}
+//---------------------------------------------------------------------------
+

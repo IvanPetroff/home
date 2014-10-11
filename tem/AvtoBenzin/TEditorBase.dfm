@@ -4,19 +4,20 @@ object EditorBase: TEditorBase
   Width = 320
   Height = 240
   TabOrder = 0
+  OnExit = FrameExit
   OnResize = FrameResize
   object Edit1: TEdit
     Left = 0
     Top = 0
     Width = 121
     Height = 21
+    TabStop = False
     AutoSize = False
     BorderStyle = bsNone
     Color = clYellow
     TabOrder = 0
     Text = 'Edit1'
     Visible = False
-    OnExit = Edit1Exit
     OnKeyDown = Edit1KeyDown
     OnKeyPress = Edit1KeyPress
   end
