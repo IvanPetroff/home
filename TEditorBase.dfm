@@ -10,6 +10,7 @@ object EditorBase: TEditorBase
     Top = 0
     Width = 121
     Height = 21
+    AutoSize = False
     BorderStyle = bsNone
     Color = clYellow
     TabOrder = 0
@@ -24,9 +25,12 @@ object EditorBase: TEditorBase
     Top = 0
     Width = 58
     Height = 17
+    AutoSize = False
     Caption = 'StaticText1'
     Color = clBtnFace
     ParentColor = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 1
     OnClick = StaticText1Click
   end
