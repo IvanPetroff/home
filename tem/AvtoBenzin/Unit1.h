@@ -75,7 +75,6 @@ __published:	// IDE-managed Components
           TGridDrawState State);
     void __fastcall DBG_SloAvtoMouseMove(TObject *Sender,
           TShiftState Shift, int X, int Y);
-    void __fastcall Timer1Timer(TObject *Sender);
 private:	// User declarations
     void __fastcall BeginEdit();
 public:		// User declarations

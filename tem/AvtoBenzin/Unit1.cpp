@@ -176,11 +176,6 @@ void __fastcall TForm1::DBG_SloAvtoMouseMove(TObject *Sender,
 
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm1::Timer1Timer(TObject *Sender)
-{
-//  return;
-}
-//---------------------------------------------------------------------------
 
 
 void __fastcall TForm1::BeginEdit()

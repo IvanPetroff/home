@@ -37,6 +37,9 @@ private:	// User declarations
     typedef void __fastcall (__closure *TDrawColumnCellEvent)(TObject* Sender,const TRect &Rect, int DataCol, TColumnEh* Column, TGridDrawState State);
     TKeyPressEvent oldOnKeyPress;
     TDrawColumnCellEvent oldOnDrawColumnCell;
+    void __fastcall Show();
+    void __fastcall Hide();
+
 
 public:		// User declarations
     __fastcall TEditorBase(TComponent* Owner);
