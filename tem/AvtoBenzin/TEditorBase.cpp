@@ -170,6 +170,21 @@ void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
     }
 }
 
+bool __fastcall TEditorBase::isPointInRect(int X, int Y, TRect &Rect)
+{
+    if (X>Rect.Left && X<Rect.Right && Y>Rect.Top && Y<Rect.Bottom) return true;
+    return false;
+}
+
+bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
+{
+    if (isPointInRect(Left,Top,Rect)) return true;
+    if (isPointInRect(Left,Top+Height,Rect)) return true;
+    if (isPointInRect(Left+Width,Top,Rect)) return true;
+    if (isPointInRect(Left+Width,Top+Height,Rect)) return true;
+    return false;
+}
+
 
 void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
@@ -190,10 +205,10 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         this->SetVal(Column->Field->AsString);
         this->SetAlignment(Column->Alignment);
         this->Visible = true;
-//        Application->MainForm->Caption = Application->MainForm->Caption.SubString(Application->MainForm->Caption.Length()-100,Application->MainForm->Caption.Length());
     }
-    if (Column->FieldName.UpperCase()=="KOL_TREB") {
-//        Application->MainForm->Caption = Column->Field->AsString + " " + Application->MainForm->Caption;
+    else {
+        if (isFrameInRect(Rect)) {
+            this->Visible = false;
+        }
     }
-
 }

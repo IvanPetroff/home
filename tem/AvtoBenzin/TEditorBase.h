@@ -30,6 +30,8 @@ private:	// User declarations
     void __fastcall EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
       TGridDrawState State);
+    bool __fastcall isFrameInRect(TRect &Rect);
+    bool __fastcall isPointInRect(int X, int Y, TRect &Rect);
 
 public:		// User declarations
     __fastcall TEditorBase(TComponent* Owner);
