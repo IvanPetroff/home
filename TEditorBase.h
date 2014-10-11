@@ -33,6 +33,11 @@ private:	// User declarations
     bool __fastcall isFrameInRect(TRect &Rect);
     bool __fastcall isPointInRect(int X, int Y, TRect &Rect);
 
+    typedef void __fastcall (__closure *TKeyPressEvent)(TObject* Sender, char &Key);
+    typedef void __fastcall (__closure *TDrawColumnCellEvent)(TObject* Sender,const TRect &Rect, int DataCol, TColumnEh* Column, TGridDrawState State);
+    TKeyPressEvent oldOnKeyPress;
+    TDrawColumnCellEvent oldOnDrawColumnCell;
+
 public:		// User declarations
     __fastcall TEditorBase(TComponent* Owner);
     void __fastcall SetRect(TRect inRect);
@@ -41,6 +46,7 @@ public:		// User declarations
     void __fastcall myKeyPress(char &Key);
     void __fastcall SetViewMode();
     void __fastcall SetEditMode();
+    bool __fastcall isViewMode();
 
 
 };
