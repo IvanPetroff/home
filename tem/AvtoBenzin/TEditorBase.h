@@ -37,6 +37,8 @@ public:		// User declarations
     void __fastcall SetVal(AnsiString S);
     void __fastcall SetAlignment(TAlignment al);
     void __fastcall myKeyPress(char &Key);
+    void __fastcall SetViewMode();
+    void __fastcall SetEditMode();
 
 
 };

@@ -55,7 +55,6 @@ __published:	// IDE-managed Components
     TOraDataSource *DS_SloAvto;
     TPanel *Panel1;
     TGroupBox *GroupBox3;
-    TDBGridEh *DBG_Sod;
     TGroupBox *GroupBox4;
     TSplitter *Splitter1;
     TPanel *P_SloAvto;
@@ -66,6 +65,7 @@ __published:	// IDE-managed Components
     TTimer *Timer1;
     TStaticText *Edit1;
     TEditorBase *EditorBase1;
+    TDBGridEh *DBG_Sod;
     void __fastcall DBG_SloAvtoSortMarkingChanged(TObject *Sender);
     void __fastcall DBG_SloAvtoApplyFilter(TObject *Sender);
     void __fastcall SpeedButton1Click(TObject *Sender);

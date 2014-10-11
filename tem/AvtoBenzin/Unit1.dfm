@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 600
   Top = 119
   Width = 887
-  Height = 591
+  Height = 637
   Caption = 'Отпуск топлива'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -173,7 +173,7 @@ object Form1: TForm1
     Left = 0
     Top = 193
     Width = 879
-    Height = 371
+    Height = 417
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel1'
@@ -182,7 +182,7 @@ object Form1: TForm1
       Left = 663
       Top = 0
       Width = 5
-      Height = 371
+      Height = 417
       Cursor = crHSplit
       Align = alRight
       Color = clHighlight
@@ -192,16 +192,40 @@ object Form1: TForm1
       Left = 0
       Top = 0
       Width = 663
-      Height = 371
+      Height = 417
       Align = alClient
       Caption = 'GroupBox3'
       TabOrder = 0
+      object Edit1: TStaticText
+        Left = 320
+        Top = 80
+        Width = 197
+        Height = 17
+        AutoSize = False
+        Caption = 'Edit1'
+        Color = clHighlight
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWhite
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        TabOrder = 0
+        Visible = False
+      end
+      inline EditorBase1: TEditorBase
+        Left = 184
+        Top = 108
+        TabOrder = 1
+        Visible = False
+      end
       object DBG_Sod: TDBGridEh
         Left = 2
         Top = 15
         Width = 659
-        Height = 354
-        Align = alBottom
+        Height = 400
+        Align = alClient
         DataSource = DS_Sod
         Flat = True
         FooterColor = clWindow
@@ -211,7 +235,8 @@ object Form1: TForm1
         FooterFont.Name = 'MS Sans Serif'
         FooterFont.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
-        TabOrder = 0
+        OptionsEh = [dghFixed3D, dghClearSelection, dghDialogFind]
+        TabOrder = 2
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
@@ -354,36 +379,12 @@ object Form1: TForm1
             Footers = <>
           end>
       end
-      object Edit1: TStaticText
-        Left = 320
-        Top = 80
-        Width = 197
-        Height = 17
-        AutoSize = False
-        Caption = 'Edit1'
-        Color = clHighlight
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWhite
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        TabOrder = 1
-        Visible = False
-      end
-      inline EditorBase1: TEditorBase
-        Left = 184
-        Top = 108
-        TabOrder = 2
-        Visible = False
-      end
     end
     object GroupBox4: TGroupBox
       Left = 668
       Top = 0
       Width = 211
-      Height = 371
+      Height = 417
       Align = alRight
       Caption = 'Список автомобилей'
       TabOrder = 1
@@ -391,7 +392,7 @@ object Form1: TForm1
         Left = 2
         Top = 15
         Width = 207
-        Height = 354
+        Height = 400
         Align = alClient
         BevelOuter = bvNone
         Caption = 'P_SloAvto'
@@ -400,7 +401,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 207
-          Height = 322
+          Height = 368
           Align = alClient
           AutoFitColWidths = True
           Color = 11075583
@@ -470,7 +471,7 @@ object Form1: TForm1
         end
         object Panel2: TPanel
           Left = 0
-          Top = 322
+          Top = 368
           Width = 207
           Height = 32
           Align = alBottom

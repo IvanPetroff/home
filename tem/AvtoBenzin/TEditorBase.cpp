@@ -14,30 +14,40 @@ TEditorBase *EditorBase;
 __fastcall TEditorBase::TEditorBase(TComponent* Owner)
     : TFrame(Owner)
 {
+    StaticText1->BringToFront();
+    Color = StaticText1->Color;
 }
 //---------------------------------------------------------------------------
 
 
 void __fastcall TEditorBase::SetRect(TRect inRect)
 {
-    Left = inRect.Left+2;
+    Left = inRect.Left+1;
     Top = inRect.Top+1;
-    Width = inRect.Width()-5;
+    Width = inRect.Width()-2;
     Height = inRect.Height()-2;
 }
 
 
 void __fastcall TEditorBase::FrameResize(TObject *Sender)
 {
-    StaticText1->Width = Width;
-    StaticText1->Height = Height;
-    Edit1->Width = Width;
-    Edit1->Height = Height;
+    TDBGridEh* DBG = (TDBGridEh*)this->Parent;
+    StaticText1->Left = 1;
+    StaticText1->Top = DBG->Flat?0:1;
+    StaticText1->Width = Width-3;
+    StaticText1->Height = Height-0;
+
+    Edit1->Left = StaticText1->Left;
+    Edit1->Top = StaticText1->Top;
+    Edit1->Width = StaticText1->Width;
+    Edit1->Height = StaticText1->Height;
 }
 
 void __fastcall TEditorBase::SetVal(AnsiString S)
 {
     StaticText1->Caption = S;
+    StaticText1->Hint = S;
+
     Edit1->Text = S;
 }
 
@@ -48,29 +58,40 @@ void __fastcall TEditorBase::SetAlignment(TAlignment al)
 }
 
 
-//---------------------------------------------------------------------------
-void __fastcall TEditorBase::StaticText1Click(TObject *Sender)
+void __fastcall TEditorBase::SetViewMode()
+{
+    Edit1->Visible = false;
+    StaticText1->Visible = true;
+    StaticText1->BringToFront();
+    Color = StaticText1->Color;
+}
+
+
+void __fastcall TEditorBase::SetEditMode()
 {
     StaticText1->Visible = false;
     Edit1->Visible = true;
     Edit1->BringToFront();
     Edit1->SetFocus();
+    Color = Edit1->Color;
+}
+
+
+//---------------------------------------------------------------------------
+void __fastcall TEditorBase::StaticText1Click(TObject *Sender)
+{
+    SetEditMode();
 }
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::Edit1Exit(TObject *Sender)
 {
-    Edit1->Visible = false;
-    StaticText1->Visible = true;
-    StaticText1->BringToFront();
+    SetViewMode();
 }
 //---------------------------------------------------------------------------
 
 void __fastcall TEditorBase::myKeyPress(char &Key)
 {
-    StaticText1->Visible = false;
-    Edit1->Visible = true;
-    Edit1->BringToFront();
-    Edit1->SetFocus();
+    SetEditMode();
     SendMessage(Edit1->Handle, WM_CHAR, Key, 0);
 }
 
@@ -80,9 +101,7 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
 {
     TDBGridEh* DBG = (TDBGridEh*)this->Parent;
     if (Key==VK_ESCAPE) {
-        Edit1->Visible = false;
-        StaticText1->Visible = true;
-        StaticText1->BringToFront();
+        SetViewMode();
         this->Parent->SetFocus();
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
             DBG->DataSource->DataSet->Cancel();
@@ -90,9 +109,7 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
     }
 
     if (Key==VK_RETURN) {
-        Edit1->Visible = false;
-        StaticText1->Visible = true;
-        StaticText1->BringToFront();
+        SetViewMode();
         this->Parent->SetFocus();
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
             DBG->SelectedField->AsString = Edit1->Text;
@@ -100,9 +117,7 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
     }
 
     if (Key==VK_UP || Key==VK_DOWN) {
-        Edit1->Visible = false;
-        StaticText1->Visible = true;
-        StaticText1->BringToFront();
+        SetViewMode();
         this->Parent->SetFocus();
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
             DBG->SelectedField->AsString = Edit1->Text;
@@ -175,6 +190,10 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         this->SetVal(Column->Field->AsString);
         this->SetAlignment(Column->Alignment);
         this->Visible = true;
+//        Application->MainForm->Caption = Application->MainForm->Caption.SubString(Application->MainForm->Caption.Length()-100,Application->MainForm->Caption.Length());
+    }
+    if (Column->FieldName.UpperCase()=="KOL_TREB") {
+//        Application->MainForm->Caption = Column->Field->AsString + " " + Application->MainForm->Caption;
     }
 
 }
