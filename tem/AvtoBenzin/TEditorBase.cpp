@@ -14,6 +14,8 @@ TEditorBase *EditorBase;
 __fastcall TEditorBase::TEditorBase(TComponent* Owner)
     : TFrame(Owner)
 {
+    oldOnKeyPress = 0;
+    oldOnDrawColumnCell = 0;
     StaticText1->BringToFront();
     Color = StaticText1->Color;
 }
@@ -157,6 +159,8 @@ void __fastcall TEditorBase::RemoveEvents(TDBGridEh* DBG)
 
 void __fastcall TEditorBase::SetupEvents(TDBGridEh* DBG)
 {
+    oldOnKeyPress = DBG->OnKeyPress;
+    oldOnDrawColumnCell = DBG->OnDrawColumnCell;
     DBG->OnKeyPress = EditorBaseKeyPress;
     DBG->OnDrawColumnCell = EditorBaseDrawColumnCell;
 }
@@ -165,6 +169,7 @@ void __fastcall TEditorBase::SetupEvents(TDBGridEh* DBG)
 
 void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
 {
+    if (oldOnKeyPress != 0) oldOnKeyPress(Sender,Key);
     if (Key != VK_TAB && Key!=VK_ESCAPE) {
         myKeyPress(Key);
     }
@@ -185,11 +190,22 @@ bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
     return false;
 }
 
+bool __fastcall TEditorBase::isViewMode()
+{
+    if (StaticText1->Visible) {
+        return true;
+    }
+    return false;
+}
+
+
 
 void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
       TGridDrawState State)
 {
+    if (oldOnDrawColumnCell != 0) oldOnDrawColumnCell(Sender,Rect,DataCol,Column,State);
+
     TDBGridEh* DBG = (TDBGridEh*)Sender;
     if (DBG->LeftCol > (DBG->SelectedIndex+1)) {
         this->Visible = false;
@@ -199,15 +215,15 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         this->Visible = false;
         return;
     }
-    if (State.Contains(gdFocused)) {
-        this->Visible = false;
+    if (State.Contains(gdSelected)) {
+        if (isViewMode()) this->Visible = false;
         this->SetRect(Rect);
         this->SetVal(Column->Field->AsString);
         this->SetAlignment(Column->Alignment);
         this->Visible = true;
     }
     else {
-        if (isFrameInRect(Rect)) {
+        if (isFrameInRect(Rect) && this->Visible) {
             this->Visible = false;
         }
     }
