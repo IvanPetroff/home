@@ -22,21 +22,12 @@
 #pragma link "TEditorBase"
 #pragma resource "*.dfm"
 TForm1 *Form1;
+
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
-
-//std::string v(
-//  (std::istreambuf_iterator<char>(
-//    *(std::auto_ptr<std::ifstream>(
-//      new std::ifstream("testfile.txt")
-//    )).get()
-//  )),
-//  std::istreambuf_iterator<char>()
-//);
-
-
     try {
         std::auto_ptr<TStringList> SL(new TStringList);
         SL->LoadFromFile("c:\\db_asu.txt");
@@ -74,8 +65,9 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //    DBG_Sod->InsertControl(EditorBase1);
     EditorBase1->BringToFront();
 }
-//---------------------------------------------------------------------------
 
+
+//---------------------------------------------------------------------------
 void __fastcall TForm1::DBG_SloAvtoSortMarkingChanged(TObject *Sender)
 {
     AnsiString S = "";
@@ -92,6 +84,8 @@ void __fastcall TForm1::DBG_SloAvtoSortMarkingChanged(TObject *Sender)
     Q_SloAvto->SetOrderBy(S);
     Q_SloAvto->Open();
 }
+
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::DBG_SloAvtoApplyFilter(TObject *Sender)
 {
@@ -105,6 +99,8 @@ void __fastcall TForm1::DBG_SloAvtoApplyFilter(TObject *Sender)
     Q_SloAvto->AddWhere(S);
     Q_SloAvto->Open();
 }
+
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 {
@@ -117,11 +113,15 @@ void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
 
     Q_Sod->Post();
 }
+
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::DBG_SloAvtoDblClick(TObject *Sender)
 {
     SpeedButton1Click(0);
 }
+
+
 //---------------------------------------------------------------------------
 void __fastcall TForm1::DBG_SloAvtoDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
@@ -148,6 +148,7 @@ void __fastcall TForm1::DBG_SloAvtoDrawColumnCell(TObject *Sender,
 }
 
 
+//---------------------------------------------------------------------------
 int __fastcall GetRecNoOnARow(TDBGridEh* DBG, int ARow)
 {
     if (ARow<(DBG->STFilter->Visible?2:1)) {
@@ -158,6 +159,7 @@ int __fastcall GetRecNoOnARow(TDBGridEh* DBG, int ARow)
     int RecNo = DBG->DataRowToRecNo(DBG->Row-(DBG->STFilter->Visible?2:1)) + DeltaY;
     return RecNo;
 }
+
 
 //---------------------------------------------------------------------------
 void __fastcall TForm1::DBG_SloAvtoMouseMove(TObject *Sender,
@@ -175,9 +177,9 @@ void __fastcall TForm1::DBG_SloAvtoMouseMove(TObject *Sender,
     }
 
 }
+
+
 //---------------------------------------------------------------------------
-
-
 void __fastcall TForm1::BeginEdit()
 {
     if (DBG_Sod->EditorMode) {
@@ -197,20 +199,7 @@ void __fastcall TForm1::BeginEdit()
         if (MR==mrOk) {
             DBG_Sod->SelectedField->AsString = my->E_Cell->Text;
         }
-
-        return;
-
-
-
-////        DBG_Sod->EditorMode = false;
-//        Edit1->SetFocus();
-//        Edit1->Text = DBG_Sod->InplaceEditor->Text;
-//        Edit1->SelStart = DBG_Sod->InplaceEditor->SelStart;
-//        Edit1->SelLength = DBG_Sod->InplaceEditor->SelLength;
-////        Edit1->SelText = DBG_Sod->InplaceEditor->SelText;
     }
-
-
 }
 
 

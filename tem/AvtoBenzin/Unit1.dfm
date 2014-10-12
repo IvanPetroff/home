@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 600
-  Top = 119
+  Left = 391
+  Top = 17
   Width = 887
   Height = 637
   Caption = 'Отпуск топлива'
@@ -517,7 +517,7 @@ object Form1: TForm1
       
         'select lpad(op,3,'#39' '#39')||'#39' - '#39'||naim txt from asu_spr_op where wid' +
         '_dok=46 order by naim')
-    Left = 196
+    Left = 244
     Top = 4
   end
   object Q_Benzin: TOraQuery
