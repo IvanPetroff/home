@@ -19,47 +19,35 @@ __fastcall TEditorBase::TEditorBase(TComponent* Owner)
     StaticText1->BringToFront();
     Color = StaticText1->Color;
 }
+
+
 //---------------------------------------------------------------------------
-
-
 void __fastcall TEditorBase::SetRect(TRect inRect)
 {
-    Left = inRect.Left+1;
-    Top = inRect.Top+1;
-    Width = inRect.Width()-2;
-    Height = inRect.Height()-2;
+    Left    = inRect.Left+1;
+    Top     = inRect.Top+1;
+    Width   = inRect.Width()-2;
+    Height  = inRect.Height()-2;
 }
 
 
-void __fastcall TEditorBase::FrameResize(TObject *Sender)
-{
-    TDBGridEh* DBG = (TDBGridEh*)this->Parent;
-    StaticText1->Left = 1;
-    StaticText1->Top = DBG->Flat?0:1;
-    StaticText1->Width = Width-3;
-    StaticText1->Height = Height-0;
-
-    Edit1->Left = StaticText1->Left;
-    Edit1->Top = StaticText1->Top;
-    Edit1->Width = StaticText1->Width;
-    Edit1->Height = StaticText1->Height;
-}
-
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetVal(AnsiString S)
 {
-    StaticText1->Caption = S;
-    StaticText1->Hint = S;
-
-    Edit1->Text = S;
+    StaticText1->Caption    = S;
+    StaticText1->Hint       = S;
+    Edit1->Text             = S;
 }
 
 
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetAlignment(TAlignment al)
 {
     StaticText1->Alignment = al;
 }
 
 
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetViewMode()
 {
     Edit1->Hide();
@@ -69,6 +57,7 @@ void __fastcall TEditorBase::SetViewMode()
 }
 
 
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetEditMode()
 {
     StaticText1->Hide();
@@ -84,8 +73,9 @@ void __fastcall TEditorBase::StaticText1Click(TObject *Sender)
 {
     SetEditMode();
 }
-//---------------------------------------------------------------------------
 
+
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::myKeyPress(char &Key)
 {
     SetEditMode();
@@ -93,6 +83,7 @@ void __fastcall TEditorBase::myKeyPress(char &Key)
 }
 
 
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
@@ -121,8 +112,9 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
         }
         SendMessage(Parent->Handle, WM_KEYDOWN, Key, 0);
     }
-
 }
+
+
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::Edit1KeyPress(TObject *Sender, char &Key)
 {
@@ -130,52 +122,51 @@ void __fastcall TEditorBase::Edit1KeyPress(TObject *Sender, char &Key)
         ((TDBGridEh*)this->Parent)->DataSource->DataSet->Edit();
     }
 }
+
+
 //---------------------------------------------------------------------------
-
-
 void __fastcall TEditorBase::SetParent(TWinControl* AParent)
 {
     TDBGridEh* DBG = dynamic_cast<TDBGridEh*>(Parent);
     if (DBG != 0) {
-        RemoveEvents(DBG);
+        _RemoveEvents(DBG);
     }
     TFrame::SetParent(AParent);
     DBG = dynamic_cast<TDBGridEh*>(Parent);
     if (DBG != 0) {
-        SetupEvents(DBG);
+        _SetupEvents(DBG);
     }
 }
 
-void __fastcall TEditorBase::RemoveEvents(TDBGridEh* DBG)
-{
-    DBG->OnKeyPress = 0;
-    DBG->OnDrawColumnCell = 0;
-}
 
-void __fastcall TEditorBase::SetupEvents(TDBGridEh* DBG)
+//---------------------------------------------------------------------------
+void __fastcall TEditorBase::_RemoveEvents(TDBGridEh* DBG)
 {
-    oldOnKeyPress = DBG->OnKeyPress;
-    oldOnDrawColumnCell = DBG->OnDrawColumnCell;
-    DBG->OnKeyPress = EditorBaseKeyPress;
-    DBG->OnDrawColumnCell = EditorBaseDrawColumnCell;
+    DBG->OnKeyPress         = 0;
+    DBG->OnDrawColumnCell   = 0;
 }
 
 
-
-void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
+//---------------------------------------------------------------------------
+void __fastcall TEditorBase::_SetupEvents(TDBGridEh* DBG)
 {
-    if (oldOnKeyPress != 0) oldOnKeyPress(Sender,Key);
-    if (Key != VK_TAB && Key!=VK_ESCAPE) {
-        myKeyPress(Key);
-    }
+    oldOnKeyPress           = DBG->OnKeyPress;
+    oldOnDrawColumnCell     = DBG->OnDrawColumnCell;
+    DBG->OnKeyPress         = EditorBaseKeyPress;
+    DBG->OnDrawColumnCell   = EditorBaseDrawColumnCell;
 }
 
+
+
+//---------------------------------------------------------------------------
 bool __fastcall TEditorBase::isPointInRect(int X, int Y, TRect &Rect)
 {
     if (X>Rect.Left && X<Rect.Right && Y>Rect.Top && Y<Rect.Bottom) return true;
     return false;
 }
 
+
+//---------------------------------------------------------------------------
 bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
 {
     if (isPointInRect(Left,Top,Rect)) return true;
@@ -185,6 +176,8 @@ bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
     return false;
 }
 
+
+//---------------------------------------------------------------------------
 bool __fastcall TEditorBase::isViewMode()
 {
     if (StaticText1->Visible) {
@@ -194,22 +187,36 @@ bool __fastcall TEditorBase::isViewMode()
 }
 
 
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::Show()
 {
     if (Visible) return;
     TFrame::Show();
 }
 
+
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::Hide()
 {
     TFrame::Hide();
 }
 
 
+//---------------------------------------------------------------------------
+void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
+{ // перехватчик соответствующего события грида
+    if (oldOnKeyPress != 0) oldOnKeyPress(Sender,Key);
+    if (Key != VK_TAB && Key!=VK_ESCAPE) {
+        myKeyPress(Key);
+    }
+}
+
+
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
       TGridDrawState State)
-{
+{ // перехватчик соответствующего события грида
     if (oldOnDrawColumnCell != 0) oldOnDrawColumnCell(Sender,Rect,DataCol,Column,State);
 
     TDBGridEh* DBG = (TDBGridEh*)Sender;
@@ -236,10 +243,30 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         }
     }
 }
+
+
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::FrameExit(TObject *Sender)
-{
+{ // обработчик соответствующего события фрейма
     SetViewMode();
 }
+
+
 //---------------------------------------------------------------------------
+void __fastcall TEditorBase::FrameResize(TObject *Sender)
+{ // обработчик соответствующего события фрейма
+    TDBGridEh* DBG = (TDBGridEh*)this->Parent;
+    StaticText1->Left   = 1;
+    StaticText1->Top    = DBG->Flat?0:1;
+    StaticText1->Width  = Width-3;
+    StaticText1->Height = Height-0;
+
+    Edit1->Left     = StaticText1->Left;
+    Edit1->Top      = StaticText1->Top;
+    Edit1->Width    = StaticText1->Width;
+    Edit1->Height   = StaticText1->Height;
+}
+
+
 
 
