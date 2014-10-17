@@ -61,8 +61,6 @@ __fastcall TForm1::TForm1(TComponent* Owner)
     CB_Benzin->ItemIndex = 0;
 
     EditorBase1->Parent = DBG_Sod;
-//    EditorBase1->Parent->RemoveControl(EditorBase1);
-//    DBG_Sod->InsertControl(EditorBase1);
     EditorBase1->BringToFront();
 }
 

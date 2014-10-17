@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 391
-  Top = 17
+  Left = 365
+  Top = 163
   Width = 887
   Height = 637
   Caption = 'Отпуск топлива'
@@ -11,6 +11,7 @@ object Form1: TForm1
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
+  WindowState = wsMaximized
   PixelsPerInch = 96
   TextHeight = 13
   object GroupBox1: TGroupBox

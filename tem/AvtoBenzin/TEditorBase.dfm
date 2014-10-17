@@ -3,6 +3,8 @@ object EditorBase: TEditorBase
   Top = 0
   Width = 320
   Height = 240
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
   TabOrder = 0
   OnExit = FrameExit
   OnResize = FrameResize
@@ -34,5 +36,25 @@ object EditorBase: TEditorBase
     ShowHint = True
     TabOrder = 1
     OnClick = StaticText1Click
+  end
+  object DBGridEh1: TDBGridEh
+    Left = 0
+    Top = 40
+    Width = 161
+    Height = 65
+    Flat = False
+    FooterColor = clWindow
+    FooterFont.Charset = DEFAULT_CHARSET
+    FooterFont.Color = clWindowText
+    FooterFont.Height = -11
+    FooterFont.Name = 'MS Sans Serif'
+    FooterFont.Style = []
+    TabOrder = 2
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = []
+    Visible = False
   end
 end

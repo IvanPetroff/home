@@ -16,6 +16,7 @@ class TEditorBase : public TFrame
 __published:	// IDE-managed Components
     TEdit *Edit1;
     TStaticText *StaticText1;
+        TDBGridEh *DBGridEh1;
     void __fastcall FrameResize(TObject *Sender);
     void __fastcall StaticText1Click(TObject *Sender);
     void __fastcall Edit1KeyDown(TObject *Sender, WORD &Key,
@@ -38,6 +39,7 @@ private:	// User declarations
     typedef void __fastcall (__closure *TDrawColumnCellEvent)(TObject* Sender,const TRect &Rect, int DataCol, TColumnEh* Column, TGridDrawState State);
     TKeyPressEvent          oldOnKeyPress;
     TDrawColumnCellEvent    oldOnDrawColumnCell;
+    TRect       FrameCell;
 
 
 public:		// User declarations
