@@ -125,11 +125,11 @@ void __fastcall TForm1::DBG_SloAvtoDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
       TGridDrawState State)
 {
-    if (State.Contains(gdFixed)) return;
+    if (State.Contains(Gridseh::gdFixed)) return;
     if (DataCol>0) return;
     Panel3->Height = Rect.Height()-2;
     Panel3->Width = Rect.Height()+2;
-    if (State.Contains(gdSelected)) {
+    if (State.Contains(Gridseh::gdSelected)) {
         Panel3->Color = clLime;
         Panel3->Font->Color = clBlack;
     }
@@ -138,7 +138,7 @@ void __fastcall TForm1::DBG_SloAvtoDrawColumnCell(TObject *Sender,
         Panel3->Font->Color = clSilver;
     }
 
-    if (State.Contains(gdSelected)) {
+    if (State.Contains(Gridseh::gdSelected)) {
         DBG_SloAvto->Canvas->Lock();
         Panel3->PaintTo( DBG_SloAvto->Canvas->Handle,(Rect.Left+Rect.Right-Panel3->Width)/2,(Rect.Top+Rect.Bottom-Panel3->Height)/2);
         DBG_SloAvto->Canvas->Unlock();
@@ -163,7 +163,7 @@ int __fastcall GetRecNoOnARow(TDBGridEh* DBG, int ARow)
 void __fastcall TForm1::DBG_SloAvtoMouseMove(TObject *Sender,
       TShiftState Shift, int X, int Y)
 {
-    TGridCoord Coord = DBG_SloAvto->MouseCoord(X,Y);
+    Gridseh::TGridCoord Coord = DBG_SloAvto->MouseCoord(X,Y);
     int MouseRecNo = GetRecNoOnARow(DBG_SloAvto,Coord.Y);
     if (MouseRecNo>0) {
         while (Q_SloAvto->RecNo < MouseRecNo) Q_SloAvto->Next();
