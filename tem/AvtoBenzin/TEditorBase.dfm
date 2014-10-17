@@ -37,24 +37,12 @@ object EditorBase: TEditorBase
     TabOrder = 1
     OnClick = StaticText1Click
   end
-  object DBGridEh1: TDBGridEh
+  object Grid: TStringGrid
     Left = 0
-    Top = 40
-    Width = 161
-    Height = 65
-    Flat = False
-    FooterColor = clWindow
-    FooterFont.Charset = DEFAULT_CHARSET
-    FooterFont.Color = clWindowText
-    FooterFont.Height = -11
-    FooterFont.Name = 'MS Sans Serif'
-    FooterFont.Style = []
+    Top = 56
+    Width = 320
+    Height = 120
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
     TabOrder = 2
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clWindowText
-    TitleFont.Height = -11
-    TitleFont.Name = 'MS Sans Serif'
-    TitleFont.Style = []
-    Visible = False
   end
 end

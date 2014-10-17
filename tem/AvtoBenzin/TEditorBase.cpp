@@ -43,8 +43,8 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
     }
     else {
         Width   = inRect.Width()-2;
-        if (Width < DBGridEh1->Width) Width = DBGridEh1->Width;
-        Height  = Edit1->Height + DBGridEh1->Height;
+        if (Width < Grid->Width) Width = Grid->Width;
+        Height  = Edit1->Height + Grid->Height;
     }
 
     this->Left = Left;
@@ -80,7 +80,7 @@ void __fastcall TEditorBase::SetViewMode()
     StaticText1->BringToFront();
     Color = StaticText1->Color;
 
-    DBGridEh1->Visible = Edit1->Visible;
+    Grid->Visible = Edit1->Visible;
 }
 
 
@@ -93,7 +93,7 @@ void __fastcall TEditorBase::SetEditMode()
     Edit1->SetFocus();
     Color = Edit1->Color;
 
-    DBGridEh1->Visible = Edit1->Visible;
+    Grid->Visible = Edit1->Visible;
 }
 
 
@@ -259,7 +259,7 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         Hide();
         return;
     }
-    if (State.Contains(gdSelected)) {
+    if (State.Contains(Gridseh::gdSelected)) {
         if (isViewMode()) {
             Hide();
         }
@@ -300,8 +300,8 @@ void __fastcall TEditorBase::FrameResize(TObject *Sender)
         Edit1->Width    = StaticText1->Width;
         Edit1->Height   = StaticText1->Height;
 
-        DBGridEh1->Left = Edit1->Left;
-        DBGridEh1->Top = Edit1->Height;
+        Grid->Left = Edit1->Left;
+        Grid->Top = Edit1->Height;
     }
 }
 
