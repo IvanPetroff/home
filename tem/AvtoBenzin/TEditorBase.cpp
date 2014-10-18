@@ -30,47 +30,11 @@ __fastcall TEditorBase::TEditorBase(TComponent* Owner)
 void __fastcall TEditorBase::SetRect(TRect inRect)
 {BEGIN
     FrameCell = inRect;
-    int Left = this->Left;
-    int Top = this->Top;
-    int Width = this->Width;
-    int Height = this->Height;
 
     Left    = inRect.Left+1;
     Top     = inRect.Top+1;
-    if (this->isViewMode()) {
-        Width   = inRect.Width()-2;
-        Height  = inRect.Height()-2;
-    }
-    else {
-        Width   = inRect.Width()-2;
-        if (Width < Grid->Width) Width = Grid->Width+2;
-        Height  = Edit1->Height + Grid->Height+2;
-    }
-
-    this->Left = Left;
-    this->Top = Top;
-    this->Width = Width;
-    this->Height = Height;
-    VAR(Width)
-    VAR(Height)
-
-    if (this->isViewMode()) {
-        TDBGridEh* DBG = (TDBGridEh*)this->Parent;
-        StaticText1->Left   = 1;
-        StaticText1->Top    = DBG->Flat?0:1;
-        StaticText1->Width  = Width-3;
-        StaticText1->Height = Height-0;
-    }
-    else {
-        Edit1->Left     = StaticText1->Left;
-        Edit1->Top      = StaticText1->Top;
-        Edit1->Width    = StaticText1->Width;
-        Edit1->Height   = StaticText1->Height;
-
-        Grid->Left = Edit1->Left;
-        Grid->Top = Edit1->Height;
-    }
-
+    Width   = inRect.Width()-2;
+    Height  = inRect.Height()-2;
 }
 
 
@@ -98,7 +62,7 @@ void __fastcall TEditorBase::SetViewMode()
     StaticText1->BringToFront();
     Color = StaticText1->Color;
 
-    Grid->Visible = Edit1->Visible;
+//    Grid->Visible = Edit1->Visible;
 }
 
 
@@ -111,7 +75,7 @@ void __fastcall TEditorBase::SetEditMode()
     Edit1->SetFocus();
     Color = Edit1->Color;
 
-    Grid->Visible = Edit1->Visible;
+//    Grid->Visible = Edit1->Visible;
 }
 
 
@@ -231,6 +195,13 @@ bool __fastcall TEditorBase::isViewMode()
         return true;
     }
     return false;
+}
+
+
+//---------------------------------------------------------------------------
+bool __fastcall TEditorBase::isEditMode()
+{BEGIN
+    return !isViewMode();
 }
 
 
