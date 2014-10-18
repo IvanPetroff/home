@@ -19,7 +19,6 @@ class TEditorBase : public TFrame
 __published:	// IDE-managed Components
     TEdit *Edit1;
     TStaticText *StaticText1;
-        TStringGrid *Grid;
     void __fastcall StaticText1Click(TObject *Sender);
     void __fastcall Edit1KeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
@@ -49,14 +48,16 @@ private:	// User declarations
 
 
 public:		// User declarations
-                __fastcall TEditorBase  (TComponent* Owner);
-    void        __fastcall SetRect      (TRect inRect);
-    void        __fastcall SetAlignment (TAlignment al);
-    void        __fastcall SetVal       (AnsiString S);
-    void        __fastcall myKeyPress   (char &Key);
-    void        __fastcall SetViewMode  ();
-    void        __fastcall SetEditMode  ();
-    bool        __fastcall isViewMode   ();
+    virtual void        __fastcall SetRect      (TRect inRect);
+
+                        __fastcall TEditorBase  (TComponent* Owner);
+            void        __fastcall SetAlignment (TAlignment al);
+            void        __fastcall SetVal       (AnsiString S);
+            void        __fastcall myKeyPress   (char &Key);
+            void        __fastcall SetViewMode  ();
+            void        __fastcall SetEditMode  ();
+            bool        __fastcall isViewMode   ();
+            bool        __fastcall isEditMode   ();
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TEditorBase *EditorBase;
