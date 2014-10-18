@@ -243,29 +243,42 @@ void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
 
 
 //---------------------------------------------------------------------------
+bool __fastcall TEditorBase::isSelectedColumnOutOfRange(TDBGridEh* DBG)
+{
+    if (DBG->LeftCol > (DBG->SelectedIndex+1)) {
+        return true;
+    }
+    if ((DBG->VisibleColCount+DBG->LeftCol) < (DBG->SelectedIndex)) {
+        return true;
+    }
+    return false;
+}
+
+
+//---------------------------------------------------------------------------
 void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
       TGridDrawState State)
 {BEGIN
  // перехватчик соответствующего события грида
-    if (oldOnDrawColumnCell != 0) oldOnDrawColumnCell(Sender,Rect,DataCol,Column,State);
+    if (oldOnDrawColumnCell != 0) {
+        oldOnDrawColumnCell(Sender,Rect,DataCol,Column,State);
+    }
 
     TDBGridEh* DBG = (TDBGridEh*)Sender;
-    if (DBG->LeftCol > (DBG->SelectedIndex+1)) {
+
+    if (isSelectedColumnOutOfRange(DBG)) {
         Hide();
         return;
     }
-    if ((DBG->VisibleColCount+DBG->LeftCol) < (DBG->SelectedIndex)) {
-        Hide();
-        return;
-    }
+
     if (State.Contains(Gridseh::gdSelected)) {
         if (isViewMode()) {
             Hide();
+            this->SetVal(Column->Field->AsString);
+            this->SetAlignment(Column->Alignment);
         }
-        this->SetRect(Rect); VAR(Rect.Width()) VAR(Rect.Height())
-        if (isViewMode()) this->SetVal(Column->Field->AsString);
-        this->SetAlignment(Column->Alignment);
+        this->SetRect(Rect);// VAR(Rect.Width()) VAR(Rect.Height())
         Show();
     }
     else {
@@ -274,6 +287,7 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
         }
     }
 }
+
 
 
 //---------------------------------------------------------------------------
@@ -307,4 +321,11 @@ void __fastcall TEditorBase::FrameResize(TObject *Sender)
 
 
 
+
+void __fastcall TEditorBase::FrameMouseWheel(TObject *Sender,
+      TShiftState Shift, int WheelDelta, TPoint &MousePos, bool &Handled)
+{
+    Handled = true;
+}
+//---------------------------------------------------------------------------
 
