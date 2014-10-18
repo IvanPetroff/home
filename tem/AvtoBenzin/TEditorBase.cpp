@@ -43,8 +43,8 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
     }
     else {
         Width   = inRect.Width()-2;
-        if (Width < Grid->Width) Width = Grid->Width;
-        Height  = Edit1->Height + Grid->Height;
+        if (Width < Grid->Width) Width = Grid->Width+2;
+        Height  = Edit1->Height + Grid->Height+2;
     }
 
     this->Left = Left;
@@ -53,6 +53,24 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
     this->Height = Height;
     VAR(Width)
     VAR(Height)
+
+    if (this->isViewMode()) {
+        TDBGridEh* DBG = (TDBGridEh*)this->Parent;
+        StaticText1->Left   = 1;
+        StaticText1->Top    = DBG->Flat?0:1;
+        StaticText1->Width  = Width-3;
+        StaticText1->Height = Height-0;
+    }
+    else {
+        Edit1->Left     = StaticText1->Left;
+        Edit1->Top      = StaticText1->Top;
+        Edit1->Width    = StaticText1->Width;
+        Edit1->Height   = StaticText1->Height;
+
+        Grid->Left = Edit1->Left;
+        Grid->Top = Edit1->Height;
+    }
+
 }
 
 
@@ -299,29 +317,6 @@ void __fastcall TEditorBase::FrameExit(TObject *Sender)
 
 
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::FrameResize(TObject *Sender)
-{BEGIN // обработчик соответствующего события фрейма
-    if (this->isViewMode()) {
-        TDBGridEh* DBG = (TDBGridEh*)this->Parent;
-        StaticText1->Left   = 1;
-        StaticText1->Top    = DBG->Flat?0:1;
-        StaticText1->Width  = Width-3;
-        StaticText1->Height = Height-0;
-    }
-    else {
-        Edit1->Left     = StaticText1->Left;
-        Edit1->Top      = StaticText1->Top;
-        Edit1->Width    = StaticText1->Width;
-        Edit1->Height   = StaticText1->Height;
-
-        Grid->Left = Edit1->Left;
-        Grid->Top = Edit1->Height;
-    }
-}
-
-
-
-
 void __fastcall TEditorBase::FrameMouseWheel(TObject *Sender,
       TShiftState Shift, int WheelDelta, TPoint &MousePos, bool &Handled)
 {

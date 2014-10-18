@@ -7,13 +7,13 @@
     <OBJFILES value="Project1.obj Unit1.obj ..\..\lib\TInplaceEditorBase\TInplaceEditorBase.obj 
       TmyInplaceEditor.obj ..\..\lib\TInplaceEditorBase\THorizont.obj 
       ..\..\lib\TmyQuery\TmyQuery.obj ..\..\lib\TmyStringList\TmyStringList.obj 
-      TEditorBase.obj"/>
+      TEditorBase.obj TEditorGrid.obj"/>
     <RESFILES value="Project1.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Unit1.dfm ..\..\lib\TInplaceEditorBase\TInplaceEditorBase.dfm 
-      TmyInplaceEditor.dfm TEditorBase.dfm"/>
+      TmyInplaceEditor.dfm TEditorBase.dfm TEditorGrid.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="EHLIBB50.lib VCLBDE50.lib ODAC50.lib DAC50.lib Vcldb50.lib Vcl50.lib"/>
     <SPARELIBS value="Vcl50.lib Vcldb50.lib DAC50.lib ODAC50.lib VCLBDE50.lib EHLIBB50.lib"/>

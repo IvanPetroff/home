@@ -8,7 +8,6 @@ object EditorBase: TEditorBase
   TabOrder = 0
   OnExit = FrameExit
   OnMouseWheel = FrameMouseWheel
-  OnResize = FrameResize
   object Edit1: TEdit
     Left = 0
     Top = 0
@@ -40,10 +39,12 @@ object EditorBase: TEditorBase
   end
   object Grid: TStringGrid
     Left = 0
-    Top = 56
+    Top = 120
     Width = 320
     Height = 120
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing]
+    DefaultRowHeight = 16
+    FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goColSizing, goEditing]
     TabOrder = 2
   end
 end

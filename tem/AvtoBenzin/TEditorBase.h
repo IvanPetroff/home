@@ -20,7 +20,6 @@ __published:	// IDE-managed Components
     TEdit *Edit1;
     TStaticText *StaticText1;
         TStringGrid *Grid;
-    void __fastcall FrameResize(TObject *Sender);
     void __fastcall StaticText1Click(TObject *Sender);
     void __fastcall Edit1KeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
