@@ -26,6 +26,8 @@ __published:	// IDE-managed Components
           TShiftState Shift);
     void __fastcall Edit1KeyPress(TObject *Sender, char &Key);
     void __fastcall FrameExit(TObject *Sender);
+        void __fastcall FrameMouseWheel(TObject *Sender, TShiftState Shift,
+          int WheelDelta, TPoint &MousePos, bool &Handled);
 
 private:	// User declarations
     virtual void __fastcall SetParent           (TWinControl* AParent);
@@ -37,6 +39,8 @@ private:	// User declarations
     bool        __fastcall isPointInRect            (int X, int Y, TRect &Rect);
     void        __fastcall Show                     ();
     void        __fastcall Hide                     ();
+    bool        __fastcall isSelectedColumnOutOfRange(TDBGridEh* DBG);
+
 
     typedef void __fastcall (__closure *TKeyPressEvent)(TObject* Sender, char &Key);
     typedef void __fastcall (__closure *TDrawColumnCellEvent)(TObject* Sender,const TRect &Rect, int DataCol, TColumnEh* Column, TGridDrawState State);

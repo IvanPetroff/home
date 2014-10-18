@@ -7,6 +7,7 @@ object EditorBase: TEditorBase
   VertScrollBar.Visible = False
   TabOrder = 0
   OnExit = FrameExit
+  OnMouseWheel = FrameMouseWheel
   OnResize = FrameResize
   object Edit1: TEdit
     Left = 0
