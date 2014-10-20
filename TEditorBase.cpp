@@ -20,8 +20,8 @@ __fastcall TEditorBase::TEditorBase(TComponent* Owner)
 {BEGIN
     oldOnKeyPress = 0;
     oldOnDrawColumnCell = 0;
-    StaticText1->BringToFront();
-    Color = StaticText1->Color;
+    ViewText->BringToFront();
+    Color = ViewText->Color;
     isEditMode = false;
 }
 
@@ -31,26 +31,26 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
 {BEGIN
     FrameCell = inRect;
 
-    Left    = inRect.Left+1;
-    Top     = inRect.Top+1;
-    Width   = inRect.Width()-2;
-    Height  = inRect.Height()-2;
+    this->Left    = inRect.Left+1;
+    this->Top     = inRect.Top+1;
+    this->Width   = inRect.Width()-2;
+    this->Height  = inRect.Height()-2;
 }
 
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetVal(AnsiString S)
 {BEGIN
-    StaticText1->Caption    = S;
-    StaticText1->Hint       = S;
-    Edit1->Text             = S;
+    ViewText->Caption    = S;
+    ViewText->Hint       = S;
+    EditText->Text       = S;
 }
 
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetAlignment(TAlignment al)
 {BEGIN
-    StaticText1->Alignment = al;
+    ViewText->Alignment = al;
 }
 
 
@@ -59,10 +59,10 @@ void __fastcall TEditorBase::SetViewMode()
 {BEGIN
     isEditMode = false;
 
-    Edit1->Hide();
-    StaticText1->Show();
-    StaticText1->BringToFront();
-    Color = StaticText1->Color;
+    EditText->Hide();
+    ViewText->Show();
+    ViewText->BringToFront();
+    Color = ViewText->Color;
     SetRect(FrameCell);
 }
 
@@ -72,20 +72,20 @@ void __fastcall TEditorBase::SetEditMode()
 {BEGIN
     isEditMode = true;
 
-    StaticText1->Hide();
-    Edit1->Show();
-    Edit1->BringToFront();
-    Color = Edit1->Color;
+    ViewText->Hide();
+    EditText->Show();
+    EditText->BringToFront();
+    Color = EditText->Color;
 
     SetRect(FrameCell);
-    Edit1->SetFocus();
+    EditText->SetFocus();
 
-//    Grid->Visible = Edit1->Visible;
+//    Grid->Visible = EditText->Visible;
 }
 
 
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::StaticText1Click(TObject *Sender)
+void __fastcall TEditorBase::ViewTextClick(TObject *Sender)
 {BEGIN
     SetEditMode();
 }
@@ -95,12 +95,12 @@ void __fastcall TEditorBase::StaticText1Click(TObject *Sender)
 void __fastcall TEditorBase::myKeyPress(char &Key)
 {BEGIN
     SetEditMode();
-    SendMessage(Edit1->Handle, WM_CHAR, Key, 0);
+    SendMessage(EditText->Handle, WM_CHAR, Key, 0);
 }
 
 
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
+void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {BEGIN
     TDBGridEh* DBG = (TDBGridEh*)this->Parent;
@@ -116,7 +116,7 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
         SetViewMode();
         this->Parent->SetFocus();
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
-            DBG->SelectedField->AsString = Edit1->Text;
+            DBG->SelectedField->AsString = EditText->Text;
         }
     }
 
@@ -124,7 +124,7 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
         SetViewMode();
         this->Parent->SetFocus();
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
-            DBG->SelectedField->AsString = Edit1->Text;
+            DBG->SelectedField->AsString = EditText->Text;
         }
         SendMessage(Parent->Handle, WM_KEYDOWN, Key, 0);
     }
@@ -132,9 +132,9 @@ void __fastcall TEditorBase::Edit1KeyDown(TObject *Sender, WORD &Key,
 
 
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::Edit1KeyPress(TObject *Sender, char &Key)
+void __fastcall TEditorBase::EditTextKeyPress(TObject *Sender, char &Key)
 {BEGIN
-    if (Edit1->Focused() && ((TDBGridEh*)this->Parent)->DataSource->DataSet->State==dsBrowse) {
+    if (EditText->Focused() && ((TDBGridEh*)this->Parent)->DataSource->DataSet->State==dsBrowse) {
         ((TDBGridEh*)this->Parent)->DataSource->DataSet->Edit();
     }
 }
@@ -196,7 +196,7 @@ bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
 //---------------------------------------------------------------------------
 //bool __fastcall TEditorBase::isViewMode()
 //{BEGIN
-//    if (StaticText1->Visible) {
+//    if (ViewText->Visible) {
 //        return true;
 //    }
 //    return false;

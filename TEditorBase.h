@@ -17,12 +17,12 @@
 class TEditorBase : public TFrame
 {
 __published:	// IDE-managed Components
-    TEdit *Edit1;
-    TStaticText *StaticText1;
-    void __fastcall StaticText1Click(TObject *Sender);
-    void __fastcall Edit1KeyDown(TObject *Sender, WORD &Key,
+        TEdit *EditText;
+        TStaticText *ViewText;
+    void __fastcall ViewTextClick(TObject *Sender);
+    void __fastcall EditTextKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
-    void __fastcall Edit1KeyPress(TObject *Sender, char &Key);
+    void __fastcall EditTextKeyPress(TObject *Sender, char &Key);
     void __fastcall FrameExit(TObject *Sender);
         void __fastcall FrameMouseWheel(TObject *Sender, TShiftState Shift,
           int WheelDelta, TPoint &MousePos, bool &Handled);

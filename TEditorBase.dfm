@@ -8,7 +8,7 @@ object EditorBase: TEditorBase
   TabOrder = 0
   OnExit = FrameExit
   OnMouseWheel = FrameMouseWheel
-  object Edit1: TEdit
+  object EditText: TEdit
     Left = 0
     Top = 0
     Width = 121
@@ -18,23 +18,23 @@ object EditorBase: TEditorBase
     BorderStyle = bsNone
     Color = clYellow
     TabOrder = 0
-    Text = 'Edit1'
+    Text = 'EditText'
     Visible = False
-    OnKeyDown = Edit1KeyDown
-    OnKeyPress = Edit1KeyPress
+    OnKeyDown = EditTextKeyDown
+    OnKeyPress = EditTextKeyPress
   end
-  object StaticText1: TStaticText
+  object ViewText: TStaticText
     Left = 0
     Top = 0
     Width = 58
     Height = 17
     AutoSize = False
-    Caption = 'StaticText1'
+    Caption = 'ViewText'
     Color = clBtnFace
     ParentColor = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
-    OnClick = StaticText1Click
+    OnClick = ViewTextClick
   end
 end
