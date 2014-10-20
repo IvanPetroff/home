@@ -41,10 +41,10 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
     ViewText->Top    = DBG->Flat?0:1;
     ViewText->Width  = this->Width-3;
     ViewText->Height = this->Height-0;
-    EditText->Left         = ViewText->Left;
-    EditText->Top          = ViewText->Top;
-    EditText->Width        = ViewText->Width;
-    EditText->Height       = ViewText->Height;
+    EditText->Left   = ViewText->Left;
+    EditText->Top    = ViewText->Top;
+    EditText->Width  = ViewText->Width;
+    EditText->Height = ViewText->Height;
 }
 
 
@@ -89,8 +89,6 @@ void __fastcall TEditorBase::SetEditMode()
 
     SetRect(FrameCell);
     EditText->SetFocus();
-
-//    Grid->Visible = EditText->Visible;
 }
 
 
@@ -204,23 +202,6 @@ bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
 
 
 //---------------------------------------------------------------------------
-//bool __fastcall TEditorBase::isViewMode()
-//{BEGIN
-//    if (ViewText->Visible) {
-//        return true;
-//    }
-//    return false;
-//}
-
-
-//---------------------------------------------------------------------------
-//bool __fastcall TEditorBase::isEditMode()
-//{BEGIN
-//    return !isViewMode;
-//}
-
-
-//---------------------------------------------------------------------------
 void __fastcall TEditorBase::Show()
 {BEGIN
     if (Visible) return;
@@ -282,7 +263,6 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
             this->SetVal(Column->Field->AsString);
             this->SetAlignment(Column->Alignment);
         }
-Application->MainForm->Caption = Application->MainForm->Caption + ".";
         this->SetRect(Rect);// VAR(Rect.Width()) VAR(Rect.Height())
         Show();
     }
