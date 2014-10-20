@@ -22,22 +22,22 @@ void __fastcall TEditorGrid::SetRect(TRect inRect)
     TEditorBase::SetRect(inRect);
 
     TDBGridEh* DBG = (TDBGridEh*)this->Parent;
-    StaticText1->Left   = 1;
-    StaticText1->Top    = DBG->Flat?0:1;
-    StaticText1->Width  = Width-3;
-    StaticText1->Height = Height-0;
-    Edit1->Left         = StaticText1->Left;
-    Edit1->Top          = StaticText1->Top;
-    Edit1->Width        = StaticText1->Width;
-    Edit1->Height       = StaticText1->Height;
+    ViewText->Left   = 1;
+    ViewText->Top    = DBG->Flat?0:1;
+    ViewText->Width  = this->Width-3;
+    ViewText->Height = this->Height-0;
+    EditText->Left         = ViewText->Left;
+    EditText->Top          = ViewText->Top;
+    EditText->Width        = ViewText->Width;
+    EditText->Height       = ViewText->Height;
 
-    Grid->Left = Edit1->Left;
-    Grid->Top = Edit1->Height;
+    Grid->Left = EditText->Left;
+    Grid->Top = EditText->Height;
     if (isEditMode) {
-        Width   = inRect.Width()-2;
-        if (Width < Grid->Width) Width = Grid->Width+2;
-        Height  = Edit1->Height + Grid->Height+2;
-        Edit1->Width    = Width-3;
+        this->Width   = inRect.Width()-2;
+        if (this->Width < Grid->Width) this->Width = Grid->Width+2;
+        this->Height  = EditText->Height + Grid->Height+2;
+        EditText->Width    = this->Width-3;
     }
 }
 
