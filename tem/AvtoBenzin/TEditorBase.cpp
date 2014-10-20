@@ -35,6 +35,16 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
     this->Top     = inRect.Top+1;
     this->Width   = inRect.Width()-2;
     this->Height  = inRect.Height()-2;
+
+    TDBGridEh* DBG = (TDBGridEh*)this->Parent;
+    ViewText->Left   = 1;
+    ViewText->Top    = DBG->Flat?0:1;
+    ViewText->Width  = this->Width-3;
+    ViewText->Height = this->Height-0;
+    EditText->Left         = ViewText->Left;
+    EditText->Top          = ViewText->Top;
+    EditText->Width        = ViewText->Width;
+    EditText->Height       = ViewText->Height;
 }
 
 
