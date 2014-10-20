@@ -56,8 +56,7 @@ public:		// User declarations
             void        __fastcall myKeyPress   (char &Key);
             void        __fastcall SetViewMode  ();
             void        __fastcall SetEditMode  ();
-            bool        __fastcall isViewMode   ();
-            bool        __fastcall isEditMode   ();
+            bool        isEditMode;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TEditorBase *EditorBase;

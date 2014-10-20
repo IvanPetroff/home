@@ -214,12 +214,6 @@ object Form1: TForm1
         TabOrder = 0
         Visible = False
       end
-      inline EditorBase1: TEditorBase
-        Left = 184
-        Top = 108
-        TabOrder = 1
-        Visible = False
-      end
       object DBG_Sod: TDBGridEh
         Left = 2
         Top = 15
@@ -236,7 +230,7 @@ object Form1: TForm1
         FooterFont.Style = []
         Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgTabs, dgConfirmDelete, dgCancelOnExit]
         OptionsEh = [dghFixed3D, dghClearSelection, dghDialogFind]
-        TabOrder = 2
+        TabOrder = 1
         TitleFont.Charset = DEFAULT_CHARSET
         TitleFont.Color = clWindowText
         TitleFont.Height = -11
@@ -378,6 +372,11 @@ object Form1: TForm1
             FieldName = 'OLD_DOP_KOD'
             Footers = <>
           end>
+      end
+      inline myCellEditor: TEditorGrid
+        Left = 264
+        Top = 128
+        TabOrder = 2
       end
     end
     object GroupBox4: TGroupBox
