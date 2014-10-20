@@ -22,7 +22,7 @@ __fastcall TEditorBase::TEditorBase(TComponent* Owner)
     oldOnDrawColumnCell = 0;
     StaticText1->BringToFront();
     Color = StaticText1->Color;
-
+    isEditMode = false;
 }
 
 
@@ -57,23 +57,28 @@ void __fastcall TEditorBase::SetAlignment(TAlignment al)
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetViewMode()
 {BEGIN
+    isEditMode = false;
+
     Edit1->Hide();
     StaticText1->Show();
     StaticText1->BringToFront();
     Color = StaticText1->Color;
-
-//    Grid->Visible = Edit1->Visible;
+    SetRect(FrameCell);
 }
 
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetEditMode()
 {BEGIN
+    isEditMode = true;
+
     StaticText1->Hide();
     Edit1->Show();
     Edit1->BringToFront();
-    Edit1->SetFocus();
     Color = Edit1->Color;
+
+    SetRect(FrameCell);
+    Edit1->SetFocus();
 
 //    Grid->Visible = Edit1->Visible;
 }
@@ -189,20 +194,20 @@ bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
 
 
 //---------------------------------------------------------------------------
-bool __fastcall TEditorBase::isViewMode()
-{BEGIN
-    if (StaticText1->Visible) {
-        return true;
-    }
-    return false;
-}
+//bool __fastcall TEditorBase::isViewMode()
+//{BEGIN
+//    if (StaticText1->Visible) {
+//        return true;
+//    }
+//    return false;
+//}
 
 
 //---------------------------------------------------------------------------
-bool __fastcall TEditorBase::isEditMode()
-{BEGIN
-    return !isViewMode();
-}
+//bool __fastcall TEditorBase::isEditMode()
+//{BEGIN
+//    return !isViewMode;
+//}
 
 
 //---------------------------------------------------------------------------
@@ -262,11 +267,12 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
     }
 
     if (State.Contains(Gridseh::gdSelected)) {
-        if (isViewMode()) {
+        if (!isEditMode) {
             Hide();
             this->SetVal(Column->Field->AsString);
             this->SetAlignment(Column->Alignment);
         }
+Application->MainForm->Caption = Application->MainForm->Caption + ".";
         this->SetRect(Rect);// VAR(Rect.Width()) VAR(Rect.Height())
         Show();
     }

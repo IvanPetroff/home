@@ -20,6 +20,7 @@
 #pragma link "GridsEh"
 #pragma link "DataDriverEh"
 #pragma link "TEditorBase"
+#pragma link "TEditorGrid"
 #pragma resource "*.dfm"
 TForm1 *Form1;
 
@@ -60,8 +61,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
     }
     CB_Benzin->ItemIndex = 0;
 
-    EditorBase1->Parent = DBG_Sod;
-    EditorBase1->BringToFront();
+    myCellEditor->Parent = DBG_Sod;
+    myCellEditor->BringToFront();
 }
 
 

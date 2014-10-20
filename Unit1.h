@@ -21,6 +21,7 @@
 #include "TmyInplaceEditor.h"
 #include "TmyQuery.h"
 #include "TEditorBase.h"
+#include "TEditorGrid.h"
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -64,8 +65,8 @@ __published:	// IDE-managed Components
     TPanel *Panel3;
     TTimer *Timer1;
     TStaticText *Edit1;
-    TEditorBase *EditorBase1;
     TDBGridEh *DBG_Sod;
+        TEditorGrid *myCellEditor;
     void __fastcall DBG_SloAvtoSortMarkingChanged(TObject *Sender);
     void __fastcall DBG_SloAvtoApplyFilter(TObject *Sender);
     void __fastcall SpeedButton1Click(TObject *Sender);
