@@ -35,6 +35,8 @@ public:		// User declarations
         __fastcall TEditorGrid(TComponent* Owner);
         vector<AnsiString> listAvto;
         map<AnsiString,int> History;
+    void __fastcall LoadHistoryFromDataset(TDataSet* DS, AnsiString FieldName);
+
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TEditorGrid *EditorGrid;

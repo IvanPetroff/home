@@ -38,36 +38,36 @@ object MainForm: TMainForm
     Top = 88
     TabOrder = 1
     inherited MemTableEh1: TMemTableEh
-      ExternalMemData = MemTableEh1
+      ExternalMemData = MT
     end
   end
-  object MemTableEh1: TMemTableEh
+  object MT: TMemTableEh
     Active = True
     Params = <>
-    AfterPost = MemTableEh1AfterPost
+    AfterPost = MTAfterPost
     Left = 128
     Top = 40
-    object MemTableEh1id: TIntegerField
+    object MTid: TIntegerField
       FieldName = 'id'
     end
-    object MemTableEh1dat: TDateField
+    object MTdat: TDateField
       FieldName = 'dat'
     end
-    object MemTableEh1naim: TStringField
+    object MTnaim: TStringField
       FieldName = 'naim'
       Size = 128
     end
-    object MemTableEh1cat: TStringField
+    object MTcat: TStringField
       FieldName = 'cat'
       Size = 32
     end
-    object MemTableEh1kol: TFloatField
+    object MTkol: TFloatField
       FieldName = 'kol'
     end
-    object MemTableEh1cena: TFloatField
+    object MTcena: TFloatField
       FieldName = 'cena'
     end
-    object MemTableEh1stoim: TFloatField
+    object MTstoim: TFloatField
       FieldName = 'stoim'
     end
     object MemTableData: TMemTableDataEh
@@ -142,11 +142,36 @@ object MainForm: TMainForm
         end
       end
       object RecordsList: TRecordsListEh
+        Data = (
+          (
+            1
+            nil
+            'qwerty'
+            nil
+            nil
+            nil
+            nil)
+          (
+            2
+            nil
+            'asdfg'
+            nil
+            nil
+            nil
+            nil)
+          (
+            3
+            nil
+            nil
+            nil
+            nil
+            nil
+            nil))
       end
     end
   end
   object DataSource1: TDataSource
-    DataSet = MemTableEh1
+    DataSet = MT
     Left = 160
     Top = 40
   end

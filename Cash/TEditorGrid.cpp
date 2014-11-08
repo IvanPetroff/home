@@ -23,7 +23,6 @@ __fastcall TEditorGrid::TEditorGrid(TComponent* Owner)
 void __fastcall TEditorGrid::SetRect(TRect inRect)
 {
     TEditorBase::SetRect(inRect);
-
     Grid->Left = EditText->Left;
     Grid->Top = EditText->Height+2;
     Grid->Width = EditText->Width;
@@ -39,9 +38,10 @@ void __fastcall TEditorGrid::EditTextChange(TObject *Sender)
 {
     int row = Grid->FixedRows;
     Grid->Cells[0][Grid->FixedRows] = "";
-    for (int I = 0; I < listAvto.size(); I++) {
-        if (EditText->Text.Trim().IsEmpty() || listAvto[I].UpperCase().Pos(EditText->Text.Trim().UpperCase()) > 0) {
-            Grid->Cells[0][row] = listAvto[I];
+    for (map<AnsiString,int>::iterator it = History.begin(); it!=History.end(); it++) {
+        if (it->second==0) continue;
+        if (EditText->Text.Trim().IsEmpty() || it->first.UpperCase().Pos(EditText->Text.Trim().UpperCase()) > 0) {
+            Grid->Cells[0][row] = it->first;
             row++;
         }
     }
@@ -107,3 +107,18 @@ void __fastcall TEditorGrid::Show()
 
     __INHERIT__::Show();
 }
+
+void __fastcall TEditorGrid::LoadHistoryFromDataset(TDataSet* DS, AnsiString FieldName)
+{
+#define foreach(X) for (X->First();!X->Eof;X->Next())
+    History.clear();
+    int recno = DS->RecNo;
+    foreach(DS) {
+        AnsiString S = DS->FieldByName(FieldName)->AsString.Trim();
+        if (S.IsEmpty()) continue;
+        History[ S] = 1+History[ S];
+    }
+    DS->RecNo = recno;
+}
+
+

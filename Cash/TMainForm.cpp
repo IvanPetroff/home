@@ -20,10 +20,14 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     EditorGrid1->Parent = DBG;
     EditorGrid1->BringToFront();
     EditorGrid1->listFieldName["NAIM"] = true;
+    EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
 }
 //---------------------------------------------------------------------------
-void __fastcall TMainForm::MemTableEh1AfterPost(TDataSet *DataSet)
+
+
+void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 {
-    EditorGrid1->History[DataSet->FieldByName("naim")->AsString] = 1;
+    EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
 }
 //---------------------------------------------------------------------------
+

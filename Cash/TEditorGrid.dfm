@@ -8,7 +8,8 @@ inherited EditorGrid: TEditorGrid
     Width = 320
     Height = 120
     TabStop = False
-    ColCount = 2
+    ColCount = 1
+    DefaultColWidth = 256
     DefaultRowHeight = 16
     DefaultDrawing = False
     FixedCols = 0
@@ -19,9 +20,6 @@ inherited EditorGrid: TEditorGrid
     OnDblClick = GridDblClick
     OnDrawCell = GridDrawCell
     OnKeyDown = GridKeyDown
-    ColWidths = (
-      132
-      121)
   end
   object MemTableEh1: TMemTableEh
     Params = <>

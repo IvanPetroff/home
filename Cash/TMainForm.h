@@ -17,18 +17,18 @@
 class TMainForm : public TForm
 {
 __published:	// IDE-managed Components
-        TMemTableEh *MemTableEh1;
+    TMemTableEh *MT;
         TDataSource *DataSource1;
         TDBGridEh *DBG;
-        TIntegerField *MemTableEh1id;
-        TDateField *MemTableEh1dat;
-        TStringField *MemTableEh1naim;
-        TStringField *MemTableEh1cat;
-        TFloatField *MemTableEh1kol;
-        TFloatField *MemTableEh1cena;
-        TFloatField *MemTableEh1stoim;
+    TIntegerField *MTid;
+    TDateField *MTdat;
+    TStringField *MTnaim;
+    TStringField *MTcat;
+    TFloatField *MTkol;
+    TFloatField *MTcena;
+    TFloatField *MTstoim;
         TEditorGrid *EditorGrid1;
-        void __fastcall MemTableEh1AfterPost(TDataSet *DataSet);
+        void __fastcall MTAfterPost(TDataSet *DataSet);
 private:	// User declarations
 public:		// User declarations
         __fastcall TMainForm(TComponent* Owner);
