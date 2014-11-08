@@ -57,7 +57,7 @@ public:		// User declarations
             void        __fastcall SetVal       (AnsiString S);
             void        __fastcall myKeyPress   (char &Key);
             void        __fastcall SetViewMode  ();
-            void        __fastcall SetEditMode  ();
+    virtual void        __fastcall SetEditMode  ();
             bool        isEditMode;
     map<AnsiString,bool> listFieldName;
 };

@@ -30,12 +30,13 @@ __published:	// IDE-managed Components
         void __fastcall GridDblClick(TObject *Sender);
 private:	// User declarations
         virtual void __fastcall SetRect(TRect inRect);
-        virtual void __fastcall Show();
+        void __fastcall FilterHistory();
 public:		// User declarations
         __fastcall TEditorGrid(TComponent* Owner);
         vector<AnsiString> listAvto;
         map<AnsiString,int> History;
     void __fastcall LoadHistoryFromDataset(TDataSet* DS, AnsiString FieldName);
+    virtual void __fastcall SetEditMode();
 
 };
 //---------------------------------------------------------------------------

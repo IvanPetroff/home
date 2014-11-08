@@ -34,7 +34,7 @@ void __fastcall TEditorGrid::SetRect(TRect inRect)
     }
 }
 
-void __fastcall TEditorGrid::EditTextChange(TObject *Sender)
+void __fastcall TEditorGrid::FilterHistory()
 {
     int row = Grid->FixedRows;
     Grid->Cells[0][Grid->FixedRows] = "";
@@ -46,6 +46,12 @@ void __fastcall TEditorGrid::EditTextChange(TObject *Sender)
         }
     }
     Grid->RowCount = row+Grid->FixedRows;
+}
+
+
+void __fastcall TEditorGrid::EditTextChange(TObject *Sender)
+{
+    FilterHistory();
 }
 //---------------------------------------------------------------------------
 
@@ -94,19 +100,6 @@ void __fastcall TEditorGrid::GridDblClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TEditorGrid::Show()
-{
-    int row = Grid->FixedRows;
-    Grid->Cells[0][Grid->FixedRows] = "";
-    for (map<AnsiString,int>::iterator it = History.begin(); it!=History.end(); it++) {
-        if (it->second==0) continue;
-        Grid->Cells[0][row] = it->first;
-        row++;
-    }
-    Grid->RowCount = row+Grid->FixedRows;
-
-    __INHERIT__::Show();
-}
 
 void __fastcall TEditorGrid::LoadHistoryFromDataset(TDataSet* DS, AnsiString FieldName)
 {
@@ -121,4 +114,10 @@ void __fastcall TEditorGrid::LoadHistoryFromDataset(TDataSet* DS, AnsiString Fie
     DS->RecNo = recno;
 }
 
+
+void __fastcall TEditorGrid::SetEditMode()
+{
+    __INHERIT__::SetEditMode();
+    this->FilterHistory();
+}
 
