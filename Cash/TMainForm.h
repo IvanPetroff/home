@@ -28,6 +28,7 @@ __published:	// IDE-managed Components
     TFloatField *MTcena;
     TFloatField *MTstoim;
         TEditorGrid *EditorGrid1;
+    TEditorGrid *EditorCat;
         void __fastcall MTAfterPost(TDataSet *DataSet);
 private:	// User declarations
 public:		// User declarations

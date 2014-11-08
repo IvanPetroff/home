@@ -21,6 +21,11 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     EditorGrid1->BringToFront();
     EditorGrid1->listFieldName["NAIM"] = true;
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
+
+    EditorCat->Parent = DBG;
+    EditorCat->BringToFront();
+    EditorCat->listFieldName["CAT"] = true;
+    EditorCat->LoadHistoryFromDataset(MT, "CAT");
 }
 //---------------------------------------------------------------------------
 
@@ -28,6 +33,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 {
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
+    EditorCat->LoadHistoryFromDataset(MT, "CAT");
 }
 //---------------------------------------------------------------------------
 

@@ -36,10 +36,17 @@ object MainForm: TMainForm
   inline EditorGrid1: TEditorGrid
     Left = 96
     Top = 88
+    Width = 169
     TabOrder = 1
     inherited MemTableEh1: TMemTableEh
       ExternalMemData = MT
     end
+  end
+  inline EditorCat: TEditorGrid
+    Left = 328
+    Top = 136
+    Width = 185
+    TabOrder = 2
   end
   object MT: TMemTableEh
     Active = True
