@@ -21,9 +21,4 @@ inherited EditorGrid: TEditorGrid
     OnDrawCell = GridDrawCell
     OnKeyDown = GridKeyDown
   end
-  object MemTableEh1: TMemTableEh
-    Params = <>
-    Left = 112
-    Top = 56
-  end
 end

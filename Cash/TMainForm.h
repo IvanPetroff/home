@@ -13,13 +13,26 @@
 #include "TEditorBase.h"
 #include "TEditorGrid.h"
 #include <Db.hpp>
+#include "MemDS.hpp"
+#include "VirtualTable.hpp"
 //---------------------------------------------------------------------------
 class TMainForm : public TForm
 {
 __published:	// IDE-managed Components
-    TMemTableEh *MT;
+    TMemTableEh *MT2;
         TDataSource *DataSource1;
         TDBGridEh *DBG;
+    TIntegerField *MT2id;
+    TDateField *MT2dat;
+    TStringField *MT2naim;
+    TStringField *MT2cat;
+    TFloatField *MT2kol;
+    TFloatField *MT2cena;
+    TFloatField *MT2stoim;
+        TEditorGrid *EditorGrid1;
+    TEditorGrid *EditorCat;
+    TButton *Button1;
+    TVirtualTable *MT;
     TIntegerField *MTid;
     TDateField *MTdat;
     TStringField *MTnaim;
@@ -27,9 +40,11 @@ __published:	// IDE-managed Components
     TFloatField *MTkol;
     TFloatField *MTcena;
     TFloatField *MTstoim;
-        TEditorGrid *EditorGrid1;
-    TEditorGrid *EditorCat;
-        void __fastcall MTAfterPost(TDataSet *DataSet);
+    TButton *Button2;
+        void __fastcall MT2AfterPost(TDataSet *DataSet);
+    void __fastcall Button1Click(TObject *Sender);
+    void __fastcall MTAfterPost(TDataSet *DataSet);
+    void __fastcall Button2Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations
         __fastcall TMainForm(TComponent* Owner);

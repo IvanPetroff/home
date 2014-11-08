@@ -38,9 +38,6 @@ object MainForm: TMainForm
     Top = 88
     Width = 169
     TabOrder = 1
-    inherited MemTableEh1: TMemTableEh
-      ExternalMemData = MT
-    end
   end
   inline EditorCat: TEditorGrid
     Left = 328
@@ -48,33 +45,51 @@ object MainForm: TMainForm
     Width = 185
     TabOrder = 2
   end
-  object MT: TMemTableEh
+  object Button1: TButton
+    Left = 64
+    Top = 520
+    Width = 75
+    Height = 25
+    Caption = 'save'
+    TabOrder = 3
+    OnClick = Button1Click
+  end
+  object Button2: TButton
+    Left = 168
+    Top = 520
+    Width = 75
+    Height = 25
+    Caption = 'load'
+    TabOrder = 4
+    OnClick = Button2Click
+  end
+  object MT2: TMemTableEh
     Active = True
     Params = <>
-    AfterPost = MTAfterPost
+    AfterPost = MT2AfterPost
     Left = 128
     Top = 40
-    object MTid: TIntegerField
+    object MT2id: TIntegerField
       FieldName = 'id'
     end
-    object MTdat: TDateField
+    object MT2dat: TDateField
       FieldName = 'dat'
     end
-    object MTnaim: TStringField
+    object MT2naim: TStringField
       FieldName = 'naim'
       Size = 128
     end
-    object MTcat: TStringField
+    object MT2cat: TStringField
       FieldName = 'cat'
       Size = 32
     end
-    object MTkol: TFloatField
+    object MT2kol: TFloatField
       FieldName = 'kol'
     end
-    object MTcena: TFloatField
+    object MT2cena: TFloatField
       FieldName = 'cena'
     end
-    object MTstoim: TFloatField
+    object MT2stoim: TFloatField
       FieldName = 'stoim'
     end
     object MemTableData: TMemTableDataEh
@@ -161,7 +176,7 @@ object MainForm: TMainForm
           (
             2
             nil
-            'asdfg'
+            'asdfghh'
             nil
             nil
             nil
@@ -181,5 +196,73 @@ object MainForm: TMainForm
     DataSet = MT
     Left = 160
     Top = 40
+  end
+  object MT: TVirtualTable
+    Active = True
+    AfterPost = MTAfterPost
+    FieldDefs = <
+      item
+        Name = 'id'
+        DataType = ftInteger
+      end
+      item
+        Name = 'dat'
+        DataType = ftDate
+      end
+      item
+        Name = 'naim'
+        DataType = ftString
+        Size = 128
+      end
+      item
+        Name = 'cat'
+        DataType = ftString
+        Size = 32
+      end
+      item
+        Name = 'kol'
+        DataType = ftFloat
+      end
+      item
+        Name = 'cena'
+        DataType = ftFloat
+      end
+      item
+        Name = 'stoim'
+        DataType = ftFloat
+      end>
+    Left = 216
+    Top = 40
+    Data = {
+      030007000200696403000000000000000300646174090000000000000004006E
+      61696D01008000000000000300636174010020000000000003006B6F6C060000
+      0000000000040063656E610600000000000000050073746F696D060000000000
+      0000000003000000040000000100000000000000060000007177657274790000
+      0000000000000000000000000000040000000200000000000000050000006173
+      6466670000000000000000000000000000000004000000030000000000000000
+      00000000000000000000000000000000000000}
+    object MTid: TIntegerField
+      FieldName = 'id'
+    end
+    object MTdat: TDateField
+      FieldName = 'dat'
+    end
+    object MTnaim: TStringField
+      FieldName = 'naim'
+      Size = 128
+    end
+    object MTcat: TStringField
+      FieldName = 'cat'
+      Size = 32
+    end
+    object MTkol: TFloatField
+      FieldName = 'kol'
+    end
+    object MTcena: TFloatField
+      FieldName = 'cena'
+    end
+    object MTstoim: TFloatField
+      FieldName = 'stoim'
+    end
   end
 end

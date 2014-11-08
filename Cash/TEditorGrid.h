@@ -19,7 +19,6 @@ class TEditorGrid : public TEditorBase
 {
 __published:	// IDE-managed Components
         TStringGrid *Grid;
-        TMemTableEh *MemTableEh1;
         void __fastcall EditTextChange(TObject *Sender);
         void __fastcall EditTextKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
