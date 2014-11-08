@@ -4,6 +4,7 @@
 #pragma hdrstop
 
 #include <memory>
+#include <stdio>
 
 //---------------------------------------------------------------------------
 
@@ -51,9 +52,25 @@ int unpack(AnsiString rawjpg_FileName, AnsiString jpg_FileName="", AnsiString ra
 }
 
 
+void PrintHelp()
+{
+    printf("    jpgraw -[option] filename\n");
+    printf("\n");
+    printf("    option:\n");
+    printf("        -p  :   pack file JPG + RAW to JPGRAW file\n");
+    printf("                filename - it's a name of JPG file.\n");
+    printf("                .CR2 file must be placed near .JPG in this folder\n");
+    printf("\n");
+    printf("        -u  :   unpack JPGRAW file to separate JPG and RAW file\n");
+    printf("                filename - it's a name of RAWJPG file.\n");
+}
+
 int main(int argc, char* argv[])
 {
-    if (argc<3) return 0;
+    if (argc<3) {
+        PrintHelp();
+        return 0;
+    }
     AnsiString key = argv[1];
     if (key=="-p") {
         AnsiString jpg_FileName = "";
