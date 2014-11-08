@@ -122,11 +122,11 @@ void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
     }
 
     if (Key==VK_RETURN) {
-        SetViewMode();
-        this->Parent->SetFocus();
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
             DBG->SelectedField->AsString = EditText->Text;
         }
+        SetViewMode();
+        this->Parent->SetFocus();
     }
 
     if (Key==VK_UP || Key==VK_DOWN) {
@@ -234,6 +234,8 @@ void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
 
     if (Key != VK_TAB && Key!=VK_ESCAPE && isEditableField(DBG->SelectedField->FieldName)) {
         myKeyPress(Key);
+        DBG->EditorMode = false;
+        Key = 0;
     }
 }
 
