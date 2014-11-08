@@ -84,6 +84,10 @@ void __fastcall TEditorGrid::GridDrawCell(TObject *Sender, int ACol,
 void __fastcall TEditorGrid::GridKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
+    if (Key==VK_UP && Grid->Row==Grid->FixedRows) {
+        EditText->SetFocus();
+        return;
+    }
     if (Key==VK_DOWN || Key==VK_UP) {
         return;
     }
