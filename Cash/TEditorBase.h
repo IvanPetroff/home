@@ -55,7 +55,7 @@ public:		// User declarations
                         __fastcall TEditorBase  (TComponent* Owner);
             void        __fastcall SetAlignment (TAlignment al);
             void        __fastcall SetVal       (AnsiString S);
-            void        __fastcall myKeyPress   (char &Key);
+            void        __fastcall myKeyPress   (unsigned char &Key);
             void        __fastcall SetViewMode  ();
     virtual void        __fastcall SetEditMode  ();
             bool        isEditMode;

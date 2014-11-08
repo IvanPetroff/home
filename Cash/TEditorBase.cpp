@@ -101,7 +101,7 @@ void __fastcall TEditorBase::ViewTextClick(TObject *Sender)
 
 
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::myKeyPress(char &Key)
+void __fastcall TEditorBase::myKeyPress(unsigned char &Key)
 {
     SetEditMode();
     SendMessage(EditText->Handle, WM_CHAR, Key, 0);
