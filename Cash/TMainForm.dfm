@@ -37,6 +37,9 @@ object MainForm: TMainForm
     Left = 96
     Top = 88
     TabOrder = 1
+    inherited MemTableEh1: TMemTableEh
+      ExternalMemData = MemTableEh1
+    end
   end
   object MemTableEh1: TMemTableEh
     Active = True

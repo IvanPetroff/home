@@ -23,4 +23,9 @@ inherited EditorGrid: TEditorGrid
       132
       121)
   end
+  object MemTableEh1: TMemTableEh
+    Params = <>
+    Left = 112
+    Top = 56
+  end
 end

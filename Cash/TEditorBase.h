@@ -36,8 +36,6 @@ private:	// User declarations
     void        __fastcall EditorBaseKeyPress       (TObject *Sender, char &Key);
     bool        __fastcall isFrameInRect            (TRect &Rect);
     bool        __fastcall isPointInRect            (int X, int Y, TRect &Rect);
-    void        __fastcall Show                     ();
-    void        __fastcall Hide                     ();
     bool        __fastcall isSelectedColumnOutOfRange(TDBGridEh* DBG);
 
 
@@ -51,6 +49,8 @@ private:	// User declarations
 
 public:		// User declarations
     virtual void        __fastcall SetRect      (TRect inRect);
+    virtual void __fastcall Show                    ();
+    virtual void __fastcall Hide                    ();
 
                         __fastcall TEditorBase  (TComponent* Owner);
             void        __fastcall SetAlignment (TAlignment al);

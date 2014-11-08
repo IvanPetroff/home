@@ -7,6 +7,9 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "TEditorBase"
+#pragma link "MemTableEh"
+#pragma link "DBGridEh"
+#pragma link "GridsEh"
 #pragma resource "*.dfm"
 TEditorGrid *EditorGrid;
 //---------------------------------------------------------------------------
@@ -91,3 +94,19 @@ void __fastcall TEditorGrid::GridDblClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+void __fastcall TEditorGrid::Show()
+{
+    int row = Grid->FixedRows;
+    TMemTableEh* MT = MemTableEh1;
+    MT->Open();
+
+//    MT->ExternalMemData = (TMemTableEh*)(((TDBGridEh*)this->Parent)->DataSource->DataSet);
+    Grid->Cells[0][Grid->FixedRows] = "";
+    for (MT->First(); !MT->Eof; MT->Next()) {
+        Grid->Cells[0][row] = MT->FieldByName("naim")->AsString;
+        row++;
+    }
+    Grid->RowCount = row+Grid->FixedRows;
+
+    __INHERIT__::Show();
+}
