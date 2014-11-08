@@ -44,6 +44,7 @@ object MainForm: TMainForm
   object MemTableEh1: TMemTableEh
     Active = True
     Params = <>
+    AfterPost = MemTableEh1AfterPost
     Left = 128
     Top = 40
     object MemTableEh1id: TIntegerField

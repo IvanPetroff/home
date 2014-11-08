@@ -34,6 +34,7 @@ private:	// User declarations
 public:		// User declarations
         __fastcall TEditorGrid(TComponent* Owner);
         vector<AnsiString> listAvto;
+        map<AnsiString,int> History;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TEditorGrid *EditorGrid;

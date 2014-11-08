@@ -28,6 +28,7 @@ __published:	// IDE-managed Components
         TFloatField *MemTableEh1cena;
         TFloatField *MemTableEh1stoim;
         TEditorGrid *EditorGrid1;
+        void __fastcall MemTableEh1AfterPost(TDataSet *DataSet);
 private:	// User declarations
 public:		// User declarations
         __fastcall TMainForm(TComponent* Owner);

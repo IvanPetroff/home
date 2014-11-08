@@ -22,3 +22,8 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     EditorGrid1->listFieldName["NAIM"] = true;
 }
 //---------------------------------------------------------------------------
+void __fastcall TMainForm::MemTableEh1AfterPost(TDataSet *DataSet)
+{
+    EditorGrid1->History[DataSet->FieldByName("naim")->AsString] = 1;
+}
+//---------------------------------------------------------------------------

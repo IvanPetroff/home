@@ -97,13 +97,10 @@ void __fastcall TEditorGrid::GridDblClick(TObject *Sender)
 void __fastcall TEditorGrid::Show()
 {
     int row = Grid->FixedRows;
-    TMemTableEh* MT = MemTableEh1;
-    MT->Open();
-
-//    MT->ExternalMemData = (TMemTableEh*)(((TDBGridEh*)this->Parent)->DataSource->DataSet);
     Grid->Cells[0][Grid->FixedRows] = "";
-    for (MT->First(); !MT->Eof; MT->Next()) {
-        Grid->Cells[0][row] = MT->FieldByName("naim")->AsString;
+    for (map<AnsiString,int>::iterator it = History.begin(); it!=History.end(); it++) {
+        if (it->second==0) continue;
+        Grid->Cells[0][row] = it->first;
         row++;
     }
     Grid->RowCount = row+Grid->FixedRows;
