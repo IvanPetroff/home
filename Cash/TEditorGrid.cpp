@@ -26,12 +26,22 @@ void __fastcall TEditorGrid::SetRect(TRect inRect)
     Grid->Left = EditText->Left;
     Grid->Top = EditText->Height+2;
     Grid->Width = EditText->Width;
-    if (isEditMode) {
+    if (isEditMode && !IsHistoryGridEmpty()) {
         this->Width   = inRect.Width()-2;
         if (this->Width < Grid->Width) this->Width = Grid->Width+2;
         this->Height  = EditText->Height + Grid->Height+4;
         EditText->Width    = this->Width-3;
     }
+}
+
+
+bool __fastcall TEditorGrid::IsHistoryGridEmpty()
+{
+    if (Grid->Cells[0][Grid->FixedRows].Trim().IsEmpty()) {
+        return true;
+    }
+    return false;
+
 }
 
 void __fastcall TEditorGrid::FilterHistory()
@@ -58,7 +68,7 @@ void __fastcall TEditorGrid::EditTextChange(TObject *Sender)
 void __fastcall TEditorGrid::EditTextKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
 {
-    if (Key==VK_DOWN) {
+    if (Key==VK_DOWN && !IsHistoryGridEmpty()) {
         Grid->SetFocus();
         return;
     }
