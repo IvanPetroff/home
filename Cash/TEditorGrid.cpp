@@ -27,13 +27,25 @@ void __fastcall TEditorGrid::SetRect(TRect inRect)
     Grid->Top = EditText->Height+2;
     Grid->Width = EditText->Width;
     if (isEditMode && !IsHistoryGridEmpty()) {
-        this->Width   = inRect.Width()-2;
-        if (this->Width < Grid->Width) this->Width = Grid->Width+2;
-        this->Height  = EditText->Height + Grid->Height+4;
-        EditText->Width    = this->Width-3;
+        SetVisibleHistoryGrid(true);
     }
 }
 
+
+void __fastcall TEditorGrid::SetVisibleHistoryGrid(bool flg)
+{
+    if (flg) {
+        this->Width   = FrameCell.Width()-2;
+        if (this->Width < Grid->Width) {
+            this->Width = Grid->Width+2;
+        }
+        this->Height  = Grid->Top + Grid->Height+4;
+        EditText->Width    = this->Width-3;
+    }
+    else {
+        this->Height  = Grid->Top;
+    }
+}
 
 bool __fastcall TEditorGrid::IsHistoryGridEmpty()
 {
@@ -56,6 +68,7 @@ void __fastcall TEditorGrid::FilterHistory()
         }
     }
     Grid->RowCount = row+Grid->FixedRows;
+    SetVisibleHistoryGrid( !IsHistoryGridEmpty());
 }
 
 

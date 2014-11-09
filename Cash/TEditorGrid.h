@@ -31,6 +31,8 @@ private:	// User declarations
         virtual void __fastcall SetRect(TRect inRect);
         void __fastcall FilterHistory();
     bool __fastcall IsHistoryGridEmpty();
+    void __fastcall SetVisibleHistoryGrid(bool flg);
+
 public:		// User declarations
         __fastcall TEditorGrid(TComponent* Owner);
         vector<AnsiString> listAvto;

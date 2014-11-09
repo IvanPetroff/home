@@ -43,9 +43,10 @@ private:	// User declarations
     typedef void __fastcall (__closure *TDrawColumnCellEvent)(TObject* Sender,const TRect &Rect, int DataCol, TColumnEh* Column, TGridDrawState State);
     TKeyPressEvent          oldOnKeyPress;
     TDrawColumnCellEvent    oldOnDrawColumnCell;
-    TRect       FrameCell;
     bool __fastcall isEditableField(AnsiString inFieldName);
 
+protected:
+    TRect       FrameCell;
 
 public:		// User declarations
     virtual void        __fastcall SetRect      (TRect inRect);
