@@ -32,6 +32,9 @@ private:	// User declarations
         void __fastcall FilterHistory();
     bool __fastcall IsHistoryGridEmpty();
     void __fastcall SetVisibleHistoryGrid(bool flg);
+    AnsiString __fastcall GetHistoryGridItem(int index);
+    int __fastcall GetHistoryGridCount();
+
 
 public:		// User declarations
         __fastcall TEditorGrid(TComponent* Owner);

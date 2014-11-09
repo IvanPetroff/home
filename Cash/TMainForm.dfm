@@ -44,17 +44,17 @@ object MainForm: TMainForm
       end
       item
         EditButtons = <>
-        FieldName = 'naim'
-        Footers = <>
-        Title.Caption = 'Название'
-        Width = 181
-      end
-      item
-        EditButtons = <>
         FieldName = 'cat'
         Footers = <>
         Title.Caption = 'Категория'
         Width = 82
+      end
+      item
+        EditButtons = <>
+        FieldName = 'naim'
+        Footers = <>
+        Title.Caption = 'Название'
+        Width = 181
       end
       item
         EditButtons = <>

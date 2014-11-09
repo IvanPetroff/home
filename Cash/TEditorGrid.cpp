@@ -85,9 +85,27 @@ void __fastcall TEditorGrid::EditTextKeyDown(TObject *Sender, WORD &Key,
         Grid->SetFocus();
         return;
     }
+    if (Key==VK_RETURN && Shift.Contains(ssCtrl) && GetHistoryGridCount()==1) {
+        Grid->SetFocus();
+        EditText->Text = GetHistoryGridItem(0);
+    }
     TEditorBase::EditTextKeyDown(Sender, Key, Shift);
 }
 //---------------------------------------------------------------------------
+
+AnsiString __fastcall TEditorGrid::GetHistoryGridItem(int index)
+{
+    int row = Grid->FixedRows;
+    return Grid->Cells[0][Grid->FixedRows];
+}
+
+
+int __fastcall TEditorGrid::GetHistoryGridCount()
+{
+    if (IsHistoryGridEmpty()) return 0;
+    return Grid->RowCount - Grid->FixedRows;
+}
+
 
 void __fastcall TEditorGrid::GridDrawCell(TObject *Sender, int ACol,
       int ARow, TRect &Rect, TGridDrawState State)
@@ -147,4 +165,5 @@ void __fastcall TEditorGrid::SetEditMode()
     __INHERIT__::SetEditMode();
     this->FilterHistory();
 }
+
 
