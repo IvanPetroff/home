@@ -26,6 +26,7 @@ TMainForm *MainForm;
 __fastcall TMainForm::TMainForm(TComponent* Owner)
         : TForm(Owner)
 {
+    isLoadMode = false;
     EditorGrid1->Parent = DBG;
     EditorGrid1->BringToFront();
     EditorGrid1->listFieldName["NAIM"] = true;
@@ -47,6 +48,7 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 
 void __fastcall TMainForm::MT2AfterPost(TDataSet *DataSet)
 {
+    if (isLoadMode) return;
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
     EditorCurr->LoadHistoryFromDataset(MT, "CURR");
@@ -64,6 +66,7 @@ void __fastcall TMainForm::Button1Click(TObject *Sender)
 
 void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 {
+    if (isLoadMode) return;
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
     EditorCurr->LoadHistoryFromDataset(MT, "CURR");
@@ -72,8 +75,20 @@ void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 
 void __fastcall TMainForm::Button2Click(TObject *Sender)
 {
-    MT->LoadFromFile("test");
+    isLoadMode = true;
+    try {
+        MT->LoadFromFile("test");
+    }
+    catch(...) {
+    }
+    isLoadMode = false;
+}
+//---------------------------------------------------------------------------
 
+void __fastcall TMainForm::MTAfterInsert(TDataSet *DataSet)
+{
+    if (isLoadMode) return;
+    MT->FieldByName("dat")->AsDateTime = Now();
 }
 //---------------------------------------------------------------------------
 

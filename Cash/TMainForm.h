@@ -41,7 +41,9 @@ __published:	// IDE-managed Components
     void __fastcall Button1Click(TObject *Sender);
     void __fastcall MTAfterPost(TDataSet *DataSet);
     void __fastcall Button2Click(TObject *Sender);
+    void __fastcall MTAfterInsert(TDataSet *DataSet);
 private:	// User declarations
+    bool isLoadMode;
 public:		// User declarations
         __fastcall TMainForm(TComponent* Owner);
 };

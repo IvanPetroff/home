@@ -1,8 +1,8 @@
 object MainForm: TMainForm
-  Left = 279
-  Top = 153
-  Width = 1230
-  Height = 589
+  Left = 337
+  Top = 114
+  Width = 855
+  Height = 418
   Caption = 'MainForm'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -16,8 +16,8 @@ object MainForm: TMainForm
   object DBG: TDBGridEh
     Left = 0
     Top = 0
-    Width = 1120
-    Height = 562
+    Width = 745
+    Height = 391
     Align = alClient
     DataSource = DataSource1
     Flat = True
@@ -100,10 +100,10 @@ object MainForm: TMainForm
     TabOrder = 2
   end
   object Panel1: TPanel
-    Left = 1120
+    Left = 745
     Top = 0
     Width = 102
-    Height = 562
+    Height = 391
     Align = alRight
     Caption = 'Panel1'
     TabOrder = 3
@@ -269,6 +269,7 @@ object MainForm: TMainForm
   end
   object MT: TVirtualTable
     Active = True
+    AfterInsert = MTAfterInsert
     AfterPost = MTAfterPost
     FieldDefs = <
       item
