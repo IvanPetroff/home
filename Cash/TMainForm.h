@@ -15,6 +15,7 @@
 #include <Db.hpp>
 #include "MemDS.hpp"
 #include "VirtualTable.hpp"
+#include <ExtCtrls.hpp>
 //---------------------------------------------------------------------------
 class TMainForm : public TForm
 {
@@ -31,16 +32,11 @@ __published:	// IDE-managed Components
     TFloatField *MT2stoim;
         TEditorGrid *EditorGrid1;
     TEditorGrid *EditorCat;
-    TButton *Button1;
     TVirtualTable *MT;
-    TIntegerField *MTid;
-    TDateField *MTdat;
-    TStringField *MTnaim;
-    TStringField *MTcat;
-    TFloatField *MTkol;
-    TFloatField *MTcena;
-    TFloatField *MTstoim;
+    TPanel *Panel1;
+    TButton *Button1;
     TButton *Button2;
+    TEditorGrid *EditorCurr;
         void __fastcall MT2AfterPost(TDataSet *DataSet);
     void __fastcall Button1Click(TObject *Sender);
     void __fastcall MTAfterPost(TDataSet *DataSet);

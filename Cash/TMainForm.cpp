@@ -35,6 +35,12 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
     EditorCat->BringToFront();
     EditorCat->listFieldName["CAT"] = true;
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
+
+    EditorCurr->Parent = DBG;
+    EditorCurr->BringToFront();
+    EditorCurr->listFieldName["CURR"] = true;
+    EditorCurr->LoadHistoryFromDataset(MT, "CURR");
+
 }
 //---------------------------------------------------------------------------
 
@@ -43,6 +49,7 @@ void __fastcall TMainForm::MT2AfterPost(TDataSet *DataSet)
 {
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
+    EditorCurr->LoadHistoryFromDataset(MT, "CURR");
 }
 //---------------------------------------------------------------------------
 struct x {
@@ -59,6 +66,7 @@ void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 {
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
+    EditorCurr->LoadHistoryFromDataset(MT, "CURR");
 }
 //---------------------------------------------------------------------------
 
