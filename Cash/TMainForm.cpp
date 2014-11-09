@@ -70,6 +70,9 @@ void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
     EditorCurr->LoadHistoryFromDataset(MT, "CURR");
+    if (!MT->FieldByName("cat")->AsString.Trim().IsEmpty() && !MT->FieldByName("naim")->AsString.Trim().IsEmpty()) {
+        listCat[MT->FieldByName("naim")->AsString] = MT->FieldByName("cat")->AsString;
+    }
 }
 //---------------------------------------------------------------------------
 
@@ -89,6 +92,14 @@ void __fastcall TMainForm::MTAfterInsert(TDataSet *DataSet)
 {
     if (isLoadMode) return;
     MT->FieldByName("dat")->AsDateTime = Now();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::MTBeforePost(TDataSet *DataSet)
+{
+    if (MT->FieldByName("cat")->AsString.Trim().IsEmpty() && !MT->FieldByName("naim")->AsString.Trim().IsEmpty()) {
+        MT->FieldByName("cat")->AsString = listCat[MT->FieldByName("naim")->AsString];
+    }
 }
 //---------------------------------------------------------------------------
 

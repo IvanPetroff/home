@@ -270,6 +270,7 @@ object MainForm: TMainForm
   object MT: TVirtualTable
     Active = True
     AfterInsert = MTAfterInsert
+    BeforePost = MTBeforePost
     AfterPost = MTAfterPost
     FieldDefs = <
       item
