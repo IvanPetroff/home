@@ -2,7 +2,7 @@ inherited EditorGrid: TEditorGrid
   inherited EditText: TEdit
     OnChange = EditTextChange
   end
-  object Grid: TStringGrid
+  object Grid: TStringGrid [1]
     Left = 0
     Top = 120
     Width = 320
@@ -20,5 +20,8 @@ inherited EditorGrid: TEditorGrid
     OnDblClick = GridDblClick
     OnDrawCell = GridDrawCell
     OnKeyDown = GridKeyDown
+  end
+  inherited TabInterceptor: TEdit
+    TabOrder = 3
   end
 end

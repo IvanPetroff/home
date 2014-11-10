@@ -38,4 +38,13 @@ object EditorBase: TEditorBase
     TabOrder = 1
     OnClick = ViewTextClick
   end
+  object TabInterceptor: TEdit
+    Left = 40
+    Top = 72
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    Text = 'TabInterceptor'
+    OnEnter = TabInterceptorEnter
+  end
 end

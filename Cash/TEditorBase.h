@@ -20,6 +20,7 @@ class TEditorBase : public TFrame
 __published:	// IDE-managed Components
         TEdit *EditText;
         TStaticText *ViewText;
+    TEdit *TabInterceptor;
     void __fastcall ViewTextClick(TObject *Sender);
     void __fastcall EditTextKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
@@ -27,6 +28,7 @@ __published:	// IDE-managed Components
     void __fastcall FrameExit(TObject *Sender);
         void __fastcall FrameMouseWheel(TObject *Sender, TShiftState Shift,
           int WheelDelta, TPoint &MousePos, bool &Handled);
+    void __fastcall TabInterceptorEnter(TObject *Sender);
 
 private:	// User declarations
     virtual void __fastcall SetParent           (TWinControl* AParent);

@@ -24,6 +24,9 @@ __fastcall TEditorBase::TEditorBase(TComponent* Owner)
     ViewText->BringToFront();
     Color = ViewText->Color;
     isEditMode = false;
+    TabInterceptor->Width = 0;
+    TabInterceptor->Left = -10;
+
 }
 
 
@@ -121,7 +124,7 @@ void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
         }
     }
 
-    if (Key==VK_RETURN) {
+    if (Key==VK_RETURN || Key==VK_TAB) {
         if (DBG->DataSource->State == dsBrowse) {
             DBG->DataSource->Edit();
         }
@@ -309,4 +312,14 @@ void __fastcall TEditorBase::FrameMouseWheel(TObject *Sender,
 }
 //---------------------------------------------------------------------------
 
+
+
+
+
+void __fastcall TEditorBase::TabInterceptorEnter(TObject *Sender)
+{
+    EditTextKeyDown(EditText, VK_TAB, TShiftState());
+
+}
+//---------------------------------------------------------------------------
 

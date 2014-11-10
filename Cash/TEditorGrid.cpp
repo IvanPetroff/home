@@ -167,3 +167,5 @@ void __fastcall TEditorGrid::SetEditMode()
 }
 
 
+
+
