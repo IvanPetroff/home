@@ -66,7 +66,6 @@ void __fastcall TMainForm::Button1Click(TObject *Sender)
 
 void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 {
-    if (isLoadMode) return;
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
     EditorCurr->LoadHistoryFromDataset(MT, "CURR");
