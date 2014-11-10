@@ -1,6 +1,6 @@
 object MainForm: TMainForm
-  Left = 337
-  Top = 114
+  Left = 473
+  Top = 135
   Width = 855
   Height = 418
   Caption = 'MainForm'
@@ -269,6 +269,7 @@ object MainForm: TMainForm
   end
   object MT: TVirtualTable
     Active = True
+    IndexFieldNames = 'dat desc'
     AfterInsert = MTAfterInsert
     BeforePost = MTBeforePost
     AfterPost = MTAfterPost
