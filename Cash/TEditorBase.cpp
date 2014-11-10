@@ -122,6 +122,9 @@ void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
     }
 
     if (Key==VK_RETURN) {
+        if (DBG->DataSource->State == dsBrowse) {
+            DBG->DataSource->Edit();
+        }
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
             DBG->SelectedField->AsString = EditText->Text;
         }
