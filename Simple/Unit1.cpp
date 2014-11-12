@@ -50,6 +50,12 @@ void __fastcall TForm1::FormDblClick(TObject *Sender)
 void __fastcall TForm1::FormMouseMove(TObject *Sender, TShiftState Shift,
       int X, int Y)
 {
+    int sWhite = 0;
+    for (int I = 0; I<X; I++) {
+        if (Canvas->Pixels[I][Y]>0) sWhite++;
+    }
+    Caption = String(sWhite);
+    return;
     unsigned int XX = Y*this->ClientWidth + X;
     Caption = String(XX) + " "+ String(s[X])+" " +((Canvas->Pixels[X][Y]==0)?" black ":" white ") + (isSimple(XX)?String(" - SIMPLE "):String(" "));
 }
@@ -65,16 +71,20 @@ void __fastcall TForm1::FormResize(TObject *Sender)
         if (ss<0) ss = 0;
         X = ss*this->ClientWidth;
 
+        Canvas->Pen->Color = clLime;
         for (int I = 0; I < this->ClientHeight; I++) {
+            int sWhite = 0;
             for (int T = 0; T < this->ClientWidth; T++) {
                 if (I==0) s[T]=0;
                 if (X>=p.size()) continue;
                 if (p[X++]) {
                     Canvas->Pixels[T][I]=clWhite;
                     s[T] = s[T]+1;
+                    sWhite++;
                 }
                 else Canvas->Pixels[T][I]=0;
             }
+            Canvas->LineTo(sWhite,I);
         }
 
         Canvas->Pen->Color = clYellow;
@@ -89,6 +99,7 @@ void __fastcall TForm1::FormResize(TObject *Sender)
             }
         }
         Caption = String(c);
+
 //
 //    Caption = String(this->ClientWidth);
 //    for (int J = 0; J < 50; J++) {
