@@ -13,6 +13,7 @@
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
+    TEdit *Edit1;
     void __fastcall FormDblClick(TObject *Sender);
     void __fastcall FormMouseMove(TObject *Sender, TShiftState Shift,
           int X, int Y);

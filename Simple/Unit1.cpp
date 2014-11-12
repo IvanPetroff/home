@@ -11,15 +11,26 @@
 #pragma resource "*.dfm"
 TForm1 *Form1;
 //---------------------------------------------------------------------------
+map<int,bool>m210;
+
 __fastcall TForm1::TForm1(TComponent* Owner)
     : TForm(Owner)
 {
+    AnsiString S = "1,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97,101,103,107,109,113,121,127,131,137,139,143,149,151,157,163,167,169,173,179,181,187,191,193,197,199,209,";
+    while (S.Pos(",")>0) {
+        AnsiString SS = S.SubString(1,S.Pos(",")-1);
+        S = S.SubString(S.Pos(",")+1, S.Length());
+        m210[SS.ToInt()]=true;
+    }
 }
 //---------------------------------------------------------------------------
 
 
+
 bool isSimple(unsigned int X)
 {
+    int m=X%210;
+    if (m210[m]==false) return false;
     for (unsigned int I = 2; I < X; I++) {
         if ((X % I)==0) return false;
     }
@@ -68,11 +79,13 @@ void __fastcall TForm1::FormResize(TObject *Sender)
 
         Canvas->Pen->Color = clYellow;
         int c = 0;
+        Edit1->Text = "";
         for (int T = 0; T < this->ClientWidth; T++) {
             int y = s[T];
             if (y>0) {
                 Canvas->LineTo(T,y);
                 c++;
+                Edit1->Text = Edit1->Text + String(T) + ",";
             }
         }
         Caption = String(c);
