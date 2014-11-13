@@ -45,10 +45,27 @@ __fastcall TMainForm::TMainForm(TComponent* Owner)
 }
 //---------------------------------------------------------------------------
 
+class lock_class
+{
+private:
+  TDBGridEh* DBG;
+public:
+lock_class(TDBGridEh* DBG) {
+  this->DBG = DBG;
+  DBG->DataSource->Enabled = false;
+}
+~lock_class() {
+  DBG->DataSource->Enabled = true;
+}
+};
+#define LOCK(x) lock_class my_lock_##__LINE__(x)
+
+
 
 void __fastcall TMainForm::MT2AfterPost(TDataSet *DataSet)
 {
     if (isLoadMode) return;
+    LOCK(DBG);
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
     EditorCurr->LoadHistoryFromDataset(MT, "CURR");
@@ -64,8 +81,10 @@ void __fastcall TMainForm::Button1Click(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
+
 void __fastcall TMainForm::MTAfterPost(TDataSet *DataSet)
 {
+    LOCK(DBG);
     EditorGrid1->LoadHistoryFromDataset(MT, "NAIM");
     EditorCat->LoadHistoryFromDataset(MT, "CAT");
     EditorCurr->LoadHistoryFromDataset(MT, "CURR");
