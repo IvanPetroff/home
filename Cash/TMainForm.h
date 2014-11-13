@@ -43,6 +43,7 @@ __published:	// IDE-managed Components
     void __fastcall Button2Click(TObject *Sender);
     void __fastcall MTAfterInsert(TDataSet *DataSet);
     void __fastcall MTBeforePost(TDataSet *DataSet);
+    void __fastcall DBGSortMarkingChanged(TObject *Sender);
 private:	// User declarations
     bool isLoadMode;
     map<AnsiString,AnsiString> listCat;

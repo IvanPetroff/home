@@ -121,3 +121,19 @@ void __fastcall TMainForm::MTBeforePost(TDataSet *DataSet)
 }
 //---------------------------------------------------------------------------
 
+
+
+void __fastcall TMainForm::DBGSortMarkingChanged(TObject *Sender)
+{
+    if (DBG->FieldColumns["dat"]->Title->SortMarker==smDownEh) {
+        MT->IndexFieldNames = "dat";
+    }
+    else {
+        MT->IndexFieldNames = "dat desc";
+    }
+    MT->IndexFieldNames = "";
+}
+//---------------------------------------------------------------------------
+
+
+

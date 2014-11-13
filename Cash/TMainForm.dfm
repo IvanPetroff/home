@@ -27,19 +27,21 @@ object MainForm: TMainForm
     FooterFont.Height = -11
     FooterFont.Name = 'MS Sans Serif'
     FooterFont.Style = []
-    SortLocal = True
+    OptionsEh = [dghFixed3D, dghHighlightFocus, dghClearSelection, dghAutoSortMarking, dghDialogFind]
     TabOrder = 0
     TitleFont.Charset = DEFAULT_CHARSET
     TitleFont.Color = clWindowText
     TitleFont.Height = -11
     TitleFont.Name = 'MS Sans Serif'
     TitleFont.Style = []
+    OnSortMarkingChanged = DBGSortMarkingChanged
     Columns = <
       item
         EditButtons = <>
         FieldName = 'dat'
         Footers = <>
         Title.Caption = 'Дата'
+        Title.TitleButton = True
         Width = 81
       end
       item
@@ -269,7 +271,6 @@ object MainForm: TMainForm
   end
   object MT: TVirtualTable
     Active = True
-    IndexFieldNames = 'dat desc'
     AfterInsert = MTAfterInsert
     BeforePost = MTBeforePost
     AfterPost = MTAfterPost
