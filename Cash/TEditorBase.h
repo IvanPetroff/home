@@ -14,6 +14,8 @@
 #include <map.h>
 
 #define TGridDrawState Gridseh::TGridDrawState
+
+#define NEXT_REC_AFTER_ENTER true
 //---------------------------------------------------------------------------
 class TEditorBase : public TFrame
 {
