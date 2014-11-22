@@ -1,0 +1,2 @@
+inherited EditAvto: TEditAvto
+end

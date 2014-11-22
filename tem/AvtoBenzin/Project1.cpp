@@ -11,6 +11,11 @@ USEUNIT("..\..\lib\TmyQuery\TmyQuery.cpp");
 USEUNIT("..\..\lib\TmyStringList\TmyStringList.cpp");
 USEFORM("TEditorBase.cpp", EditorBase); /* TFrame: File Type */
 USEFORM("TEditorGrid.cpp", EditorGrid); /* TFrame: File Type */
+USEFORM("TEditAvto.cpp", EditAvto); /* TFrame: File Type */
+USEFORM("TEditSimple.cpp", EditSimple); /* TFrame: File Type */
+USEFORM("TFraBase.cpp", FraBase); /* TFrame: File Type */
+USEFORM("TFraGasPoint.cpp", FraGasPoint); /* TFrame: File Type */
+USEFORM("TFraTankGasolineList.cpp", FraTankGasolineList); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

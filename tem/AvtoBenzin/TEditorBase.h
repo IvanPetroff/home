@@ -11,6 +11,7 @@
 #include "DBGridEh.hpp"
 #include "GridsEh.hpp"
 #include <Grids.hpp>
+#include <map.h>
 
 #define TGridDrawState Gridseh::TGridDrawState
 //---------------------------------------------------------------------------
@@ -19,6 +20,7 @@ class TEditorBase : public TFrame
 __published:	// IDE-managed Components
         TEdit *EditText;
         TStaticText *ViewText;
+    TEdit *TabInterceptor;
     void __fastcall ViewTextClick(TObject *Sender);
     void __fastcall EditTextKeyDown(TObject *Sender, WORD &Key,
           TShiftState Shift);
@@ -26,6 +28,7 @@ __published:	// IDE-managed Components
     void __fastcall FrameExit(TObject *Sender);
         void __fastcall FrameMouseWheel(TObject *Sender, TShiftState Shift,
           int WheelDelta, TPoint &MousePos, bool &Handled);
+    void __fastcall TabInterceptorEnter(TObject *Sender);
 
 private:	// User declarations
     virtual void __fastcall SetParent           (TWinControl* AParent);
@@ -33,30 +36,36 @@ private:	// User declarations
     void        __fastcall _SetupEvents             (TDBGridEh* DBG);
     void        __fastcall EditorBaseDrawColumnCell (TObject *Sender, const TRect &Rect, int DataCol, TColumnEh *Column, TGridDrawState State);
     void        __fastcall EditorBaseKeyPress       (TObject *Sender, char &Key);
+    void        __fastcall EditorBaseColEnter       (TObject *Sender);
     bool        __fastcall isFrameInRect            (TRect &Rect);
     bool        __fastcall isPointInRect            (int X, int Y, TRect &Rect);
-    void        __fastcall Show                     ();
-    void        __fastcall Hide                     ();
     bool        __fastcall isSelectedColumnOutOfRange(TDBGridEh* DBG);
 
 
     typedef void __fastcall (__closure *TKeyPressEvent)(TObject* Sender, char &Key);
     typedef void __fastcall (__closure *TDrawColumnCellEvent)(TObject* Sender,const TRect &Rect, int DataCol, TColumnEh* Column, TGridDrawState State);
+    typedef void __fastcall (__closure *TColEnter)(TObject* Sender);
     TKeyPressEvent          oldOnKeyPress;
     TDrawColumnCellEvent    oldOnDrawColumnCell;
-    TRect       FrameCell;
+    TColEnter               oldOnColEnter;
+    bool __fastcall isEditableField(AnsiString inFieldName);
 
+protected:
+    TRect       FrameCell;
 
 public:		// User declarations
     virtual void        __fastcall SetRect      (TRect inRect);
+    virtual void __fastcall Show                    ();
+    virtual void __fastcall Hide                    ();
 
                         __fastcall TEditorBase  (TComponent* Owner);
             void        __fastcall SetAlignment (TAlignment al);
             void        __fastcall SetVal       (AnsiString S);
-            void        __fastcall myKeyPress   (char &Key);
+            void        __fastcall myKeyPress   (unsigned char &Key);
             void        __fastcall SetViewMode  ();
-            void        __fastcall SetEditMode  ();
+    virtual void        __fastcall SetEditMode  ();
             bool        isEditMode;
+    map<AnsiString,bool> listFieldName;
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TEditorBase *EditorBase;

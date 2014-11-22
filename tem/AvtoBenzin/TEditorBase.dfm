@@ -6,6 +6,7 @@ object EditorBase: TEditorBase
   HorzScrollBar.Visible = False
   VertScrollBar.Visible = False
   TabOrder = 0
+  Visible = False
   OnExit = FrameExit
   OnMouseWheel = FrameMouseWheel
   object EditText: TEdit
@@ -18,7 +19,6 @@ object EditorBase: TEditorBase
     BorderStyle = bsNone
     Color = clYellow
     TabOrder = 0
-    Text = 'EditText'
     Visible = False
     OnKeyDown = EditTextKeyDown
     OnKeyPress = EditTextKeyPress
@@ -29,12 +29,20 @@ object EditorBase: TEditorBase
     Width = 58
     Height = 17
     AutoSize = False
-    Caption = 'ViewText'
     Color = clBtnFace
     ParentColor = False
     ParentShowHint = False
     ShowHint = True
     TabOrder = 1
     OnClick = ViewTextClick
+  end
+  object TabInterceptor: TEdit
+    Left = 40
+    Top = 72
+    Width = 121
+    Height = 21
+    TabOrder = 2
+    Text = 'TabInterceptor'
+    OnEnter = TabInterceptorEnter
   end
 end

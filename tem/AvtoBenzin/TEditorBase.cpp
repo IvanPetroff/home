@@ -7,28 +7,32 @@
 
 //#define TEM_TRACE
 //#define TEM_TRACE_TAB_COUNT 4
-#include "TtemTraceLog.h"
+//#include "TtemTraceLog.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma link "DBGridEh"
 #pragma link "GridsEh"
 #pragma resource "*.dfm"
 TEditorBase *EditorBase;
+//
 //---------------------------------------------------------------------------
 __fastcall TEditorBase::TEditorBase(TComponent* Owner)
     : TFrame(Owner)
-{BEGIN
+{
     oldOnKeyPress = 0;
     oldOnDrawColumnCell = 0;
     ViewText->BringToFront();
     Color = ViewText->Color;
     isEditMode = false;
+    TabInterceptor->Width = 0;
+    TabInterceptor->Left = -10;
+
 }
 
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetRect(TRect inRect)
-{BEGIN
+{
     FrameCell = inRect;
 
     this->Left    = inRect.Left+1;
@@ -50,7 +54,7 @@ void __fastcall TEditorBase::SetRect(TRect inRect)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetVal(AnsiString S)
-{BEGIN
+{
     ViewText->Caption    = S;
     ViewText->Hint       = S;
     EditText->Text       = S;
@@ -59,14 +63,14 @@ void __fastcall TEditorBase::SetVal(AnsiString S)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetAlignment(TAlignment al)
-{BEGIN
+{
     ViewText->Alignment = al;
 }
 
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetViewMode()
-{BEGIN
+{
     isEditMode = false;
 
     EditText->Hide();
@@ -79,7 +83,7 @@ void __fastcall TEditorBase::SetViewMode()
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetEditMode()
-{BEGIN
+{
     isEditMode = true;
 
     ViewText->Hide();
@@ -94,14 +98,14 @@ void __fastcall TEditorBase::SetEditMode()
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::ViewTextClick(TObject *Sender)
-{BEGIN
+{
     SetEditMode();
 }
 
 
 //---------------------------------------------------------------------------
-void __fastcall TEditorBase::myKeyPress(char &Key)
-{BEGIN
+void __fastcall TEditorBase::myKeyPress(unsigned char &Key)
+{
     SetEditMode();
     SendMessage(EditText->Handle, WM_CHAR, Key, 0);
 }
@@ -110,7 +114,7 @@ void __fastcall TEditorBase::myKeyPress(char &Key)
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
       TShiftState Shift)
-{BEGIN
+{
     TDBGridEh* DBG = (TDBGridEh*)this->Parent;
     if (Key==VK_ESCAPE) {
         SetViewMode();
@@ -120,12 +124,15 @@ void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
         }
     }
 
-    if (Key==VK_RETURN) {
-        SetViewMode();
-        this->Parent->SetFocus();
+    if (Key==VK_RETURN || Key==VK_TAB) {
+        if (DBG->DataSource->State == dsBrowse) {
+            DBG->DataSource->Edit();
+        }
         if (DBG->DataSource->State == dsEdit || DBG->DataSource->State == dsInsert) {
             DBG->SelectedField->AsString = EditText->Text;
         }
+        SetViewMode();
+        this->Parent->SetFocus();
     }
 
     if (Key==VK_UP || Key==VK_DOWN) {
@@ -141,7 +148,7 @@ void __fastcall TEditorBase::EditTextKeyDown(TObject *Sender, WORD &Key,
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::EditTextKeyPress(TObject *Sender, char &Key)
-{BEGIN
+{
     if (EditText->Focused() && ((TDBGridEh*)this->Parent)->DataSource->DataSet->State==dsBrowse) {
         ((TDBGridEh*)this->Parent)->DataSource->DataSet->Edit();
     }
@@ -150,7 +157,7 @@ void __fastcall TEditorBase::EditTextKeyPress(TObject *Sender, char &Key)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::SetParent(TWinControl* AParent)
-{BEGIN
+{
     TDBGridEh* DBG = dynamic_cast<TDBGridEh*>(Parent);
     if (DBG != 0) {
         _RemoveEvents(DBG);
@@ -165,7 +172,7 @@ void __fastcall TEditorBase::SetParent(TWinControl* AParent)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::_RemoveEvents(TDBGridEh* DBG)
-{BEGIN
+{
     DBG->OnKeyPress         = 0;
     DBG->OnDrawColumnCell   = 0;
 }
@@ -173,18 +180,36 @@ void __fastcall TEditorBase::_RemoveEvents(TDBGridEh* DBG)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::_SetupEvents(TDBGridEh* DBG)
-{BEGIN
+{
     oldOnKeyPress           = DBG->OnKeyPress;
     oldOnDrawColumnCell     = DBG->OnDrawColumnCell;
+    oldOnColEnter           = DBG->OnColEnter;
     DBG->OnKeyPress         = EditorBaseKeyPress;
     DBG->OnDrawColumnCell   = EditorBaseDrawColumnCell;
+    DBG->OnColEnter         = EditorBaseColEnter;
 }
 
+
+void __fastcall TEditorBase::EditorBaseColEnter(TObject *Sender)
+{
+    if (oldOnColEnter != 0) {
+        oldOnColEnter(Sender);
+    }
+    TDBGridEh* DBG = (TDBGridEh*)this->Parent;
+    TRect Rect = DBG->CellRect(DBG->Col, DBG->Row);
+    if (isEditableField(DBG->SelectedField->FieldName)) {
+        this->SetRect(Rect);
+        this->Show();
+    }
+    else {
+        this->Hide();
+    }
+}
 
 
 //---------------------------------------------------------------------------
 bool __fastcall TEditorBase::isPointInRect(int X, int Y, TRect &Rect)
-{BEGIN
+{
     if (X>Rect.Left && X<Rect.Right && Y>Rect.Top && Y<Rect.Bottom) return true;
     return false;
 }
@@ -192,7 +217,7 @@ bool __fastcall TEditorBase::isPointInRect(int X, int Y, TRect &Rect)
 
 //---------------------------------------------------------------------------
 bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
-{BEGIN
+{
     if (isPointInRect(FrameCell.Left,FrameCell.Top,Rect)) return true;
     if (isPointInRect(FrameCell.Left,FrameCell.Top+FrameCell.Height(),Rect)) return true;
     if (isPointInRect(FrameCell.Left+FrameCell.Width(),FrameCell.Top,Rect)) return true;
@@ -203,7 +228,7 @@ bool __fastcall TEditorBase::isFrameInRect(TRect &Rect)
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::Show()
-{BEGIN
+{
     if (Visible) return;
     TFrame::Show();
 }
@@ -211,18 +236,30 @@ void __fastcall TEditorBase::Show()
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::Hide()
-{BEGIN
+{
     TFrame::Hide();
 }
 
 
+bool __fastcall TEditorBase::isEditableField(AnsiString inFieldName)
+{
+    inFieldName = inFieldName.Trim().UpperCase();
+    map<AnsiString,bool>::iterator it = listFieldName.find(inFieldName);
+    if (it==listFieldName.end()) return false;
+    return it->second;
+}
+
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::EditorBaseKeyPress(TObject *Sender, char &Key)
-{BEGIN
+{
  // перехватчик соответствующего события грида
     if (oldOnKeyPress != 0) oldOnKeyPress(Sender,Key);
-    if (Key != VK_TAB && Key!=VK_ESCAPE) {
+    TDBGridEh* DBG = (TDBGridEh*)this->Parent;
+
+    if (Key != VK_TAB && Key!=VK_ESCAPE && isEditableField(DBG->SelectedField->FieldName)) {
         myKeyPress(Key);
+        DBG->EditorMode = false;
+        Key = 0;
     }
 }
 
@@ -244,7 +281,7 @@ bool __fastcall TEditorBase::isSelectedColumnOutOfRange(TDBGridEh* DBG)
 void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
       const TRect &Rect, int DataCol, TColumnEh *Column,
       TGridDrawState State)
-{BEGIN
+{
  // перехватчик соответствующего события грида
     if (oldOnDrawColumnCell != 0) {
         oldOnDrawColumnCell(Sender,Rect,DataCol,Column,State);
@@ -263,8 +300,10 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
             this->SetVal(Column->Field->AsString);
             this->SetAlignment(Column->Alignment);
         }
-        this->SetRect(Rect);// VAR(Rect.Width()) VAR(Rect.Height())
-        Show();
+        if (isEditableField(Column->FieldName)) {
+            this->SetRect(Rect);// VAR(Rect.Width()) VAR(Rect.Height())
+            Show();
+        }
     }
     else {
         if (isFrameInRect(Rect) && this->Visible) {
@@ -277,7 +316,7 @@ void __fastcall TEditorBase::EditorBaseDrawColumnCell(TObject *Sender,
 
 //---------------------------------------------------------------------------
 void __fastcall TEditorBase::FrameExit(TObject *Sender)
-{BEGIN
+{
  // обработчик соответствующего события фрейма
     SetViewMode();
 }
@@ -288,6 +327,17 @@ void __fastcall TEditorBase::FrameMouseWheel(TObject *Sender,
       TShiftState Shift, int WheelDelta, TPoint &MousePos, bool &Handled)
 {
     Handled = true;
+}
+//---------------------------------------------------------------------------
+
+
+
+
+
+void __fastcall TEditorBase::TabInterceptorEnter(TObject *Sender)
+{
+    EditTextKeyDown(EditText, VK_TAB, TShiftState());
+
 }
 //---------------------------------------------------------------------------
 
