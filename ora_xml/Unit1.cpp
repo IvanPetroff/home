@@ -1,6 +1,7 @@
 //---------------------------------------------------------------------------
 
 #include <vcl.h>
+#include <memory>
 #pragma hdrstop
 
 #include "Unit1.h"
@@ -523,10 +524,34 @@ AnsiString s = "<zz>\
 //OraQuery1->ParamByName("1")->AsBlob = s;
 //ShowMessage(OraQuery1->ParamByName("1")->AsBlob.Length());
 //OraQuery1->ExecSQL();
+
+
+std::auto_ptr<TOraQuery> OraQuery2(new TOraQuery(0));
+OraQuery2->SQL->Text = "begin admdba.skldok_pkg.add_to_dok(xmltype(:1)); end;";
+OraQuery2->Options->TemporaryLobUpdate = true;
+OraQuery2->ParamByName("1")->ParamType = ptInput;
 OraQuery2->ParamByName("1")->AsOraClob->AsString = s;
 ShowMessage(OraQuery2->ParamByName("1")->AsOraClob->AsString.Length());
 OraQuery2->ExecSQL();
 
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::Button2Click(TObject *Sender)
+{
+    std::auto_ptr<TOraQuery> Q(new TOraQuery(0));
+    Q->SQL->Text = "declare x xmltype; begin admdba.skldok_pkg.add_to_dok(:1); end;";
+    Q->Prepare();
+
+//*
+    AnsiString S;
+    for (int I = 0; I < 32506; I++) {
+        S = S + "x";
+    }
+//*/
+    S = "<a>" + S + "</a>";
+    Q->ParamByName("1")->AsMemo = S;
+    Q->ExecSQL();
 }
 //---------------------------------------------------------------------------
 
