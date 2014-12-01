@@ -8,6 +8,7 @@ create or replace package admdba.skldok_pkg is
 procedure ADD_TO_DOK(x xmltype);
 procedure COMMIT_DOK(s clob);
 FUNCTION blob_to_xmltype (blob_in IN BLOB) RETURN XMLTYPE;
+procedure SAVE_DOK(x XMLtype);
 
   
 end skldok_pkg;
@@ -26,6 +27,7 @@ end;
 procedure ADD_TO_DOK(x xmltype) is
   XX XMLTYPE;
 begin
+  raise_application_error(-20001, x.getrootelement());
 --  XX := XMLTYPE(X);
   null;
 end;
@@ -69,6 +71,24 @@ begin
   null;
 end;
 
+procedure SAVE_DOK(x XMLtype) is
+wid_dok number;
+tip varchar2(1);
+x_zag XMLtype := x.extract('/doc/zag');
+x_sod XMLtype := x.extract('/doc/sod');
+cnt number := 0;
+begin
+  wid_dok := nvl(x.extract('/doc/@wid').GetStringVal(), 0);
+  tip := nvl(x.extract('/doc/@type').GetStringVal(), ' ');
+  for cur in (select * from table(XMLsequence(x_sod.extract('sod/row')))) loop
+    cnt := cnt+1;
+    null;
+  end loop;
+  raise_application_error(-20001, cnt);
+  
+  
+  null;
+end;
 
 
 begin
