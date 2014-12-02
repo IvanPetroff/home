@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 46
-  Top = 66
+  Left = 258
+  Top = 144
   Width = 1230
   Height = 589
   Caption = 'Form1'
@@ -30,6 +30,15 @@ object Form1: TForm1
     Caption = 'Button2'
     TabOrder = 1
     OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 472
+    Top = 48
+    Width = 75
+    Height = 25
+    Caption = 'Button3'
+    TabOrder = 2
+    OnClick = Button3Click
   end
   object OraSession1: TOraSession
     Options.Direct = True
