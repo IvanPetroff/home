@@ -23,7 +23,7 @@ create or replace type body OstBase is
   member procedure OpenKart(in_id number, in_tip varchar2) is
   begin
     select RAWTOHEX(DBMS_OBFUSCATION_TOOLKIT.MD5(INPUT => UTL_RAW.CAST_TO_RAW(
-      xmltype(cursor(select * from asu_ost_mat where id=in_id and type=in_tip)).extract('/ROWSET/ROW').getstringval()
+      xmltype(cursor(select ceeded * from asu_ost_mat where id=in_id and type=in_tip)).extract('/ROWSET/ROW').getstringval()
       ))) into md5 from dual;
       
     select xmltype(cursor(select * from asu_ost_mat where id=in_id and type=in_tip)).extract('/ROWSET/ROW') into rec_xml from dual;

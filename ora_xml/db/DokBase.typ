@@ -4,7 +4,12 @@ create or replace type DokBase force as object
   -- Created : 03.12.2014 9:03:06
   -- Purpose : 
   x XMLtype,
-  nz number,
+  nz number, -- регистрационный номер документа
+  d_skl_post date,
+  d_skl_potr date, 
+  d_snab date, -- Дата прохождения через снабжение
+  ceh_post varchar2(8),
+  
   member procedure Init,
   member procedure OpenDok(in_nz number),
   member procedure CloseDok,
@@ -15,7 +20,11 @@ create or replace type DokBase force as object
   member procedure doCommitOnSkl(in_x XMLtype),
   member procedure doCommitOnSkl#(in_x XMLtype),
   member procedure doUpdateXMLvalue( in_x XMLtype, in_tag varchar2, in_val varchar2),
-  member procedure doSeparateXMLtag(in_tag varchar2, out_path out varchar2, out_tag out varchar2)
+  member procedure doSeparateXMLtag(in_tag varchar2, out_path out varchar2, out_tag out varchar2),
+  member procedure LoadZagDok,
+  member function isCanCommitOnSkl return boolean,
+  member function isUserCanCommitOnSkl return boolean
+  
   
   
   
@@ -47,6 +56,9 @@ create or replace type body DokBase is
             raise_application_error(-20001,'Документ не найден!');
         end if;
     end loop;
+    self.nz := in_nz;
+    LoadZagDok();
+--    LoadSodDok();
     
     select appendchildxml(x, '/DOC/ZAG', xmltype(cursor(select * from asu_zag_dok where nz=in_nz)).extract('/ROWSET/ROW')) 
         into x 
@@ -56,6 +68,16 @@ create or replace type body DokBase is
         into x 
         from dual;
 
+    null;
+  end;
+
+/************************************************************************************************/
+  member procedure LoadZagDok is
+  begin
+    select d_snab, d_skl_post, d_skl_potr, ceh_post 
+      into self.d_snab, self.d_skl_post, self.d_skl_potr, self.ceh_post
+      from asu_zag_dok
+      where nz=self.nz;
     null;
   end;
 
@@ -79,26 +101,33 @@ create or replace type body DokBase is
   member function GetDateCommitOnSkl return date is
   d date;
   begin
-    select coalesce(extractvalue(x,'/DOC/ZAG/ROW/D_SKL_POST'),extractvalue(x,'/DOC/ZAG/ROW/D_SKL_POTR')) into d from dual;
-    return d;
+    return nvl(self.d_skl_post,self.d_skl_potr);
+--    select coalesce(extractvalue(x,'/DOC/ZAG/ROW/D_SKL_POST'),extractvalue(x,'/DOC/ZAG/ROW/D_SKL_POTR')) into d from dual;
+--    return d;
   end;
 
 /************************************************************************************************/
   member function GetDateCommitOnSnab return date is
   d date;
   begin
-    select extractvalue(x,'/DOC/ZAG/ROW/D_SNAB') into d from dual;
-    return d;
+    return self.d_snab;
+--    select extractvalue(x,'/DOC/ZAG/ROW/D_SNAB') into d from dual;
+--    return d;
   end;
 
 /************************************************************************************************/
   member procedure doCommitOnSnab is
   begin
     if nvl(get_env_var(user,'STEP_DOK'),' ') <> 'СНАБ' then
---        raise_application_error(-20001,'Нет прав!');
-        null;
+        raise_application_error(-20001,'Нет прав!');
     end if;
-    doUpdateXMLvalue( x, 'DOC/ZAG/ROW/D_SKL_POTR', sysdate);
+    
+    update zag_dok set d_snab=sysdate where nz=self.nz 
+    returning d_snab into self.d_snab;
+    
+    
+    
+--    doUpdateXMLvalue( x, 'DOC/ZAG/ROW/D_SKL_POTR', sysdate);
 
 /*    for Cur in (select x.existsnode('DOC/ZAG/ROW/D_SKL_POTR') n from dual) loop
         if Cur.n=1 then
@@ -143,58 +172,24 @@ create or replace type body DokBase is
 
 /************************************************************************************************/
   member procedure doCommitOnSkl(in_x XMLtype) is
-/*  cursor Cur_usr(xx XMLtype) is select extractvalue(column_value,'/ROW/NZ') nz, extractvalue(column_value,'/ROW/KOL') kol 
-                from table(xmlsequence(xx.extract('/SKL/ROW')));
-  cursor Cur_db(xx XMLtype) is select extractvalue(column_value,'/ROW/NZ') nz, extractvalue(column_value,'/ROW/KOL_TREB') kol_treb 
-                from table(xmlsequence(xx.extract('/DOC/SOD/ROW')));
-*/  
---  sod_cnt number := 0;
-  x_nz number;
-  x_kol number;
-  x_prizn asu_sod_dok.prizn%TYPE;
-  skl_kol number;
-  I number;
-  tmp_x XMLtype := x;
-  ost_from OstBase := OstBase(null,null,null,null,null);
-  ost_to OstBase := OstBase(null,null,null,null,null);
   begin
-    -- Проверяем возможность прохождения документа через очередную инстанцию
-    if GetDateCommitOnSkl() is not null then
-        raise_application_error(-20001,'Документ уже проведён на складе '||GetDateCommitOnSkl());
-    end if;
-    if GetDateCommitOnSnab() is null then
-        raise_application_error(-20001,'Документ ещё не обработан исполнителем отдела снабжения');
-    end if;
-    
-    -- Проверяем, что кладовщик указал все количества
-    I := 0;
-    while true loop
-        I := I+1;
-        x_nz := tmp_x.extract('/DOC/SOD/ROW['||I||']/NZ/text()').getstringval();
-        exit when x_nz is null;
-        x_kol := tmp_x.extract('/DOC/SOD/ROW['||I||']/KOL_TREB/text()').getstringval();
-        x_prizn := tmp_x.extract('/DOC/SOD/ROW['||I||']/PRIZN/text()').getstringval();
-        
-        select max(extractvalue(column_value,'/ROW/KOL')) kol into skl_kol
-                    from table(xmlsequence(in_x.extract('/SKL/ROW')))
-                    where extractvalue(column_value,'/ROW/NZ')=x_nz;
-        if skl_kol is null then
-            raise_application_error(-20001,'Не все данные о количестве выдаваемого указаны (в строке '||I||')' );
-        end if;
-        if skl_kol > x_kol then
-            raise_application_error(-20001,'Выдаваемое количество ['||skl_kol||'] больше затребованного ['||x_kol||'] (в строке '||I||')');
-        end if;
-        doUpdateXMLvalue(tmp_x, '/DOC/SOD/ROW['||I||']/KOL', skl_kol);
-        ost_from.OpenKart(tmp_x.extract('/DOC/SOD/ROW['||I||']/NZ_PRIH/text()').getstringval(), 'П');
-        ost_to.OpenKart(tmp_x.extract('/DOC/SOD/ROW['||I||']/NZ_CEH/text()').getstringval(), 'П');
-        ost_from.AddKol( -skl_kol, x_prizn);
-        ost_to.AddKol( skl_kol, x_prizn );
-      null;
-    end loop;
-    doUpdateXMLvalue(tmp_x, '/DOC/ZAG/ROW/D_SKL_POST', sysdate);
-    doUpdateXMLvalue(tmp_x, '/DOC/ZAG/ROW/U_SKL_POST', user);
---    update asu_zag_dok set d_skl_post=sysdate, u_skl_post=user where nz=self.nz;
-    x := tmp_x;    
+    null;
+  end;
+
+
+
+  member function isCanCommitOnSkl return boolean is
+  begin
+    -- функция-заглушка. Должна переопределяться в производных классах
+    -- делает проверку того, что документ может быть проведён на складе
+    -- т.е. присутствуют все признаки (данные) этого
+    null;
+  end;
+
+  member function isUserCanCommitOnSkl return boolean is
+  begin
+    -- функция-заглушка. Должна переопределяться в производных классах
+    -- делает проверку того, что ПОЛЬЗОВАТЕЛЬ может провести этот документ через склад
     null;
   end;
   
