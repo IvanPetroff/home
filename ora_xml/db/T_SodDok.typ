@@ -6,38 +6,55 @@ create or replace type T_SodDok force as object
   
   -- Attributes
   rec T_SodDok_tab,
-
-  
-  constructor function T_SodDok(in_nz_zag number) return self as result
+  last number,
   
   -- Member functions and procedures
+  constructor function T_SodDok(in_nz_zag number) return self as result,
+  member procedure newline,
+  member procedure clean,
+  member procedure Store
+  
+
 )
+not final;
 /
 create or replace type body T_SodDok is
   
   -- Member procedures and functions
   constructor function T_SodDok(in_nz_zag number) return self as result is
-  my_last number;
   begin
+    self.rec := T_SodDok_tab();
+    if in_nz_zag is null then
+      return;
+    end if;
+     
     for Cur in (select * from asu_sod_dok where nz_zag=in_nz_zag) loop
-      self.rec.extend(1);
-      my_last := self.rec.last;
-      self.rec( my_last).nz := Cur.nz;
-      self.rec( my_last).nz_zag := Cur.nz_zag;
-      self.rec( my_last).kod_mat := Cur.kod_mat;
-      self.rec( my_last).dop_kod := Cur.dop_kod;
-    null;
+      self.newline();
+      self.rec( last).nz := Cur.nz;
+      self.rec( last).nz_zag := Cur.nz_zag;
+      self.rec( last).kod_mat := Cur.kod_mat;
+      self.rec( last).dop_kod := Cur.dop_kod;
+      self.rec( last).kol_treb := Cur.kol_treb;
     end loop;
-    
---    for Cur in (select * from asu_sod_dok where nz_zag=in_nz) loop
-    --  self.rec
+  end;
+
+  member procedure newline is
+  begin
+      self.rec.extend(1);
+      last := self.rec.last;
+      self.rec( last) := T_SodDok_rec(null);
+  end;
+
+  member procedure clean is
+  begin
+    rec := T_SodDok_tab();
     null;
---    end loop;
-    
-/*    select nz,nz_zag,kod_mat,dop_kod
-    into nz,nz_zag,kod_mat,dop_kod
-    from asu_sod_dok where nz_zag = in_nz_zag;
-*/  end;
+  end;
+
+  member procedure Store is
+  begin
+    null;
+  end;
   
 end;
 /

@@ -5,10 +5,8 @@ create or replace type DokBase force as object
   -- Purpose : 
   x XMLtype,
   nz number, -- регистрационный номер документа
-  d_skl_post date,
-  d_skl_potr date, 
-  d_snab date, -- Дата прохождения через снабжение
-  ceh_post varchar2(8),
+  rec_zag T_ZagDok,
+  rec_sod T_SodDok,
   
   member procedure Init,
   member procedure OpenDok(in_nz number),
@@ -16,14 +14,35 @@ create or replace type DokBase force as object
   member function GetSodRowCount return number,
   member function GetDateCommitOnSkl return date,
   member function GetDateCommitOnSnab return date,
-  member procedure doCommitOnSnab,
+  member procedure doCommitToSnab(in_x XMLtype),
   member procedure doCommitOnSkl(in_x XMLtype),
   member procedure doCommitOnSkl#(in_x XMLtype),
   member procedure doUpdateXMLvalue( in_x XMLtype, in_tag varchar2, in_val varchar2),
   member procedure doSeparateXMLtag(in_tag varchar2, out_path out varchar2, out_tag out varchar2),
   member procedure LoadZagDok,
+  member procedure LoadSodDok,
   member function isCanCommitOnSkl return boolean,
-  member function isUserCanCommitOnSkl return boolean
+  member function isUserCanCommitOnSkl return boolean,
+  member procedure check_DokReadyToCommitSnab#,
+  member procedure check_UserReadyToCommitSnab#,
+  member procedure doCommitToSnab#(in_x XMLtype),
+  member procedure check_DataReadyToCommitSnab#(in_x XMLtype),
+  member procedure chk_not_null(x varchar2, str1 varchar2 := null, str2 varchar2 := null, str3 varchar2 := null),
+  member procedure CreateDok(in_x XMLtype),
+  member procedure StoreDok,
+  member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2),
+  member procedure chk_nklad_exist(in_nklad varchar2, in_type varchar2),
+  member procedure chk_op_exist(in_op number, in_wid_dok number)
+  
+
+  
+  
+  
+  
+  
+  
+  
+
   
   
   
@@ -58,9 +77,9 @@ create or replace type body DokBase is
     end loop;
     self.nz := in_nz;
     LoadZagDok();
---    LoadSodDok();
+    LoadSodDok();
     
-    select appendchildxml(x, '/DOC/ZAG', xmltype(cursor(select * from asu_zag_dok where nz=in_nz)).extract('/ROWSET/ROW')) 
+/*    select appendchildxml(x, '/DOC/ZAG', xmltype(cursor(select * from asu_zag_dok where nz=in_nz)).extract('/ROWSET/ROW')) 
         into x 
         from dual;
         
@@ -68,17 +87,20 @@ create or replace type body DokBase is
         into x 
         from dual;
 
-    null;
+    null;*/
   end;
 
 /************************************************************************************************/
   member procedure LoadZagDok is
   begin
-    select d_snab, d_skl_post, d_skl_potr, ceh_post 
-      into self.d_snab, self.d_skl_post, self.d_skl_potr, self.ceh_post
-      from asu_zag_dok
-      where nz=self.nz;
-    null;
+    rec_zag := T_ZagDok(self.nz);
+  end;
+
+
+/************************************************************************************************/
+  member procedure LoadSodDok is
+  begin
+    rec_sod := T_SodDok(self.nz);
   end;
 
 /************************************************************************************************/
@@ -101,7 +123,7 @@ create or replace type body DokBase is
   member function GetDateCommitOnSkl return date is
   d date;
   begin
-    return nvl(self.d_skl_post,self.d_skl_potr);
+    return nvl(rec_zag.d_skl_post,rec_zag.d_skl_potr);
 --    select coalesce(extractvalue(x,'/DOC/ZAG/ROW/D_SKL_POST'),extractvalue(x,'/DOC/ZAG/ROW/D_SKL_POTR')) into d from dual;
 --    return d;
   end;
@@ -110,33 +132,42 @@ create or replace type body DokBase is
   member function GetDateCommitOnSnab return date is
   d date;
   begin
-    return self.d_snab;
+    return rec_zag.d_snab;
 --    select extractvalue(x,'/DOC/ZAG/ROW/D_SNAB') into d from dual;
 --    return d;
   end;
 
-/************************************************************************************************/
-  member procedure doCommitOnSnab is
-  begin
-    if nvl(get_env_var(user,'STEP_DOK'),' ') <> 'СНАБ' then
-        raise_application_error(-20001,'Нет прав!');
-    end if;
-    
-    update zag_dok set d_snab=sysdate where nz=self.nz 
-    returning d_snab into self.d_snab;
-    
-    
-    
---    doUpdateXMLvalue( x, 'DOC/ZAG/ROW/D_SKL_POTR', sysdate);
 
-/*    for Cur in (select x.existsnode('DOC/ZAG/ROW/D_SKL_POTR') n from dual) loop
-        if Cur.n=1 then
-            select updatexml(x,'DOC/ZAG/ROW/D_SKL_POTR/text()',sysdate) into x from dual;
-        else
-            select appendchildxml(x,'DOC/ZAG/ROW',XMLelement("D_SKL_POTR",to_char(sysdate))) into x from dual;
-        end if;
-    end loop;
-*/
+  member procedure check_DokReadyToCommitSnab# is
+  begin
+    raise_application_error(-20001, 'Метод check_DokReadyToCommitSnab не реализован в базовом классе!');
+    null;
+  end;
+
+  member procedure check_UserReadyToCommitSnab# is
+  begin
+    raise_application_error(-20001, 'Метод check_UserReadyToCommitSnab не реализован в базовом классе!');
+  end;
+
+  member procedure check_DataReadyToCommitSnab#(in_x XMLtype) is
+  begin
+    raise_application_error(-20001, 'Метод check_DataReadyToCommitSnab не реализован в базовом классе!');
+  end;
+
+
+  member procedure doCommitToSnab#(in_x XMLtype) is
+  begin
+    raise_application_error(-20001, 'Метод doCommitToSnab не реализован в базовом классе!');
+  end;
+
+
+/************************************************************************************************/
+  member procedure doCommitToSnab(in_x XMLtype) is
+  begin
+    check_DokReadyToCommitSnab#();
+    check_UserReadyToCommitSnab#();
+    check_DataReadyToCommitSnab#(in_x);
+    doCommitToSnab#(in_x);
   end;
   
   member procedure doSeparateXMLtag(in_tag varchar2, out_path out varchar2, out_tag out varchar2) is
@@ -192,7 +223,72 @@ create or replace type body DokBase is
     -- делает проверку того, что ПОЛЬЗОВАТЕЛЬ может провести этот документ через склад
     null;
   end;
+
+
+  member procedure chk_not_null(x varchar2, str1 varchar2 := null, str2 varchar2 := null, str3 varchar2 := null) is
+  begin
+    if x is null then
+      raise_application_error(-20001,nvl(str1,' ')||' '||nvl(str2,' ')||' '||nvl(str3,' ')||' не может быть пустым!');
+    end if;
+    null;
+  end;
+
+
+  member procedure CreateDok(in_x XMLtype) is
+  begin
+    raise_application_error(-20001, 'Метод не реализован в базовом классе!');
+    null;
+  end;
   
+  member procedure StoreDok is
+  -- Запись содержимого rec_zag и rec_sod в базу с базовым контролем целостности документа
+  begin
+    rec_zag.Store();
+    rec_sod.Store();
+    null;
+  end;
+  
+  member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2) is
+  cnt number := 0;
+  begin
+    if in_type is null then
+      raise_application_error(-20001,'Не указан тип для проверки кода!');
+    end if;
+    if (in_type = 'М') then
+        select count(1) into cnt from asu_slo_mt where m_kod=in_kod_mat and rownum<2;
+    end if;
+    if (in_type = 'П') then
+        select count(1) into cnt from asu_slo_pk where dce0=in_kod_mat and rownum<2;
+    end if;
+    if (in_type = 'И') then
+        select count(1) into cnt from asu_slo_ins where i_kod=in_kod_mat and rownum<2;
+    end if;
+    if cnt=0 then
+      raise_application_error(-20001,'Неправильный код ['||in_kod_mat||']');
+    end if;
+    null;
+  end;
+  
+  member procedure chk_nklad_exist(in_nklad varchar2, in_type varchar2) is
+  cnt number;
+  begin
+    select count(1) into cnt from asu_n_klad t where instr(t.user_type,in_type)>0 and t.n_klad=in_nklad and rownum<2;
+    if cnt=0 then
+      raise_application_error(-20001,'Неправильный номер склада/кладовой ['||in_nklad||']');
+    end if;
+    null;
+  end;
+  
+  member procedure chk_op_exist(in_op number, in_wid_dok number) is
+  cnt number;
+  begin
+    select count(1) into cnt from asu_spr_op t where t.wid_dok=in_wid_dok and t.op=in_op and rownum<2;
+    if cnt=0 then
+      raise_application_error(-20001,'Неправильный код операции ['||in_op||']');
+    end if;
+    null;
+  end;
+
 /************************************************************************************************/
 /************************************************************************************************/
 /************************************************************************************************/

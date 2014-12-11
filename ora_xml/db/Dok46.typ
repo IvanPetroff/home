@@ -10,7 +10,8 @@ create or replace type Dok46 force under DokBase
   overriding member procedure check_DokReadyToCommitSnab#,
   overriding member procedure check_UserReadyToCommitSnab#,
   overriding member procedure doCommitToSnab#(in_x XMLtype),
-  overriding member procedure check_DataReadyToCommitSnab#(in_x XMLtype)
+  overriding member procedure check_DataReadyToCommitSnab#(in_x XMLtype),
+  member procedure CreateDok46(in_nz in out number, in_type varchar2, in_x XMLtype)
   
   
   
@@ -195,6 +196,47 @@ create or replace type body Dok46 is
   begin
     rec_zag.null_rec(in_d_snab=>NULL, in_u_snab=>NULL);
     rec_zag.update_rec(in_d_snab=>sysdate, in_u_snab=>user);
+  end;
+  
+  
+  member procedure CreateDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
+    z XMLtype;
+    s XMLtype;
+    i number;
+    nz number;
+  begin
+    self.rec_zag.clean();
+    self.rec_zag.type := in_type;
+
+    z := in_x.extract('DOC/ZAG/ROW');
+    for Cur in (select extractvalue( column_value, '/ROW/CEH_POST') ceh_post,
+                       extractvalue( column_value, '/ROW/CEH_POTR') ceh_potr,
+                       extractvalue( column_value, '/ROW/OP') op
+                from table(XMLsequence(z))) loop
+      self.chk_nklad_exist(Cur.ceh_post, in_type);
+      self.chk_nklad_exist(Cur.ceh_potr, in_type);
+      self.chk_op_exist(Cur.op, 46);
+
+      self.rec_zag.ceh_post := Cur.ceh_post;
+      self.rec_zag.ceh_potr := Cur.ceh_potr;
+      null;
+    end loop;
+
+    s := in_x.extract('DOC/SOD/ROW');
+    for Cur in (select extractvalue( column_value, '/ROW/KOD_MAT') kod_mat,
+                       extractvalue( column_value, '/ROW/KOL_TREB') kol_treb
+                from table(XMLsequence(s))) loop
+      self.chk_Kod_mat_exist(Cur.kod_mat, in_type);
+
+      self.rec_sod.newline();
+      self.rec_sod.rec(self.rec_sod.last).kod_mat := Cur.kod_mat;
+      self.rec_sod.rec(self.rec_sod.last).kol_treb := Cur.kol_treb;
+      null;
+    end loop;
+
+    self.rec_zag.generate_id();
+    self.StoreDok();
+    null;
   end;
   
   
