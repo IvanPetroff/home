@@ -7,6 +7,7 @@ create or replace type m_Dok46 force under Dok46
                            
   
   member procedure put_line(s varchar2),
+  
 
   overriding member procedure StoreDok,  
   overriding member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2),

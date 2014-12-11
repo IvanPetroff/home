@@ -127,6 +127,8 @@ begin
   x.createdok46(nz, 'Ì', XMLtype('<DOC><ZAG><ROW><OP>33</OP><CEH_POST>11.11</CEH_POST><CEH_POTR>22.22</CEH_POTR></ROW></ZAG><SOD></SOD></DOC>'));
   chk(x.rec_zag.ceh_post = '11.11');
   chk(x.rec_zag.ceh_potr = '22.22');
+  chk(x.rec_zag.post = 11.11);
+  chk(x.rec_zag.potr = 22.22);
   chk(x.rec_zag.op = 33);
   null;
 end;

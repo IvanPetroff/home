@@ -217,8 +217,11 @@ create or replace type body Dok46 is
       self.chk_nklad_exist(Cur.ceh_potr, in_type);
       self.chk_op_exist(Cur.op, 46);
 
+      self.rec_zag.op := Cur.op;
       self.rec_zag.ceh_post := Cur.ceh_post;
       self.rec_zag.ceh_potr := Cur.ceh_potr;
+      self.rec_zag.post := to_char(Cur.ceh_post);
+      self.rec_zag.potr := to_char(Cur.ceh_potr);
       null;
     end loop;
 
