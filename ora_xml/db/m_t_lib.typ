@@ -10,7 +10,9 @@ create or replace type m_t_lib force under t_lib
   constructor function m_t_lib return self as result,
   overriding member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2),
   overriding member procedure chk_nklad_exist(in_nklad varchar2, in_type varchar2),
-  overriding member procedure chk_op_exist(in_op number, in_wid_dok number)
+  overriding member procedure chk_op_exist(in_op number, in_wid_dok number),
+  overriding member procedure chk_skl_kart_exists( in_ost_id number, in_type varchar2, in_m_kod varchar2)
+  
   
 )
 /
@@ -38,7 +40,14 @@ create or replace type body m_t_lib is
   begin
     debug_pkg.put_line(in_op || ', ' || in_wid_dok);
     null;
+  end; 
+  
+  overriding member procedure chk_skl_kart_exists( in_ost_id number, in_type varchar2, in_m_kod varchar2) is
+  begin
+    debug_pkg.put_line(in_ost_id || ', ' || in_type || ', ' || in_m_kod);
+    null;
   end;
+  
 
 end;
 /

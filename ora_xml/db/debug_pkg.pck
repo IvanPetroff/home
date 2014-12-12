@@ -1,4 +1,4 @@
-create or replace package debug_pkg is
+create or replace force package debug_pkg is
 
   -- Author  : Администратор
   -- Created : 12.12.2014 11:07:19
@@ -12,7 +12,7 @@ procedure put_line(s varchar2);
 
 end debug_pkg;
 /
-create or replace package body debug_pkg is
+create or replace force package body debug_pkg is
 
   -- Private type declarations
 function who_called_me( steps_to_back  number) return varchar2
@@ -27,6 +27,7 @@ is
    found_stack BOOLEAN := FALSE;
    line        varchar2(255);
    cnt         number := 0;
+ 
 -- http://tkyte.blogspot.ru/2009/10/httpasktomoraclecomtkytewhocalledme.html   
 begin
    call_stack  := dbms_utility.format_call_stack;
@@ -51,10 +52,13 @@ begin
            if ( cnt = (2+steps_to_back) ) then
 --dbms_output.put_line(line);
 --dbms_output.put_line(substr( line, 13, 10 ));
+line := trim(substr(line,instr(line,' ')));
+my_lineno := to_number(substr( line, 1, instr(line,' ') ));
+line := trim(substr(line,instr(line,' ')));
 --               lineno := to_number(substr( line, 13, 6 ));
-               my_lineno := to_number(substr( line, 13, 10 ));
+--               my_lineno := to_number(substr( line, 13, 10 ));
 --               line   := substr( line, 21 );
-               line   := substr( line, 24 );
+--               line   := substr( line, 24 );
                if ( line like 'pr%' ) then
                    n := length( 'procedure ' );
                elsif ( line like 'fun%' ) then

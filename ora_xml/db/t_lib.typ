@@ -11,7 +11,8 @@ create or replace type t_lib force as object
   -- Member functions and procedures
   member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2),
   member procedure chk_nklad_exist(in_nklad varchar2, in_type varchar2),
-  member procedure chk_op_exist(in_op number, in_wid_dok number)
+  member procedure chk_op_exist(in_op number, in_wid_dok number),
+  member procedure chk_skl_kart_exists( in_ost_id number, in_type varchar2, in_m_kod varchar2)
 )
 not final;
 /
@@ -61,6 +62,16 @@ create or replace type body t_lib is
     select count(1) into cnt from asu_spr_op t where t.wid_dok=in_wid_dok and t.op=in_op and rownum<2;
     if cnt=0 then
       raise_application_error(-20001,'Ќеправильный код операции ['||in_op||']');
+    end if;
+    null;
+  end;
+  
+  member procedure chk_skl_kart_exists( in_ost_id number, in_type varchar2, in_m_kod varchar2) is
+  cnt number;
+  begin
+    select count(1) into cnt from asu_ost_mat where id=in_ost_id and type=in_type and m_kod=nvl(in_m_kod,m_kod) and rownum <2;
+    if cnt=0 then
+      raise_application_error(-20001,'Ќеправильный номер складской карточки ['||in_ost_id||'] или код ['||in_m_kod);
     end if;
     null;
   end;

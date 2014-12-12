@@ -1,4 +1,4 @@
-create or replace type m_Dok46 force under Dok46
+create or replace force type m_Dok46 force under Dok46
 (
   -- Author  : Администратор
   -- Created : 11.12.2014 10:40:44

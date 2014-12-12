@@ -1,4 +1,4 @@
-create or replace type T_ZagDok force as object
+create or replace force type T_ZagDok force as object
 (
   -- Author  : Администратор
   -- Created : 09.12.2014 8:35:46
@@ -7,21 +7,21 @@ create or replace type T_ZagDok force as object
   -- Attributes
   nz number,
   wid_dok number,
-  type varchar2(1),
-  ceh_post varchar2(8),
-  ceh_potr varchar2(8),
+  type varchar2(1 char),
+  ceh_post varchar2(8 char),
+  ceh_potr varchar2(8 char),
   d_snab date,
   d_skl_post date,
   d_skl_potr date,
   dd_ceh date,
-  u_snab varchar2(16),
-  u_skl_post varchar2(16),
-  u_skl_potr varchar2(16),
-  uu_ceh varchar2(16),
+  u_snab varchar2(16 char),
+  u_skl_post varchar2(16 char),
+  u_skl_potr varchar2(16 char),
+  uu_ceh varchar2(16 char),
   op number,
   post number,
   potr number,
-  prim varchar2(200),
+  prim varchar2(200 char),
   
   constructor function T_ZagDok(in_nz number) return self as result,
 
@@ -69,6 +69,7 @@ create or replace type T_ZagDok force as object
 not final;
 /
 create or replace type body T_ZagDok is
+
   
   -- Member procedures and functions
   constructor function T_ZagDok(in_nz number) return self as result is

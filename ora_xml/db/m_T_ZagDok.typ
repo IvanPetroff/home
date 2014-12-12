@@ -1,4 +1,4 @@
-create or replace type m_T_ZagDok force under T_ZagDok
+create or replace force type m_T_ZagDok under T_ZagDok
 (
   -- Author  : Администратор
   -- Created : 11.12.2014 10:40:44
@@ -40,7 +40,7 @@ create or replace type m_T_ZagDok force under T_ZagDok
   
 )
 /
-create or replace type body m_T_ZagDok is
+create or replace force type body m_T_ZagDok is
   
   -- Member procedures and functions
   constructor function m_T_ZagDok(in_nz number) return self as result is
@@ -50,7 +50,7 @@ create or replace type body m_T_ZagDok is
       return;
     end if;
   end;
-
+ 
 
   overriding member procedure Store is
   begin

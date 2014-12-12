@@ -1,5 +1,5 @@
-create or replace type DokBase force as object
-(
+create or replace force type DokBase force  as object
+( 
   -- Author  : Администратор
   -- Created : 03.12.2014 9:03:06
   -- Purpose : 
@@ -40,13 +40,13 @@ not final;
 /
 create or replace type body DokBase is
   
-
+    
   constructor function DokBase return self as result is
-  begin
+  begin 
     Init();
     return;
   end;
-
+ 
   -- Member procedures and functions
 /************************************************************************************************/
   member procedure Init is
