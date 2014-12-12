@@ -21,6 +21,7 @@ create or replace type T_ZagDok force as object
   op number,
   post number,
   potr number,
+  prim varchar2(200),
   
   constructor function T_ZagDok(in_nz number) return self as result,
 
@@ -36,7 +37,8 @@ create or replace type T_ZagDok force as object
     in_op number := null,
     in_wid_dok number := null,
     in_post number := null,
-    in_potr number := null
+    in_potr number := null,
+    in_prim varchar2 := null
     ),
 
   member procedure null_rec(
@@ -51,7 +53,8 @@ create or replace type T_ZagDok force as object
     in_op number := 1,
     in_wid_dok number := 1,
     in_post number := 1,
-    in_potr number := 1
+    in_potr number := 1,
+    in_prim number := 1
     ),
     
   member procedure clean,
@@ -74,8 +77,8 @@ create or replace type body T_ZagDok is
       self.clean();
       return;
     end if;
-    select nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, wid_dok, post, potr
-      into nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, wid_dok, post, potr
+    select nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, wid_dok, post, potr, prim
+      into nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, wid_dok, post, potr, prim
     from asu_zag_dok where nz = in_nz;
   end;
   
@@ -91,7 +94,8 @@ create or replace type body T_ZagDok is
     in_op number := null,
     in_wid_dok number := null,
     in_post number := null,
-    in_potr number := null
+    in_potr number := null,
+    in_prim varchar2 := null
     ) is
   begin
     update zag_dok set 
@@ -106,7 +110,8 @@ create or replace type body T_ZagDok is
       op         =nvl(in_op, op),
       wid_dok    =nvl(in_wid_dok, wid_dok),
       post       =nvl(in_post, post),
-      potr       =nvl(in_potr, potr)
+      potr       =nvl(in_potr, potr),
+      prim       =nvl(in_prim, prim)
     where 
       nz=self.nz;
     null;
@@ -124,7 +129,8 @@ create or replace type body T_ZagDok is
     in_op number := 1,
     in_wid_dok number := 1,
     in_post number := 1,
-    in_potr number := 1
+    in_potr number := 1,
+    in_prim number := 1
     ) is
   begin
     update zag_dok set 
@@ -139,11 +145,12 @@ create or replace type body T_ZagDok is
       op         =decode(in_op,         null,null, op),
       wid_dok    =decode(in_wid_dok,    null,null, wid_dok),
       post       =decode(in_post,       null,null, post),
-      potr       =decode(in_potr,       null,null, potr)
+      potr       =decode(in_potr,       null,null, potr),
+      prim       =decode(in_prim,       null,null, prim)
     where 
       nz=self.nz
-    returning   nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, post, potr
-           into nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, post, potr;
+    returning   nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, post, potr, prim
+           into nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, post, potr, prim;
     null;
   end;
   
@@ -165,6 +172,7 @@ create or replace type body T_ZagDok is
     op         := null;
     post       := null;
     potr       := null;
+    prim       := null;
   end;
   
   member procedure generate_id is

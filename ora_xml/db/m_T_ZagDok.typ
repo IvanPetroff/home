@@ -18,7 +18,8 @@ create or replace type m_T_ZagDok force under T_ZagDok
     in_op number := null,
     in_wid_dok number := null,
     in_post number := null,
-    in_potr number := null
+    in_potr number := null,
+    in_prim varchar2 := null
     ),
 
   overriding member procedure null_rec(
@@ -33,7 +34,8 @@ create or replace type m_T_ZagDok force under T_ZagDok
     in_op number := 1,
     in_wid_dok number := 1,
     in_post number := 1,
-    in_potr number := 1
+    in_potr number := 1,
+    in_prim number := 1
     )
   
 )
@@ -67,7 +69,8 @@ create or replace type body m_T_ZagDok is
     in_op number := null,
     in_wid_dok number := null,
     in_post number := null,
-    in_potr number := null
+    in_potr number := null,
+    in_prim varchar2 := null
     ) is
   begin
     null;
@@ -85,7 +88,8 @@ create or replace type body m_T_ZagDok is
     in_op number := 1,
     in_wid_dok number := 1,
     in_post number := 1,
-    in_potr number := 1
+    in_potr number := 1,
+    in_prim number := 1
     ) is
   begin
     null;

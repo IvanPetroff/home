@@ -3,10 +3,13 @@ create or replace type DokBase force as object
   -- Author  : Администратор
   -- Created : 03.12.2014 9:03:06
   -- Purpose : 
+  lib t_lib,
   x XMLtype,
   nz number, -- регистрационный номер документа
   rec_zag T_ZagDok,
   rec_sod T_SodDok,
+
+  constructor function DokBase return self as result,
   
   member procedure Init,
   member procedure OpenDok(in_nz number),
@@ -30,37 +33,25 @@ create or replace type DokBase force as object
   member procedure chk_not_null(x varchar2, str1 varchar2 := null, str2 varchar2 := null, str3 varchar2 := null),
   member procedure CreateDok(in_x XMLtype),
   member procedure StoreDok,
-  member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2),
-  member procedure chk_nklad_exist(in_nklad varchar2, in_type varchar2),
-  member procedure chk_op_exist(in_op number, in_wid_dok number)
-  
-
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-  
-
-  
-  
+  member procedure DeleteDok(in_nz number)
 
 )
 not final;
 /
 create or replace type body DokBase is
   
+
+  constructor function DokBase return self as result is
+  begin
+    Init();
+    return;
+  end;
+
   -- Member procedures and functions
 /************************************************************************************************/
   member procedure Init is
   begin
-    x := XMLtype('<doc></doc>');
+    lib := t_lib;
     null;
   end;
   
@@ -248,46 +239,12 @@ create or replace type body DokBase is
     null;
   end;
   
-  member procedure chk_Kod_mat_exist(in_kod_mat varchar2, in_type varchar2) is
-  cnt number := 0;
+  member procedure DeleteDok(in_nz number) is
+  -- Удалить документ из базы
   begin
-    if in_type is null then
-      raise_application_error(-20001,'Не указан тип для проверки кода!');
-    end if;
-    if (in_type = 'М') then
-        select count(1) into cnt from asu_slo_mt where m_kod=in_kod_mat and rownum<2;
-    end if;
-    if (in_type = 'П') then
-        select count(1) into cnt from asu_slo_pk where dce0=in_kod_mat and rownum<2;
-    end if;
-    if (in_type = 'И') then
-        select count(1) into cnt from asu_slo_ins where i_kod=in_kod_mat and rownum<2;
-    end if;
-    if cnt=0 then
-      raise_application_error(-20001,'Неправильный код ['||in_kod_mat||']');
-    end if;
     null;
   end;
-  
-  member procedure chk_nklad_exist(in_nklad varchar2, in_type varchar2) is
-  cnt number;
-  begin
-    select count(1) into cnt from asu_n_klad t where instr(t.user_type,in_type)>0 and t.n_klad=in_nklad and rownum<2;
-    if cnt=0 then
-      raise_application_error(-20001,'Неправильный номер склада/кладовой ['||in_nklad||']');
-    end if;
-    null;
-  end;
-  
-  member procedure chk_op_exist(in_op number, in_wid_dok number) is
-  cnt number;
-  begin
-    select count(1) into cnt from asu_spr_op t where t.wid_dok=in_wid_dok and t.op=in_op and rownum<2;
-    if cnt=0 then
-      raise_application_error(-20001,'Неправильный код операции ['||in_op||']');
-    end if;
-    null;
-  end;
+
 
 /************************************************************************************************/
 /************************************************************************************************/

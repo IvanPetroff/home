@@ -3,6 +3,9 @@ create or replace type Dok46 force under DokBase
   -- Author  : Администратор
   -- Created : 03.12.2014 9:04:51
   -- Purpose : 
+  constructor function Dok46 return self as result,
+
+
   overriding member procedure Init,
   overriding member procedure doCommitOnSkl(in_x XMLtype),
   overriding member function isCanCommitOnSkl return boolean,
@@ -11,6 +14,7 @@ create or replace type Dok46 force under DokBase
   overriding member procedure check_UserReadyToCommitSnab#,
   overriding member procedure doCommitToSnab#(in_x XMLtype),
   overriding member procedure check_DataReadyToCommitSnab#(in_x XMLtype),
+  member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype),
   member procedure CreateDok46(in_nz in out number, in_type varchar2, in_x XMLtype)
   
   
@@ -28,8 +32,17 @@ not final;
 create or replace type body Dok46 is
   
   -- Member procedures and functions
+
+  constructor function Dok46 return self as result is
+  begin
+    Init();
+    return;
+  end;
+
+
   overriding member procedure Init is
   begin
+    (self as DokBase).Init();
     null;
   end;
   
@@ -46,6 +59,7 @@ create or replace type body Dok46 is
   ost_from OstBase := OstBase(null,null);
   ost_to OstBase := OstBase(null,null);
   begin
+
     -- Проверяем возможность прохождения документа через очередную инстанцию
     if self.GetDateCommitOnSkl() is not null then
         raise_application_error(-20001,'Документ уже проведён на складе '||self.GetDateCommitOnSkl());
@@ -198,6 +212,12 @@ create or replace type body Dok46 is
     rec_zag.update_rec(in_d_snab=>sysdate, in_u_snab=>user);
   end;
   
+  member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
+  begin
+    self.DeleteDok(in_nz);
+    CreateDok46(in_nz, in_type, in_x);
+    null;
+  end;
   
   member procedure CreateDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
     z XMLtype;
@@ -211,29 +231,43 @@ create or replace type body Dok46 is
     z := in_x.extract('DOC/ZAG/ROW');
     for Cur in (select extractvalue( column_value, '/ROW/CEH_POST') ceh_post,
                        extractvalue( column_value, '/ROW/CEH_POTR') ceh_potr,
+                       extractvalue( column_value, '/ROW/PRIM') prim,
                        extractvalue( column_value, '/ROW/OP') op
                 from table(XMLsequence(z))) loop
-      self.chk_nklad_exist(Cur.ceh_post, in_type);
-      self.chk_nklad_exist(Cur.ceh_potr, in_type);
-      self.chk_op_exist(Cur.op, 46);
+      lib.chk_nklad_exist(Cur.ceh_post, in_type);
+      lib.chk_nklad_exist(Cur.ceh_potr, in_type);
+      lib.chk_op_exist(Cur.op, 46);
 
       self.rec_zag.op := Cur.op;
       self.rec_zag.ceh_post := Cur.ceh_post;
       self.rec_zag.ceh_potr := Cur.ceh_potr;
       self.rec_zag.post := to_char(Cur.ceh_post);
       self.rec_zag.potr := to_char(Cur.ceh_potr);
+      self.rec_zag.prim := to_char(Cur.prim);
       null;
     end loop;
 
     s := in_x.extract('DOC/SOD/ROW');
     for Cur in (select extractvalue( column_value, '/ROW/KOD_MAT') kod_mat,
-                       extractvalue( column_value, '/ROW/KOL_TREB') kol_treb
+                       extractvalue( column_value, '/ROW/KOL_TREB') kol_treb,
+                       extractvalue( column_value, '/ROW/DOP_KOD') dop_kod,
+                       extractvalue( column_value, '/ROW/SHPZ') shpz,
+                       extractvalue( column_value, '/ROW/IZD') izd,
+                       extractvalue( column_value, '/ROW/PRIM') prim,
+                       extractvalue( column_value, '/ROW/DCE') dce,
+                       extractvalue( column_value, '/ROW/D_GAR') d_gar
                 from table(XMLsequence(s))) loop
-      self.chk_Kod_mat_exist(Cur.kod_mat, in_type);
+      lib.chk_Kod_mat_exist(Cur.kod_mat, in_type);
 
       self.rec_sod.newline();
       self.rec_sod.rec(self.rec_sod.last).kod_mat := Cur.kod_mat;
       self.rec_sod.rec(self.rec_sod.last).kol_treb := Cur.kol_treb;
+      self.rec_sod.rec(self.rec_sod.last).dop_kod := Cur.dop_kod;
+      self.rec_sod.rec(self.rec_sod.last).shpz := Cur.shpz;
+      self.rec_sod.rec(self.rec_sod.last).izd := Cur.izd;
+      self.rec_sod.rec(self.rec_sod.last).prim := Cur.prim;
+      self.rec_sod.rec(self.rec_sod.last).dce := Cur.dce;
+      self.rec_sod.rec(self.rec_sod.last).d_gar := to_date(Cur.d_gar,'dd.mm.yyyy');
       null;
     end loop;
 
