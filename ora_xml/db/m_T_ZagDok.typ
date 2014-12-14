@@ -36,7 +36,10 @@ create or replace force type m_T_ZagDok under T_ZagDok
     in_post number := 1,
     in_potr number := 1,
     in_prim number := 1
-    )
+    ),
+
+  overriding member procedure Delete_from_DB
+    
   
 )
 /
@@ -92,6 +95,11 @@ create or replace force type body m_T_ZagDok is
     in_potr number := 1,
     in_prim number := 1
     ) is
+  begin
+    null;
+  end;
+  
+  overriding member procedure Delete_from_DB is
   begin
     null;
   end;

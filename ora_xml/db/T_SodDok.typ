@@ -12,7 +12,10 @@ create or replace type T_SodDok force as object
   constructor function T_SodDok(in_nz_zag number) return self as result,
   member procedure newline,
   member procedure clean,
-  member procedure Store
+  member procedure Store,
+  member procedure Delete_from_DB
+
+  
   
 
 )
@@ -57,6 +60,15 @@ create or replace type body T_SodDok is
   begin
     null;
   end;
+  
+  member procedure Delete_from_DB is
+  begin
+    
+    delete asu_sod_dok where nz in (select nz from table(rec));
+   
+    null;
+  end;
+  
   
 end;
 /

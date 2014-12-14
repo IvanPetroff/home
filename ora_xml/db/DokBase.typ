@@ -5,7 +5,7 @@ create or replace force type DokBase force  as object
   -- Purpose : 
   lib t_lib,
   x XMLtype,
-  nz number, -- регистрационный номер документа
+--  nz number, -- регистрационный номер документа
   rec_zag T_ZagDok,
   rec_sod T_SodDok,
 
@@ -14,15 +14,16 @@ create or replace force type DokBase force  as object
   member procedure Init,
   member procedure OpenDok(in_nz number, in_wid_dok number := null, in_type varchar2 := null),
   member procedure CloseDok,
-  member procedure LoadZagDok,
-  member procedure LoadSodDok,
+  member procedure LoadZagDok(in_nz number),
+  member procedure LoadSodDok(in_nz number),
   member procedure StoreDok,
   member procedure DeleteDok(in_nz number),
   member procedure ParseXML(in_x XMLtype),
   member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype),
   member procedure OnBeforeStoreDok,
   member procedure doNextStepDok(in_nz number, in_x XMLtype),
-  member procedure doPrevStepDok(in_nz number, in_x XMLtype)
+  member procedure doPrevStepDok(in_nz number, in_x XMLtype),
+  member procedure OnBeforeEditDok(in_nz number)
   
 
 )
@@ -42,6 +43,8 @@ create or replace type body DokBase is
   member procedure Init is
   begin
     lib := t_lib;
+    LoadZagDok(null);
+    LoadSodDok(null);    
     null;
   end;
   
@@ -52,9 +55,9 @@ create or replace type body DokBase is
       exit when (in_wid_dok is not null and Cur.Wid_Dok<>in_wid_dok);
       exit when (in_type is not null and instr(in_type,Cur.Type)=0);
       
-      self.nz := in_nz;
-      LoadZagDok();
-      LoadSodDok();
+--      self.nz := in_nz;
+      LoadZagDok(in_nz);
+      LoadSodDok(in_nz);
       return;
     end loop;
   
@@ -62,16 +65,16 @@ create or replace type body DokBase is
   end;
 
 /************************************************************************************************/
-  member procedure LoadZagDok is
+  member procedure LoadZagDok(in_nz number) is
   begin
-    rec_zag := T_ZagDok(self.nz);
+    rec_zag := T_ZagDok(in_nz);
   end;
 
 
 /************************************************************************************************/
-  member procedure LoadSodDok is
+  member procedure LoadSodDok(in_nz number) is
   begin
-    rec_sod := T_SodDok(self.nz);
+    rec_sod := T_SodDok(in_nz);
   end;
 
 /************************************************************************************************/
@@ -95,6 +98,10 @@ create or replace type body DokBase is
   member procedure DeleteDok(in_nz number) is
   -- Удалить документ из базы
   begin
+    rec_sod.Delete_from_DB();
+    rec_zag.Delete_from_DB();
+    self.LoadZagDok(null);
+    LoadSodDok(null);
     null;
   end;
   
@@ -180,6 +187,12 @@ create or replace type body DokBase is
   -- Возврат документа на предыдущую ступень
   begin
     raise_application_error(-20001, 'Метод doPrevStepDok должен быть переопределён в производном классе!');
+    null;
+  end;
+
+  member procedure OnBeforeEditDok(in_nz number) is
+  begin
+    raise_application_error(-20001, 'Метод OnBeforeEitDok должен быть переопределён в производном классе!');
     null;
   end;
 

@@ -5,7 +5,9 @@ create or replace type m_T_SodDok force under T_SodDok
   -- Purpose : 
   constructor function m_T_SodDok(in_nz_zag number) return self as result,
 
-  overriding member procedure Store
+  overriding member procedure Store,
+  overriding member procedure Delete_from_DB
+  
   
 )
 /
@@ -26,6 +28,12 @@ create or replace type body m_T_SodDok is
   begin
     null;
   end;
+
+  overriding member procedure Delete_from_DB is
+  begin
+    null;
+  end;
+
   
 end;
 /

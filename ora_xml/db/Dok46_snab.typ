@@ -8,7 +8,9 @@ create or replace force type Dok46_snab force under Dok46
   
   overriding member procedure OnBeforeStoreDok,
   overriding member procedure doNextStepDok(in_nz number, in_x XMLtype),
-  overriding member procedure doPrevStepDok(in_nz number, in_x XMLtype)
+  overriding member procedure doPrevStepDok(in_nz number, in_x XMLtype),
+  overriding member procedure OnBeforeEditDok(in_nz number)
+  
   
   
 )
@@ -76,6 +78,20 @@ create or replace type body Dok46_snab is
 
     null;
   end;
+
+  overriding member procedure OnBeforeEditDok(in_nz number) is
+  begin
+    (self as Dok46).OnBeforeEditDok(in_nz);
+    if (rec_zag.d_skl_post is not null) then
+      raise_application_error(-20001,'Документ уже прошёл через склад! ['||rec_zag.d_skl_post||']');
+    end if;
+    if (rec_zag.dd_ceh is null) then
+      raise_application_error(-20001,'Документ не имеет подписи цеха!');
+    end if;
+        
+    null;
+  end;
+
     
 end;
 /

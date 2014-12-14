@@ -8,7 +8,8 @@ create or replace force type Dok46 force under DokBase
 
   overriding member procedure Init,
 --  overriding member procedure doCommitOnSkl(in_x XMLtype),
-  member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype),
+  overriding member procedure OnBeforeEditDok(in_nz number),
+  member procedure EditDok(in_nz in out number, in_type varchar2, in_x XMLtype),
   overriding member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype),
   overriding member procedure OnBeforeStoreDok,
   overriding member procedure doNextStepDok(in_nz number, in_x XMLtype),
@@ -87,10 +88,16 @@ create or replace force type body Dok46 is
     null;
   end;
 */  
+  overriding member procedure OnBeforeEditDok(in_nz number) is
+  begin
+    null;
+  end;
 
  
-  member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
+  member procedure EditDok(in_nz in out number, in_type varchar2, in_x XMLtype) is
   begin
+    self.Opendok(in_nz, in_wid_dok=>46);
+    OnBeforeEditDok(in_nz);
     self.DeleteDok(in_nz);
     self.CreateDok(in_nz, in_type, in_x);
     null; 

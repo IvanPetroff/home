@@ -8,7 +8,9 @@ create or replace force type Dok46_ceh force under Dok46
   
   overriding member procedure OnBeforeStoreDok,
   overriding member procedure doNextStepDok(in_nz number, in_x XMLtype),
-  overriding member procedure doPrevStepDok(in_nz number, in_x XMLtype)
+  overriding member procedure doPrevStepDok(in_nz number, in_x XMLtype),
+  overriding member procedure OnBeforeEditDok(in_nz number)
+  
   
   
 )
@@ -74,6 +76,18 @@ create or replace type body Dok46_ceh is
 
     null;
   end;
+  
+  
+  overriding member procedure OnBeforeEditDok(in_nz number) is
+  begin
+    (self as Dok46).OnBeforeEditDok(in_nz);
+    if (rec_zag.d_snab is not null) then
+      raise_application_error(-20001,'Документ уже прошёл через снабжение! ['||rec_zag.d_snab||']');
+    end if;
+        
+    null;
+  end;
+  
     
 end;
 /

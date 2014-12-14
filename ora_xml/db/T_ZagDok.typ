@@ -59,7 +59,9 @@ create or replace force type T_ZagDok force as object
     
   member procedure clean,
   member procedure generate_id,
-  member procedure Store
+  member procedure Store,
+  member procedure Delete_from_DB
+  
   
 
   
@@ -190,5 +192,13 @@ create or replace type body T_ZagDok is
     null;
   end;
   
+  member procedure Delete_from_DB is
+  begin
+    delete asu_zag_dok where nz=self.nz;
+   
+    null;
+  end;
+
+
 end;
 /
