@@ -81,6 +81,7 @@ create or replace type body T_ZagDok is
     select nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, wid_dok, post, potr, prim
       into nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, wid_dok, post, potr, prim
     from asu_zag_dok where nz = in_nz;
+    return;
   end;
   
   member procedure update_rec(
@@ -114,7 +115,9 @@ create or replace type body T_ZagDok is
       potr       =nvl(in_potr, potr),
       prim       =nvl(in_prim, prim)
     where 
-      nz=self.nz;
+      nz=self.nz
+    returning   nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, post, potr, prim
+           into nz, wid_dok, type, ceh_post, ceh_potr, d_snab, d_skl_post, d_skl_potr, dd_ceh, u_snab, u_skl_post, u_skl_potr, uu_ceh, op, post, potr, prim;
     null;
   end;
 
@@ -178,6 +181,7 @@ create or replace type body T_ZagDok is
   
   member procedure generate_id is
   begin
+    self.nz := zag_dok_seq.nextval;
     null;
   end;
 

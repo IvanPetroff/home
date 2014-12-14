@@ -15,18 +15,11 @@ create or replace force type Dok46 force under DokBase
   overriding member procedure doCommitToSnab#(in_x XMLtype),
   overriding member procedure check_DataReadyToCommitSnab#(in_x XMLtype),
   member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype),
-  member procedure CreateDok46(in_nz in out number, in_type varchar2, in_x XMLtype),
-  member procedure UserControlCreateDok(in_type varchar2, in_x XMLtype)
-  
-  
-  
-  
-  
+  overriding member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype),
+  overriding member procedure OnBeforeStoreDok,
+  overriding member procedure doNextStepDok(in_nz number, in_x XMLtype),
+  overriding member procedure doPrevStepDok(in_nz number, in_x XMLtype)
 
-
-  
-  
-  
 )
 not final;
 /
@@ -156,7 +149,7 @@ create or replace force type body Dok46 is
     select count(*) into cnt from asu_sod_dok where nz_zag=self.rec_zag.nz;
     -- Проверяем, что снабженец указал все карточки
     x_ceh_post := in_x.extract('/ZAG/ROW['||I||']/CEH_POST/text()').getstringval();
-    self.chk_not_null(x_ceh_post, 'Склад-поставщик');
+    lib.chk_not_null(x_ceh_post, 'Склад-поставщик');
     
     
   for Cur in (
@@ -183,9 +176,9 @@ create or replace force type body Dok46 is
         x_nz_prih := in_x.extract('/SOD/ROW['||I||']/NZ_PRIH/text()').getstringval();
         x_kod_mat := in_x.extract('/SOD/ROW['||I||']/KOD_MAT/text()').getstringval();
 
-        self.chk_not_null(x_kol, 'в строке', I, 'количество');
-        self.chk_not_null(x_prizn, 'в строке', I, 'номер карточки');
-        self.chk_not_null(x_kod_mat, 'в строке', I, 'код');
+        lib.chk_not_null(x_kol, 'в строке', I, 'количество');
+        lib.chk_not_null(x_prizn, 'в строке', I, 'номер карточки');
+        lib.chk_not_null(x_kod_mat, 'в строке', I, 'код');
         
 --        self.doUpdateXMLvalue(tmp_x, '/DOC/SOD/ROW['||I||']/KOL', skl_kol);
         ost_from.OpenKart(x_nz_prih, 'П');
@@ -216,75 +209,41 @@ create or replace force type body Dok46 is
   member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
   begin
     self.DeleteDok(in_nz);
-    CreateDok46(in_nz, in_type, in_x);
+    self.CreateDok(in_nz, in_type, in_x);
+    null; 
+  end;  
+  
+  overriding member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype) is
+  begin
+    (self as DokBase).CreateDok(in_nz, in_type, in_x);
     null;
   end;
   
-  member procedure CreateDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
-    xx XMLtype;
-    i number;
-    nz number;
+  
+  overriding member procedure OnBeforeStoreDok is
+  -- проверка данных перед записью требования (документ 46)
   begin
-    self.rec_zag.clean();
-    self.rec_zag.type := in_type;
+    (self as DokBase).OnBeforeStoreDok;
+    lib.chk_op_exist(rec_zag.op, 46);
 
-    xx := in_x.extract('DOC/ZAG/ROW');
-    for Cur in (select extractvalue( column_value, '/ROW/CEH_POST') ceh_post,
-                       extractvalue( column_value, '/ROW/CEH_POTR') ceh_potr,
-                       extractvalue( column_value, '/ROW/PRIM') prim,
-                       extractvalue( column_value, '/ROW/OP') op
-                from table(XMLsequence(xx))) loop
-      lib.chk_nklad_exist(Cur.ceh_post, in_type);
-      lib.chk_nklad_exist(Cur.ceh_potr, in_type);
-      lib.chk_op_exist(Cur.op, 46);
-
-      self.rec_zag.op := Cur.op;
-      self.rec_zag.ceh_post := Cur.ceh_post;
-      self.rec_zag.ceh_potr := Cur.ceh_potr;
-      self.rec_zag.post := to_char(Cur.ceh_post);
-      self.rec_zag.potr := to_char(Cur.ceh_potr);
-      self.rec_zag.prim := to_char(Cur.prim);
-      null;
+    for I in 1..rec_sod.last loop
+      rec_sod.rec(I).nz_ceh := null;
+      lib.chk_not_null(rec_sod.rec(I).kol_treb, 'Количество');
     end loop;
-
-    xx := in_x.extract('DOC/SOD/ROW');
-    for Cur in (select extractvalue( column_value, '/ROW/KOD_MAT') kod_mat,
-                       extractvalue( column_value, '/ROW/KOL_TREB') kol_treb,
-                       extractvalue( column_value, '/ROW/DOP_KOD') dop_kod,
-                       extractvalue( column_value, '/ROW/SHPZ') shpz,
-                       extractvalue( column_value, '/ROW/IZD') izd,
-                       extractvalue( column_value, '/ROW/PRIM') prim,
-                       extractvalue( column_value, '/ROW/DCE') dce,
-                       extractvalue( column_value, '/ROW/D_GAR') d_gar,
-                       extractvalue( column_value, '/ROW/NZ_PRIH') nz_prih,
-                       extractvalue( column_value, '/ROW/NZ_CEH') nz_ceh
-                from table(XMLsequence(xx))) loop
-      lib.chk_Kod_mat_exist(Cur.kod_mat, in_type);
-
-      self.rec_sod.newline();
-      self.rec_sod.rec(self.rec_sod.last).kod_mat := Cur.kod_mat;
-      self.rec_sod.rec(self.rec_sod.last).kol_treb := Cur.kol_treb;
-      self.rec_sod.rec(self.rec_sod.last).dop_kod := Cur.dop_kod;
-      self.rec_sod.rec(self.rec_sod.last).shpz := Cur.shpz;
-      self.rec_sod.rec(self.rec_sod.last).izd := Cur.izd;
-      self.rec_sod.rec(self.rec_sod.last).prim := Cur.prim;
-      self.rec_sod.rec(self.rec_sod.last).dce := Cur.dce;
-      self.rec_sod.rec(self.rec_sod.last).d_gar := to_date(Cur.d_gar,'dd.mm.yyyy');
-      self.rec_sod.rec(self.rec_sod.last).nz_prih := Cur.nz_prih;
-      self.rec_sod.rec(self.rec_sod.last).nz_ceh := Cur.nz_ceh;
-      null;
-    end loop;
-    UserControlCreateDok(in_type,in_x);
-
-    self.rec_zag.generate_id();
-    self.StoreDok();
+  end;
+  
+  overriding member procedure doNextStepDok(in_nz number, in_x XMLtype) is
+  begin
+    self.OpenDok(in_nz, in_wid_dok=>46);
     null;
   end;
   
-  member procedure UserControlCreateDok(in_type varchar2, in_x XMLtype) is
+  overriding member procedure doPrevStepDok(in_nz number, in_x XMLtype) is
   begin
+    self.OpenDok(in_nz, in_wid_dok=>46);
     null;
   end;
+  
   
   
 end;

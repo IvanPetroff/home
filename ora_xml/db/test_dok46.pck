@@ -31,7 +31,7 @@ begin
   x := m_Dok46;--(null,null,null,null,null);
   x.rec_zag := m_T_ZagDok(null);
   x.rec_sod := m_T_SodDok(null);
-  x.createdok46(nz, 'Ì', XMLtype('<DOC><SOD><ROW><KOD_MAT>qwe</KOD_MAT><DOP_KOD>dop_kod</DOP_KOD><NZ_CEH>5678</NZ_CEH><NZ_PRIH>1234</NZ_PRIH><D_GAR>11.11.2014</D_GAR><DCE>dce</DCE><PRIM>prim</PRIM><SHPZ>shpz</SHPZ><IZD>izd</IZD><KOL_TREB>111</KOL_TREB></ROW><ROW><KOD_MAT>rty</KOD_MAT><KOL_TREB>222</KOL_TREB></ROW></SOD></DOC>'));
+  x.createdok(nz, 'Ì', XMLtype('<DOC><SOD><ROW><KOD_MAT>qwe</KOD_MAT><DOP_KOD>dop_kod</DOP_KOD><NZ_CEH>5678</NZ_CEH><NZ_PRIH>1234</NZ_PRIH><D_GAR>11.11.2014</D_GAR><DCE>dce</DCE><PRIM>prim</PRIM><SHPZ>shpz</SHPZ><IZD>izd</IZD><KOL_TREB>111</KOL_TREB></ROW><ROW><KOD_MAT>rty</KOD_MAT><KOL_TREB>222</KOL_TREB></ROW></SOD></DOC>'));
   chk(x.rec_sod.last = 2);
   chk(x.rec_sod.rec(1).kod_mat = 'qwe');
   chk(x.rec_sod.rec(1).kol_treb = '112');
@@ -44,7 +44,7 @@ begin
   chk(x.rec_sod.rec(1).dce = 'dce');
   chk(x.rec_sod.rec(1).d_gar = to_date('11.11.2014'));
   chk(x.rec_sod.rec(1).nz_prih = 1234);
-  chk(x.rec_sod.rec(1).nz_ceh = 5678);
+  chk(x.rec_sod.rec(1).nz_ceh is null);
 
   null;
 end;
@@ -56,7 +56,7 @@ begin
   x := m_Dok46;--(null,null,null,null,null);
   x.rec_zag := m_T_ZagDok(null);
   x.rec_sod := m_T_SodDok(null);
-  x.createdok46(nz, 'Ì', XMLtype('<DOC><ZAG><ROW><PRIM>prim</PRIM><OP>33</OP><CEH_POST>11.11</CEH_POST><CEH_POTR>22.22</CEH_POTR></ROW></ZAG><SOD></SOD></DOC>'));
+  x.createdok(nz, 'Ì', XMLtype('<DOC><ZAG><ROW><PRIM>prim</PRIM><OP>33</OP><CEH_POST>11.11</CEH_POST><CEH_POTR>22.22</CEH_POTR></ROW></ZAG><SOD></SOD></DOC>'));
   chk(x.rec_zag.ceh_post = '11.11');
   chk(x.rec_zag.ceh_potr = '22.22');
   chk(x.rec_zag.post = 11.11);

@@ -1,4 +1,4 @@
-create or replace force type m_Dok46 force under Dok46
+create or replace force type m_Dok46 under Dok46
 (
   -- Author  : Администратор
   -- Created : 11.12.2014 10:40:44
@@ -13,7 +13,7 @@ create or replace force type m_Dok46 force under Dok46
   
 )
 /
-create or replace type body m_Dok46 is
+create or replace force type body m_Dok46 is
   
 /*
 TODO: owner="Администратор" created="11.12.2014"
@@ -26,7 +26,7 @@ text="неплохо было бы сделать подсчёт количества вызовов перекрытых методов.
   constructor function m_Dok46 return self as result is
   begin
     Init();
-    return;
+    return; 
   end;
 
   
@@ -34,7 +34,7 @@ text="неплохо было бы сделать подсчёт количества вызовов перекрытых методов.
   overriding member procedure Init is
   begin
     (self as Dok46).Init();
-    self.lib := m_t_lib;
+    self.lib := m_t_lib;  
     null;
   end;
 

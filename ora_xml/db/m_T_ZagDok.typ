@@ -49,6 +49,7 @@ create or replace force type body m_T_ZagDok is
       self.clean();
       return;
     end if;
+    return;
   end;
  
 

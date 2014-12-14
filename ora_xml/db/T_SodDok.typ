@@ -24,6 +24,7 @@ create or replace type body T_SodDok is
   constructor function T_SodDok(in_nz_zag number) return self as result is
   begin
     self.rec := T_SodDok_tab();
+    last := 0;
     if in_nz_zag is null then
       return;
     end if;
@@ -36,6 +37,7 @@ create or replace type body T_SodDok is
       self.rec( last).dop_kod := Cur.dop_kod;
       self.rec( last).kol_treb := Cur.kol_treb;
     end loop;
+    return;
   end;
 
   member procedure newline is

@@ -15,9 +15,11 @@ create or replace type body m_T_SodDok is
   constructor function m_T_SodDok(in_nz_zag number) return self as result is
   begin
     self.rec := T_SodDok_tab();
+    last := 0;
     if in_nz_zag is null then
       return;
     end if;
+    return;
   end;
   
   overriding member procedure Store is
