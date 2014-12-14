@@ -7,13 +7,7 @@ create or replace force type Dok46 force under DokBase
  
 
   overriding member procedure Init,
-  overriding member procedure doCommitOnSkl(in_x XMLtype),
-  overriding member function isCanCommitOnSkl return boolean,
-  overriding member function isUserCanCommitOnSkl return boolean,
-  overriding member procedure check_DokReadyToCommitSnab#,
-  overriding member procedure check_UserReadyToCommitSnab#,
-  overriding member procedure doCommitToSnab#(in_x XMLtype),
-  overriding member procedure check_DataReadyToCommitSnab#(in_x XMLtype),
+--  overriding member procedure doCommitOnSkl(in_x XMLtype),
   member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype),
   overriding member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype),
   overriding member procedure OnBeforeStoreDok,
@@ -42,8 +36,7 @@ create or replace force type body Dok46 is
   
   
 
-  overriding member procedure doCommitOnSkl(in_x XMLtype) is
---  sod_cnt number := 0;
+/*  overriding member procedure doCommitOnSkl(in_x XMLtype) is
   x_nz number;
   x_kol number;
   x_prizn asu_sod_dok.prizn%TYPE;
@@ -93,119 +86,9 @@ create or replace force type body Dok46 is
     x := tmp_x;    
     null;
   end;
-  
-  overriding member function isCanCommitOnSkl return boolean is
-  begin
-    if self.getdatecommitonsnab() is null then
-        return false;
-    end if;
-    return true;
-    null;
-  end;
+*/  
 
-
-  overriding member function isUserCanCommitOnSkl return boolean is
-  begin
-    if get_env_var(user,'STEP_DOK')='СКЛАД' or get_env_var(user,'N_KLAD') = self.rec_zag.ceh_post then
-      return true;
-    end if;
-    return false;
-    null;
-  end; 
-  
-
-  overriding member procedure check_DokReadyToCommitSnab# is
-  begin
-    if self.rec_zag.dd_ceh is null then
-        raise_application_error(-20001,'Документ не имеет подписи цеха!');
-    end if;
-    if self.rec_zag.d_skl_post is not null then
-        raise_application_error(-20001,'Документ уже проведён на складе!');
-    end if;
-    null;
-  end;
-  
-  overriding member procedure check_UserReadyToCommitSnab# is
-  begin
-    if nvl(get_env_var(user,'STEP_DOK'),' ')<>'СНАБ' then
-      raise_application_error(-20001,'Нет прав проводить документ!');
-    end if;
-  end;
-
-
-  overriding member procedure check_DataReadyToCommitSnab#(in_x XMLtype) is
-  tmp_x XMLtype := in_x;
-  cnt number;
-  I number;
-  x_nz number;
-  x_kol number;
-  x_prizn asu_sod_dok.prizn%TYPE;
-  x_nz_prih asu_sod_dok.nz_prih%TYPE;
-  x_kod_mat asu_sod_dok.kod_mat%TYPE;
-  x_ceh_post asu_zag_dok.ceh_post%TYPE;
-
-  ost_from OstBase := OstBase(null,null);
-  begin
-    select count(*) into cnt from asu_sod_dok where nz_zag=self.rec_zag.nz;
-    -- Проверяем, что снабженец указал все карточки
-    x_ceh_post := in_x.extract('/ZAG/ROW['||I||']/CEH_POST/text()').getstringval();
-    lib.chk_not_null(x_ceh_post, 'Склад-поставщик');
-    
-    
-  for Cur in (
-    with x as (
-      select in_x.extract('/SOD/ROW['||I||']/NZ/text()').getstringval() nz
-      from table(xmlsequencetype(in_x.extract('/SOD/ROW')))
-    )
-    select x.* from 
-    table(self.rec_sod.rec) t 
-    full outer join 
-    (select * from x) xx on xx.nz=t.nz
-  
-  ) loop
-  null;
-  end loop;
-    
-    I := 0;
-    while true loop
-        I := I+1;
-        x_nz := in_x.extract('/SOD/ROW['||I||']/NZ/text()').getstringval();
-        exit when x_nz is null;
-        x_kol := in_x.extract('/SOD/ROW['||I||']/KOL_TREB/text()').getstringval();
-        x_prizn := in_x.extract('/SOD/ROW['||I||']/PRIZN/text()').getstringval();
-        x_nz_prih := in_x.extract('/SOD/ROW['||I||']/NZ_PRIH/text()').getstringval();
-        x_kod_mat := in_x.extract('/SOD/ROW['||I||']/KOD_MAT/text()').getstringval();
-
-        lib.chk_not_null(x_kol, 'в строке', I, 'количество');
-        lib.chk_not_null(x_prizn, 'в строке', I, 'номер карточки');
-        lib.chk_not_null(x_kod_mat, 'в строке', I, 'код');
-        
---        self.doUpdateXMLvalue(tmp_x, '/DOC/SOD/ROW['||I||']/KOL', skl_kol);
-        ost_from.OpenKart(x_nz_prih, 'П');
-        if ost_from.m_kod <> x_kod_mat then
-          raise_application_error(-20001,'Несоответствие кода и номера карточки в строке '||I);
-        end if;
-        if ost_from.skl <> x_ceh_post then
-          raise_application_error(-20001,'Несоответствие номера склада в строке '||I);
-        end if;
-        for Curr in (select * from table(self.rec_sod.rec) where nz=x_nz) loop
-          null;
-        end loop;
---         ost_from.GetKol(x_prizn);
-      null;
-    end loop;
-    
-      
-    null;
-  end;
-
-  
-  overriding member procedure doCommitToSnab#(in_x XMLtype) is
-  begin
-    rec_zag.null_rec(in_d_snab=>NULL, in_u_snab=>NULL);
-    rec_zag.update_rec(in_d_snab=>sysdate, in_u_snab=>user);
-  end;
-  
+ 
   member procedure EditDok46(in_nz in out number, in_type varchar2, in_x XMLtype) is
   begin
     self.DeleteDok(in_nz);
