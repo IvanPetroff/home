@@ -5,7 +5,7 @@ create or replace force type DokBase force  as object
   -- Purpose : 
   lib t_lib,
   x XMLtype,
---  nz number, -- регистрационный номер документа
+--  nzz number, -- регистрационный номер документа
   rec_zag T_ZagDok,
   rec_sod T_SodDok,
 
@@ -24,7 +24,8 @@ create or replace force type DokBase force  as object
   member procedure OnBeforeStoreDok,
   member procedure doNextStepDok(in_nz number, in_x XMLtype),
   member procedure doPrevStepDok(in_nz number, in_x XMLtype),
-  member procedure OnBeforeEditDok(in_nz number)
+  member procedure OnBeforeEditDok(in_nz number),
+  member procedure EditSod(in_nz number, in_kol number := 9876543210.0123456789)
   
 
 )
@@ -203,6 +204,29 @@ create or replace type body DokBase is
     raise_application_error(-20001, 'Метод OnBeforeEitDok должен быть переопределён в производном классе!');
     null;
   end;
+
+  member procedure EditSod(in_nz number, in_kol number := 9876543210.0123456789) is
+  flg boolean := false;
+  begin
+    if in_nz is null then
+      raise_application_error(-20001, 'Не указан обязательный параметр in_nz!');
+    end if;
+    
+    for I in 1..rec_sod.last loop
+      if rec_sod.rec(I).nz <> in_nz then
+        continue;
+      end if;  
+      if nvl(in_kol,1) <> 9876543210.0123456789 then rec_sod.rec(I).kol := in_kol; flg := true; end if;
+      if flg=true then
+        null;
+--        rec_sod.
+      end if;
+      exit;
+      null;
+    end loop;
+    null;
+  end;
+
 
 /************************************************************************************************/
 /************************************************************************************************/

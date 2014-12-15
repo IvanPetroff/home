@@ -17,6 +17,7 @@ create or replace type T_SodDok_rec force as object
   d_gar date,
   nz_prih number,
   nz_ceh number,
+  kol number,
   
   constructor function T_SodDok_rec(in_nz number) return self as result
   
@@ -41,11 +42,12 @@ create or replace type body T_SodDok_rec is
       d_gar := null;
       nz_prih := null;
       nz_ceh := null;
+      kol := null;
       return;
     end if;
 
-    select nz, nz_zag, kod_mat, dop_kod, kol_treb, shpz, izd, prim, dce, d_gar, nz_prih, nz_ceh
-      into nz, nz_zag, kod_mat, dop_kod, kol_treb, shpz, izd, prim, dce, d_gar, nz_prih, nz_ceh
+    select nz, nz_zag, kod_mat, dop_kod, kol_treb, shpz, izd, prim, dce, d_gar, nz_prih, nz_ceh, kol
+      into nz, nz_zag, kod_mat, dop_kod, kol_treb, shpz, izd, prim, dce, d_gar, nz_prih, nz_ceh, kol
       from asu_sod_dok where nz = in_nz;
   end;
   

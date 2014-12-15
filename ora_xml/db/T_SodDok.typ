@@ -39,6 +39,7 @@ create or replace type body T_SodDok is
       self.rec( last).kod_mat := Cur.kod_mat;
       self.rec( last).dop_kod := Cur.dop_kod;
       self.rec( last).kol_treb := Cur.kol_treb;
+      self.rec( last).kol := Cur.kol;
     end loop;
     return;
   end;
