@@ -183,7 +183,7 @@ create or replace type body T_ZagDok is
   
   member procedure generate_id is
   begin
-    self.nz := zag_dok_seq.nextval;
+    self.nz := asu_zag_dok_seq.nextval;
     null;
   end;
 
@@ -194,7 +194,7 @@ create or replace type body T_ZagDok is
   
   member procedure Delete_from_DB is
   begin
-    delete asu_zag_dok where nz=self.nz;
+    delete zag_dok where nz=self.nz;
    
     null;
   end;

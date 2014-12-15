@@ -19,6 +19,7 @@ create or replace force type DokBase force  as object
   member procedure StoreDok,
   member procedure DeleteDok(in_nz number),
   member procedure ParseXML(in_x XMLtype),
+  member procedure EditDok(in_nz in out number, in_type varchar2, in_x XMLtype),
   member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype),
   member procedure OnBeforeStoreDok,
   member procedure doNextStepDok(in_nz number, in_x XMLtype),
@@ -153,6 +154,13 @@ create or replace type body DokBase is
     end loop;
   end;
   
+
+  member procedure EditDok(in_nz in out number, in_type varchar2, in_x XMLtype) is
+  begin
+    raise_application_error(-20001, 'Метод EditDok должен быть переопределён в производном классе!');
+    null; 
+  end;  
+
   member procedure CreateDok(in_nz in out number, in_type varchar2, in_x XMLtype) is
     i number;
     nz number;

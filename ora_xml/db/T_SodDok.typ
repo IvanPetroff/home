@@ -64,7 +64,7 @@ create or replace type body T_SodDok is
   member procedure Delete_from_DB is
   begin
     
-    delete asu_sod_dok where nz in (select nz from table(rec));
+    delete sod_dok where nz in (select nz from table(rec));
    
     null;
   end;
