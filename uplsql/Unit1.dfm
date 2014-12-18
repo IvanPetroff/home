@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 256
-  Top = 204
+  Left = 325
+  Top = 176
   Width = 1230
   Height = 589
   Caption = 'Form1'
@@ -21,6 +21,23 @@ object Form1: TForm1
     Align = alLeft
     ItemHeight = 13
     TabOrder = 0
+  end
+  object RichEdit1: TRichEdit
+    Left = 169
+    Top = 0
+    Width = 1053
+    Height = 561
+    Align = alClient
+    Font.Charset = RUSSIAN_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Courier New'
+    Font.Style = []
+    Lines.Strings = (
+      'RichEdit1')
+    ParentFont = False
+    TabOrder = 1
+    OnChange = RichEdit1Change
   end
   object OraSession1: TOraSession
     Username = 'tem'
