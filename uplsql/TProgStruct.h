@@ -16,6 +16,11 @@ enum psStates {psNone,
         ,psAsIs
         ,psUnder
         ,psZag
+        ,psTable
+        ,psTableName
+        ,psProcedure
+        ,psFunction
+        ,psParams
         };
 
 
@@ -30,6 +35,8 @@ public:
     AnsiString ObjName;
     AnsiString ObjType;
     AnsiString UnderObjName;
+    AnsiString TableTypeName;
+    AnsiString ProcFuncName;
     void NewWord(AnsiString inWord);
 };
 //---------------------------------------------------------------------------

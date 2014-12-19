@@ -17,7 +17,7 @@ object Form1: TForm1
     Left = 0
     Top = 0
     Width = 185
-    Height = 561
+    Height = 562
     Align = alLeft
     Caption = 'GroupBox1'
     TabOrder = 0
@@ -25,11 +25,11 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 181
-      Height = 544
+      Height = 545
       Align = alClient
       inherited ListBox1: TListBox
         Width = 181
-        Height = 544
+        Height = 545
         OnClick = FraListObjects1ListBox1Click
       end
     end
@@ -38,7 +38,7 @@ object Form1: TForm1
     Left = 185
     Top = 0
     Width = 1037
-    Height = 561
+    Height = 562
     Align = alClient
     Caption = 'GroupBox2'
     TabOrder = 1
@@ -46,16 +46,16 @@ object Form1: TForm1
       Left = 2
       Top = 15
       Width = 1033
-      Height = 544
+      Height = 545
       Align = alClient
       inherited REdit: TRichEdit
         Width = 1033
-        Height = 544
-        OnKeyUp = nil
+        Height = 545
       end
     end
   end
   object db: TOraSession
+    Options.Direct = True
     Username = 'tem'
     Server = 'test'
     ConnectDialog = ConnectDialog1

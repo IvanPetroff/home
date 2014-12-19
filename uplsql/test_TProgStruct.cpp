@@ -146,3 +146,117 @@ TEST( NewWord, StateTypeFound)
     }
 }
 
+
+TEST( NewWord, UnderObjectShouldBeOBJECT)
+{
+    {
+        TProgStruct obj;
+        obj.NewWord("CREATE");
+        obj.NewWord("OR");
+        obj.NewWord("REPLACE");
+        obj.NewWord("FORCE");
+        obj.NewWord("TYPE");
+        obj.NewWord("QWERTY");
+        obj.NewWord("FORCE");
+        obj.NewWord("AS");
+        obj.NewWord("OBJECT");
+        CHECK(obj.UnderObjName == "OBJECT");
+    }
+}
+
+
+TEST( NewWord, UnderObjectShouldBeTABLE)
+{
+    {
+        TProgStruct obj;
+        obj.NewWord("CREATE");
+        obj.NewWord("OR");
+        obj.NewWord("REPLACE");
+        obj.NewWord("FORCE");
+        obj.NewWord("TYPE");
+        obj.NewWord("QWERTY");
+        obj.NewWord("FORCE");
+        obj.NewWord("AS");
+        obj.NewWord("TABLE");
+        obj.NewWord("OF");
+        obj.NewWord("QWE");
+        CHECK(obj.UnderObjName == "TABLE");
+    }
+}
+
+
+TEST( NewWord, TypeTableNameShouldBeDetected)
+{
+    {
+        TProgStruct obj;
+        obj.NewWord("CREATE");
+        obj.NewWord("OR");
+        obj.NewWord("REPLACE");
+        obj.NewWord("FORCE");
+        obj.NewWord("TYPE");
+        obj.NewWord("QWERTY");
+        obj.NewWord("FORCE");
+        obj.NewWord("AS");
+        obj.NewWord("TABLE");
+        obj.NewWord("OF");
+        obj.NewWord("QWE");
+        CHECK(obj.TableTypeName == "QWE");
+    }
+}
+
+TEST( NewWord, StateShouldBeProcFunc)
+{
+    {
+        TProgStruct obj;
+        obj.NewWord("CREATE");
+        obj.NewWord("OR");
+        obj.NewWord("REPLACE");
+        obj.NewWord("FORCE");
+        obj.NewWord("TYPE");
+        obj.NewWord("QWERTY");
+        obj.NewWord("FORCE");
+        obj.NewWord("AS");
+        obj.NewWord("OBJECT");
+        obj.NewWord("MEMBER");
+        obj.NewWord("PROCEDURE");
+        CHECK(obj.State == psProcFunc);
+    }
+    {
+        TProgStruct obj;
+        obj.NewWord("CREATE");
+        obj.NewWord("OR");
+        obj.NewWord("REPLACE");
+        obj.NewWord("FORCE");
+        obj.NewWord("TYPE");
+        obj.NewWord("QWERTY");
+        obj.NewWord("FORCE");
+        obj.NewWord("AS");
+        obj.NewWord("OBJECT");
+        obj.NewWord("MEMBER");
+        obj.NewWord("FUNCTION");
+        CHECK(obj.State == psProcFunc);
+    }
+}
+
+TEST( NewWord, FunctionNameShouldBeFound)
+{
+    {
+        TProgStruct obj;
+        obj.NewWord("CREATE");
+        obj.NewWord("OR");
+        obj.NewWord("REPLACE");
+        obj.NewWord("FORCE");
+        obj.NewWord("TYPE");
+        obj.NewWord("QWERTY");
+        obj.NewWord("FORCE");
+        obj.NewWord("AS");
+        obj.NewWord("OBJECT");
+        obj.NewWord("MEMBER");
+        obj.NewWord("PROCEDURE");
+        obj.NewWord("MY_PROC_NAME");
+        CHECK(obj.ProcFuncName == "MY_PROC_NAME");
+    }
+}
+
+
+
