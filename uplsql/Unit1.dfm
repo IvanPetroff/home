@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 325
-  Top = 176
+  Left = 311
+  Top = 160
   Width = 1230
   Height = 589
   Caption = 'Form1'
@@ -13,33 +13,50 @@ object Form1: TForm1
   OldCreateOrder = False
   PixelsPerInch = 96
   TextHeight = 13
-  object ListBox1: TListBox
+  object GroupBox1: TGroupBox
     Left = 0
     Top = 0
-    Width = 169
+    Width = 185
     Height = 561
     Align = alLeft
-    ItemHeight = 13
+    Caption = 'GroupBox1'
     TabOrder = 0
+    inline FraListObjects1: TFraListObjects
+      Left = 2
+      Top = 15
+      Width = 181
+      Height = 544
+      Align = alClient
+      inherited ListBox1: TListBox
+        Width = 181
+        Height = 544
+        OnClick = FraListObjects1ListBox1Click
+      end
+    end
   end
-  object RichEdit1: TRichEdit
-    Left = 169
+  object GroupBox2: TGroupBox
+    Left = 185
     Top = 0
-    Width = 1053
+    Width = 1037
     Height = 561
     Align = alClient
-    Font.Charset = RUSSIAN_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Courier New'
-    Font.Style = []
-    Lines.Strings = (
-      'RichEdit1')
-    ParentFont = False
+    Caption = 'GroupBox2'
     TabOrder = 1
-    OnChange = RichEdit1Change
+    inline FraLightRichEdit1: TFraLightRichEdit
+      Left = 2
+      Top = 15
+      Width = 1033
+      Height = 544
+      Align = alClient
+      inherited RichEdit1: TRichEdit
+        Width = 1033
+        Height = 544
+        ScrollBars = ssBoth
+        WordWrap = False
+      end
+    end
   end
-  object OraSession1: TOraSession
+  object db: TOraSession
     Username = 'tem'
     Server = 'test'
     ConnectDialog = ConnectDialog1
@@ -47,7 +64,7 @@ object Form1: TForm1
     Top = 8
   end
   object OraQuery1: TOraQuery
-    Session = OraSession1
+    Session = db
     Left = 192
     Top = 8
   end

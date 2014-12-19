@@ -13,21 +13,28 @@
 #include <Db.hpp>
 #include "OdacVcl.hpp"
 #include <ComCtrls.hpp>
+#include "TFraLightRichEdit.h"
+#include "TFraListObjects.h"
 //---------------------------------------------------------------------------
+// структура форматирования
+
+
 class TForm1 : public TForm
 {
 __published:	// IDE-managed Components
-        TOraSession *OraSession1;
+        TOraSession *db;
         TOraQuery *OraQuery1;
         TOraDataSource *OraDataSource1;
         TConnectDialog *ConnectDialog1;
-        TListBox *ListBox1;
-        TRichEdit *RichEdit1;
-        void __fastcall RichEdit1Change(TObject *Sender);
+        TGroupBox *GroupBox1;
+        TFraListObjects *FraListObjects1;
+        TGroupBox *GroupBox2;
+        TFraLightRichEdit *FraLightRichEdit1;
+        void __fastcall FraListObjects1ListBox1Click(TObject *Sender);
 private:	// User declarations
+        void __fastcall LoadText(AnsiString objName);
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
-        void __fastcall HighLight(TRichEdit *REdit, int pos);
 };
 //---------------------------------------------------------------------------
 extern PACKAGE TForm1 *Form1;

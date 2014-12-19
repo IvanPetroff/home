@@ -4,6 +4,8 @@
 #pragma hdrstop
 USERES("Project1.res");
 USEFORM("Unit1.cpp", Form1);
+USEFORM("TFraLightRichEdit.cpp", FraLightRichEdit); /* TFrame: File Type */
+USEFORM("TFraListObjects.cpp", FraListObjects); /* TFrame: File Type */
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
