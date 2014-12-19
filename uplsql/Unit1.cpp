@@ -55,7 +55,6 @@ void __fastcall TForm1::LoadText(AnsiString objName)
     }
     this->FraLightRichEdit1->RichEdit1->Text = S;
     this->FraLightRichEdit1->HighLight(0);
-
 }
 
 

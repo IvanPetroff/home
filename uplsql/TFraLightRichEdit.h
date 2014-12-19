@@ -9,11 +9,18 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 #include <ComCtrls.hpp>
+#include <map.h>
 //---------------------------------------------------------------------------
-struct THiLt
+class THiLt
 {
+public:
 	TColor FontColor;
 	TFontStyles FontStyle;
+        THiLt() {}
+        THiLt(TColor inColor, TFontStyles inStyle) {
+            FontColor = inColor;
+            FontStyle = inStyle;
+        }
 };
 
 
@@ -25,10 +32,11 @@ __published:	// IDE-managed Components
           TShiftState Shift);
 private:	// User declarations
 	TStringList *SQLWords /* слова */, *SQLSymbols /* символы */;
-	THiLt HiLite_wds /* слова */, HiLite_symb /* символы */;
+//	THiLt HiLite_wds /* слова */, HiLite_symb /* символы */;
         void __fastcall HighLightDynamic();
 public:		// User declarations
         __fastcall TFraLightRichEdit(TComponent* Owner);
+        map<AnsiString,THiLt> myWords;
         void __fastcall HighLight(int pos);
 };
 //---------------------------------------------------------------------------
