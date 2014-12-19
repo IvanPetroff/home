@@ -41,6 +41,7 @@ void __fastcall TFraParse::ParseText(AnsiString str)
 	// ищем по списку ключевых слов...
 
         AnsiString State="";
+        enum WordStates {none, member, procedure_function} WordState = none;
         int begWord = 0;
         int endWord = 0;
         AnsiString Symbol = "~'!@#$%^&*()-=+\\|/?,.[]{}\"`;\n\t\r ";
@@ -71,6 +72,24 @@ void __fastcall TFraParse::ParseText(AnsiString str)
                     if (it != myWords.end()) {
                         PaintText(begWord,endWord, it->second.FontColor, it->second.FontStyle);
                     }
+
+                    switch (WordState) {
+                      case none :
+                        if (myWord=="MEMBER") {
+                            WordState = member;
+                        }
+                      break;
+                      case member :
+                        if (myWord=="PROCEDURE" || myWord=="FUNCTION") {
+                            WordState = procedure_function;
+                        }
+                      break;
+                      case procedure_function :
+                        WordState = none;
+                        MemberList.push_back(myWord);
+                      break;
+                    }
+
                     int tt=0;
                 }
 //                continue;

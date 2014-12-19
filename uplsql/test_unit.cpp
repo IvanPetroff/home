@@ -16,6 +16,8 @@ public:
   TFontStyles FontStyle;
 };
 
+
+
 class MockTFraParse : public TFraParse {
 public:
     __fastcall MockTFraParse(TComponent* Owner): TFraParse(Owner)
@@ -71,6 +73,28 @@ TEST( ParseText, LineCommentNotShouldBeDetectedIntoBlockComment)
     CHECK(obj->vlog[0].begWord==8);
     CHECK(obj->vlog[0].endWord==20);
 }
+
+
+TEST( ParseText, FunctionListShouldBeBuilding)
+{
+    std::auto_ptr <MockTFraParse>  obj(new MockTFraParse(0));
+    obj->ParseText(
+"create or replace type body DokBase is\
+\
+  member procedure Init is\
+  begin\
+    lib := t_lib;\
+    LoadZagDok(null);\
+    LoadSodDok(null);\
+    null;\
+  end;\
+  member function Init2 is\
+");
+    CHECK(obj->MemberList.size()==2);
+    CHECK(obj->MemberList[0]=="INIT");
+}
+
+
 
 int main(int argc, char* argv[])
 {

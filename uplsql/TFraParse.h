@@ -32,6 +32,7 @@ private:	// User declarations
 
 public:		// User declarations
         __fastcall TFraParse(TComponent* Owner);
+        vector <AnsiString> MemberList;
         void __fastcall ParseText(AnsiString str);
         map<AnsiString,THiLt> myWords;
 };
