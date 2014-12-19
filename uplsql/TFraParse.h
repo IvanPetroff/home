@@ -9,6 +9,7 @@
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
 #include <map.h>
+#include <vector.h>
 //---------------------------------------------------------------------------
 class THiLt
 {

@@ -7,6 +7,7 @@ USEFORM("Unit1.cpp", Form1);
 USEFORM("TFraListObjects.cpp", FraListObjects); /* TFrame: File Type */
 USEFORM("TFraParse.cpp", FraParse); /* TFrame: File Type */
 USEFORM("TFraLightRichEdit.cpp", FraLightRichEdit); /* TFrame: File Type */
+USEUNIT("TProgStruct.cpp");
 //---------------------------------------------------------------------------
 WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {

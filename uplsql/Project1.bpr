@@ -5,7 +5,7 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="Project1.exe"/>
     <OBJFILES value="Project1.obj Unit1.obj TFraListObjects.obj TFraParse.obj 
-      TFraLightRichEdit.obj"/>
+      TFraLightRichEdit.obj TProgStruct.obj"/>
     <RESFILES value="Project1.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>

@@ -6,6 +6,8 @@
 #include "cppunitlite\TestResultStdErr.h"
 #include "TFraParse.cpp"
 #include "TFraParse.h"
+
+//#include "test_TProgStruct.cpp"
 //---------------------------------------------------------------------------
 #pragma argsused
 class TlogData {
