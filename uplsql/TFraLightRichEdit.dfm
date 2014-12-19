@@ -1,10 +1,5 @@
-object FraLightRichEdit: TFraLightRichEdit
-  Left = 0
-  Top = 0
-  Width = 320
-  Height = 240
-  TabOrder = 0
-  object RichEdit1: TRichEdit
+inherited FraLightRichEdit: TFraLightRichEdit
+  object REdit: TRichEdit
     Left = 0
     Top = 0
     Width = 320
@@ -18,7 +13,7 @@ object FraLightRichEdit: TFraLightRichEdit
     Lines.Strings = (
       'RichEdit1')
     ParentFont = False
+    ScrollBars = ssBoth
     TabOrder = 0
-    OnKeyUp = RichEdit1KeyUp
   end
 end

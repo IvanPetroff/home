@@ -15,6 +15,7 @@
 #include <ComCtrls.hpp>
 #include "TFraLightRichEdit.h"
 #include "TFraListObjects.h"
+#include "TFraParse.h"
 //---------------------------------------------------------------------------
 // структура форматирования
 

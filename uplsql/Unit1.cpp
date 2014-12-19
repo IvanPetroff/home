@@ -13,6 +13,7 @@
 #pragma link "OdacVcl"
 #pragma link "TFraLightRichEdit"
 #pragma link "TFraListObjects"
+#pragma link "TFraParse"
 #pragma resource "*.dfm"
 TForm1 *Form1;
 //---------------------------------------------------------------------------
@@ -48,12 +49,12 @@ void __fastcall TForm1::LoadText(AnsiString objName)
     std::auto_ptr<TOraQuery> Q(new TOraQuery(0));
     Q->SQL->Text = "select * from all_source where name=:name and type='TYPE BODY' order by line";
     Q->ParamByName("name")->AsString = objName.UpperCase();
-    this->FraLightRichEdit1->RichEdit1->Lines->Clear();
+    this->FraLightRichEdit1->REdit->Lines->Clear();
     AnsiString S = "";
     for (Q->Open(); !Q->Eof; Q->Next()) {
         S = S+Q->FieldByName("text")->AsString;
     }
-    this->FraLightRichEdit1->RichEdit1->Text = S;
+    this->FraLightRichEdit1->REdit->Text = S;
     this->FraLightRichEdit1->HighLight(0);
 }
 

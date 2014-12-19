@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------
 
-
 #ifndef TFraLightRichEditH
 #define TFraLightRichEditH
 //---------------------------------------------------------------------------
@@ -8,35 +7,17 @@
 #include <Controls.hpp>
 #include <StdCtrls.hpp>
 #include <Forms.hpp>
+#include "TFraParse.h"
 #include <ComCtrls.hpp>
-#include <map.h>
 //---------------------------------------------------------------------------
-class THiLt
-{
-public:
-	TColor FontColor;
-	TFontStyles FontStyle;
-        THiLt() {}
-        THiLt(TColor inColor, TFontStyles inStyle) {
-            FontColor = inColor;
-            FontStyle = inStyle;
-        }
-};
-
-
-class TFraLightRichEdit : public TFrame
+class TFraLightRichEdit : public TFraParse
 {
 __published:	// IDE-managed Components
-        TRichEdit *RichEdit1;
-        void __fastcall RichEdit1KeyUp(TObject *Sender, WORD &Key,
-          TShiftState Shift);
+        TRichEdit *REdit;
 private:	// User declarations
-	TStringList *SQLWords /* слова */, *SQLSymbols /* символы */;
-//	THiLt HiLite_wds /* слова */, HiLite_symb /* символы */;
-        void __fastcall HighLightDynamic();
+    virtual void __fastcall PaintText(int begWord, int endWord, TColor inFontColor, TFontStyles inFontStyle);
 public:		// User declarations
         __fastcall TFraLightRichEdit(TComponent* Owner);
-        map<AnsiString,THiLt> myWords;
         void __fastcall HighLight(int pos);
 };
 //---------------------------------------------------------------------------

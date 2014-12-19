@@ -48,11 +48,10 @@ object Form1: TForm1
       Width = 1033
       Height = 544
       Align = alClient
-      inherited RichEdit1: TRichEdit
+      inherited REdit: TRichEdit
         Width = 1033
         Height = 544
-        ScrollBars = ssBoth
-        WordWrap = False
+        OnKeyUp = nil
       end
     end
   end
