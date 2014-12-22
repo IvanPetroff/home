@@ -39,9 +39,3 @@ create or replace type rec_spis_dok force as object
 
 )
 /
-create or replace type body rec_spis_dok is
-  
-  -- Member procedures and functions
-null;  
-end;
-/

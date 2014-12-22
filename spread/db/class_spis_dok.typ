@@ -9,7 +9,8 @@ create or replace force type class_spis_dok force as object
   
   -- Attributes
   constructor function class_spis_dok(in_dok_id number) return self as result,
-  member procedure init(in_dok_id number)
+  member procedure init(in_dok_id number),
+  member procedure load_dok#(in_dok_id number)
   
   
   -- Member functions and procedures
@@ -23,10 +24,18 @@ create or replace type body class_spis_dok is
   begin
     dok_id := in_dok_id;
     init(in_dok_id);
-    null;
+    return;
   end;
   
+  
   member procedure init(in_dok_id number) is
+  begin
+    load_dok#(in_dok_id);
+    null;
+  end;
+
+
+  member procedure load_dok#(in_dok_id number) is
   begin
     select rec_spis_dok(id,spk_id,kol,kol_mat,ost_id,shpz,izd,bs,prizn,usr,dat,
            dok_id,d_ceh,u_ceh,d_buh,u_buh,skl,type,kod,r_sort,cena,lim_id,
@@ -34,8 +43,8 @@ create or replace type body class_spis_dok is
       bulk collect into tab 
       from asu_spis_dok 
       where dok_id=in_dok_id;    
-    null;
   end;
+
   
 end;
 /

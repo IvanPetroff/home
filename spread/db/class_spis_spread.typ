@@ -1,4 +1,4 @@
-create or replace type class_spis_spread under class_spis_dok
+create or replace force type class_spis_spread force under class_spis_dok
 (
   -- Author  : Администратор
   -- Created : 21.12.2014 19:27:52
@@ -9,9 +9,18 @@ create or replace type class_spis_spread under class_spis_dok
   -- Attributes
   constructor function class_spis_spread(in_dok_id number) return self as result,
   overriding member procedure init(in_dok_id number),
+  member function get_flg_spreadable#(in_dok_id number) return varchar2,
+  
   member procedure spread(x xmltype),
   member procedure kol_correction,
-  member procedure store_dok
+  member procedure prepare_out_to_store,
+  member procedure prepare_in_to_store,
+  member procedure store_dok,
+  member procedure more_attr_set_num#(in_key number, in_val number),
+  member procedure store_in_minus_recs#,
+  member procedure store_out_spread_recs#
+  
+  
   
   
   
@@ -26,24 +35,30 @@ create or replace type body class_spis_spread is
   constructor function class_spis_spread(in_dok_id number) return self as result is
   begin
     init(in_dok_id);
-    null;
+    return;
   end;
+  
   
   overriding member procedure init(in_dok_id number) is
   begin
     (self as class_spis_dok).init(in_dok_id);
-    flg_spreadable := '1';
+    flg_spreadable := get_flg_spreadable#(in_dok_id);
+  end;
+
+
+  member function get_flg_spreadable#(in_dok_id number) return varchar2 is
+  begin
     for Cur in (select * from (select m.val_num 
                                from table(tab) t, asu_more_attr m 
                                where t.dok_id=in_dok_id and t.id=m.key(+) and 'SPIS_DOK'=m.cat(+) and 'SPREADABLE'=m.name_attr(+)) 
                          where nvl(val_num,0)<>1
                )
     loop
-      -- все строки документа должны быть SPREADABLE уровня 1
-      flg_spreadable := '0';      
-      exit;
+      return '0'; -- документ имеет NONspreadable строки
     end loop;
+    return '1';
   end;
+
   /*
   TODO: owner="Администратор" created="21.12.2014"
   text="возможно нужно пересмотреть структуру классов. возможно нужно создать класс SPREAD
@@ -104,20 +119,52 @@ create or replace type body class_spis_spread is
     null;
   end;
   
-  member procedure store_dok is
+
+  member procedure prepare_out_to_store is
   begin
     for i in 1..tab_out.last loop
       tab_out(i).id := null;
       tab_out(i).dok_id := dok_id;
     end loop;
-    
+    null;
+  end;
+  
+
+  member procedure more_attr_set_num#(in_key number, in_val number) is
+  begin
+    more_attr_pkg.SET_NUM( 'SPIS_DOK', 'SPREAD', in_key, in_val);
+  end;
+
+
+  member procedure prepare_in_to_store is
+  begin
     for i in 1..tab.last loop
-      admdba.more_attr_pkg.SET_NUM( 'SPIS_DOK', 'SPREAD', tab(i).id, 2);
+      more_attr_SET_NUM#( tab(i).id, 2);
       tab(i).id := null;
       tab(i).kol_mat := -tab(i).kol_mat;
     end loop;
-    
+    null;
+  end;
+
+
+  member procedure store_dok is
+  begin
+    prepare_out_to_store();
+    prepare_in_to_store();
+
+    store_in_minus_recs#();
+    store_out_spread_recs#();
+  end;
+
+
+  member procedure store_in_minus_recs# is
+  begin
     insert into asu_spis_dok(select * from table(tab)); -- добавляем в документ оригинальные строки с минусом
+  end;
+
+
+  member procedure store_out_spread_recs# is
+  begin
     insert into asu_spis_dok(select * from table(tab_out));
   end;
   
