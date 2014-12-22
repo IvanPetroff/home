@@ -1,4 +1,4 @@
-create or replace force type rec_spis_dok force as object
+create or replace type rec_spis_dok force as object
 (
   -- Author  : Администратор
   -- Created : 21.12.2014 11:18:29
@@ -38,4 +38,10 @@ create or replace force type rec_spis_dok force as object
   dok_drag  VARCHAR2(24)
 
 )
+/
+create or replace type body rec_spis_dok is
+  
+  -- Member procedures and functions
+null;  
+end;
 /

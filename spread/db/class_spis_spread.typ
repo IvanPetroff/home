@@ -1,14 +1,14 @@
-create or replace force type class_spis_spread under class_spis_dok
+create or replace type class_spis_spread under class_spis_dok
 (
   -- Author  : јдминистратор
   -- Created : 21.12.2014 19:27:52
   -- Purpose : 
-  tab_out tab_foo,
+  tab_out tab_spis_dok,
   flg_spreadable varchar2(1),
 
   -- Attributes
-  constructor function class_spis_spread(in_id number) return self as result,
-  overriding member procedure init(in_id number),
+  constructor function class_spis_spread(in_dok_id number) return self as result,
+  overriding member procedure init(in_dok_id number),
   member procedure spread(x xmltype),
   member procedure kol_correction,
   member procedure store_dok
@@ -23,21 +23,26 @@ not final;
 create or replace type body class_spis_spread is
   
   -- Member procedures and functions
-  constructor function class_spis_spread(in_id number) return self as result is
+  constructor function class_spis_spread(in_dok_id number) return self as result is
   begin
-    init(in_id);
+    init(in_dok_id);
     null;
   end;
   
-  overriding member procedure init(in_id number) is
+  overriding member procedure init(in_dok_id number) is
   begin
-    (self as class_spis_dok).init(in_id);
+    (self as class_spis_dok).init(in_dok_id);
     flg_spreadable := '1';
-    for Cur in (select * from (select m.id from table(tab) t, more_attr m where t.id=m.key(+) and 'SPIS'=m.cat(+) and 'SPREAD'=m.prizn(+)) where id is null) loop
+    for Cur in (select * from (select m.val_num 
+                               from table(tab) t, asu_more_attr m 
+                               where t.dok_id=in_dok_id and t.id=m.key(+) and 'SPIS_DOK'=m.cat(+) and 'SPREADABLE'=m.name_attr(+)) 
+                         where nvl(val_num,0)<>1
+               )
+    loop
+      -- все строки документа должны быть SPREADABLE уровн€ 1
       flg_spreadable := '0';      
-      null;
+      exit;
     end loop;
-    
   end;
   /*
   TODO: owner="јдминистратор" created="21.12.2014"
@@ -55,22 +60,28 @@ create or replace type body class_spis_spread is
     end if;
     
     for Cur_xml in (
-      select extractvalue( column_value, '/ROW/UNIZAK') unizak,
+      select extractvalue( column_value, '/ROW/SHPZ') shpz,
+             extractvalue( column_value, '/ROW/IZD') izd,
              extractvalue( column_value, '/ROW/PRC') prc
-      from table(XMLsequence( x.extract('DOC/ROW')))
+      from table(XMLsequence( x.extract('ROWSET/ROW')))
     )
     loop
-        for Cur in (select rec_foo( id, dok_id, kol, kol_treb, d_ceh, u_ceh, d_buh, u_buh, ost_id, type) x from table(tab)) loop
+        for Cur in (select rec_spis_dok(id,spk_id,kol,kol_mat,ost_id,shpz,izd,bs,prizn,usr,dat,
+           dok_id,d_ceh,u_ceh,d_buh,u_buh,skl,type,kod,r_sort,cena,lim_id,
+           dop_dok,r_zag,prc_nds,cntrl,t_id,kol_part,prih_id,razm_zag,fakt_rash,d_drag,dok_drag ) x from table(tab)) loop
             tab_out.extend(1);
             tab_out(tab_out.last) := Cur.x;
-            tab_out(tab_out.last).id := tab_out.last;
-            tab_out(tab_out.last).dok_id := Cur.x.id;
-            tab_out(tab_out.last).kol := tab_out(tab_out.last).kol * Cur_xml.prc;
-            tab_out(tab_out.last).kol := tab_out(tab_out.last).kol * Cur_xml.prc;
+            tab_out(tab_out.last).dok_id := tab_out.last; -- временно запоминаем пор€дковый номер строки в массиве (нужно дл€ метода kol_correction)
+            tab_out(tab_out.last).kol_mat := tab_out(tab_out.last).kol_mat * Cur_xml.prc;
+            tab_out(tab_out.last).kol_mat := tab_out(tab_out.last).kol_mat * Cur_xml.prc;
+            tab_out(tab_out.last).shpz := Cur.x.shpz;
+            tab_out(tab_out.last).izd := Cur.x.izd;
+            tab_out(tab_out.last).t_id := '«';
             null;
         end loop;
       null;
     end loop;
+    flg_spreadable := '0';
     kol_correction();
     store_dok();
     null;
@@ -79,11 +90,11 @@ create or replace type body class_spis_spread is
   member procedure kol_correction is
   delta number;
   begin
-    for Cur in (select kol, ost_id from table(tab)) loop
-      for Cur_out in (select sum(kol) sum_kol, max(id) keep(dense_rank first order by kol desc) max_id from table(tab_out) where ost_id=Cur.ost_id) loop
-        delta := Cur.kol - Cur_out.sum_kol;
+    for Cur in (select kol_mat, id from table(tab)) loop
+      for Cur_out in (select sum(kol_mat) sum_kol, max(dok_id) keep(dense_rank first order by kol desc) max_id from table(tab_out) where id=Cur.id) loop
+        delta := Cur.kol_mat - Cur_out.sum_kol;
         if delta<>0 then
-          tab_out(Cur_out.max_id).kol := tab_out(Cur_out.max_id).kol + delta;
+          tab_out(Cur_out.max_id).kol_mat := tab_out(Cur_out.max_id).kol_mat + delta;
         end if;
         null;
       end loop;
@@ -95,9 +106,19 @@ create or replace type body class_spis_spread is
   
   member procedure store_dok is
   begin
+    for i in 1..tab_out.last loop
+      tab_out(i).id := null;
+      tab_out(i).dok_id := dok_id;
+    end loop;
     
+    for i in 1..tab.last loop
+      admdba.more_attr_pkg.SET_NUM( 'SPIS_DOK', 'SPREAD', tab(i).id, 2);
+      tab(i).id := null;
+      tab(i).kol_mat := -tab(i).kol_mat;
+    end loop;
     
-    null;
+    insert into asu_spis_dok(select * from table(tab)); -- добавл€ем в документ оригинальные строки с минусом
+    insert into asu_spis_dok(select * from table(tab_out));
   end;
   
 
