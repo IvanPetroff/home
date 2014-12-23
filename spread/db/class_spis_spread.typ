@@ -18,7 +18,8 @@ create or replace force type class_spis_spread force under class_spis_dok
   member procedure store_dok,
   member procedure more_attr_set_num#(in_key number, in_val number),
   member procedure store_in_minus_recs#,
-  member procedure store_out_spread_recs#
+  member procedure store_out_spread_recs#,
+  member procedure mark_to_spread
   
   
   
@@ -67,6 +68,11 @@ create or replace type body class_spis_spread is
         
         главная цель - минимизировать операции обращения к базе и парсинга XML"
   */
+
+  member procedure mark_to_spread is
+  begin
+    null;
+  end;
 
   member procedure spread(x xmltype) is
   begin
@@ -132,7 +138,7 @@ create or replace type body class_spis_spread is
 
   member procedure more_attr_set_num#(in_key number, in_val number) is
   begin
-    more_attr_pkg.SET_NUM( 'SPIS_DOK', 'SPREAD', in_key, in_val);
+    admdba.more_attr_pkg.SET_NUM( 'SPIS_DOK', 'SPREAD', in_key, in_val);
   end;
 
 

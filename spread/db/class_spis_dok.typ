@@ -10,7 +10,9 @@ create or replace force type class_spis_dok force as object
   -- Attributes
   constructor function class_spis_dok(in_dok_id number) return self as result,
   member procedure init(in_dok_id number),
-  member procedure load_dok#(in_dok_id number)
+  member procedure load_dok#(in_dok_id number),
+  member procedure set_spreadable(b number, uch varchar2)
+  
   
   
   -- Member functions and procedures
@@ -45,6 +47,14 @@ create or replace type body class_spis_dok is
       where dok_id=in_dok_id;    
   end;
 
+  member procedure set_spreadable(b number, uch varchar2) is
+  begin
+    for Cur in (select * from table(tab)) loop
+      admdba.more_attr_pkg.SET_ALL(in_cat=>'SPIS_DOK', in_name_attr => 'SPREAD', in_key => Cur.id, in_num => b, in_txt => uch, in_dat => null);
+    end loop;
+    
+    null;
+  end;
   
 end;
 /

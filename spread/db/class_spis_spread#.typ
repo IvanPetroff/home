@@ -48,18 +48,21 @@ create or replace type body class_spis_spread# is
 
   overriding member procedure more_attr_set_num#(in_key number, in_val number) is
   begin
+    dbms_output.put_line('more_attr_set_num#('||in_key||','||in_val||')');
     null;
   end;
   
   
   overriding member procedure store_in_minus_recs# is
   begin
+    dbms_output.put_line('store_in_minus_recs#');
     null;
   end;
 
 
   overriding member procedure store_out_spread_recs# is
   begin
+    dbms_output.put_line('store_out_spread_recs#');
     null;
   end;
   
