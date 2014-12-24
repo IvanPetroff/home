@@ -17,9 +17,11 @@ create or replace force type class_spis_spread force under class_spis_dok
   member procedure prepare_in_to_store,
   member procedure store_dok,
   member procedure more_attr_set_num#(in_key number, in_val number),
+  member procedure more_attr_set_all#(in_key number, in_num number, in_txt varchar2, in_dat date),
   member procedure store_in_minus_recs#,
   member procedure store_out_spread_recs#,
-  member procedure mark_to_spread
+  member procedure mark_to_spread(b number, uch varchar2)
+  
   
   
   
@@ -40,6 +42,7 @@ create or replace type body class_spis_spread is
   end;
   
   
+/*******************************************************************************************/  
   overriding member procedure init(in_dok_id number) is
   begin
     (self as class_spis_dok).init(in_dok_id);
@@ -47,17 +50,18 @@ create or replace type body class_spis_spread is
   end;
 
 
+/*******************************************************************************************/  
   member function get_flg_spreadable#(in_dok_id number) return varchar2 is
   begin
     for Cur in (select * from (select m.val_num 
                                from table(tab) t, asu_more_attr m 
                                where t.dok_id=in_dok_id and t.id=m.key(+) and 'SPIS_DOK'=m.cat(+) and 'SPREADABLE'=m.name_attr(+)) 
-                         where nvl(val_num,0)<>1
+                         where nvl(val_num,0)<>-1
                )
     loop
       return '0'; -- документ имеет NONspreadable строки
     end loop;
-    return '1';
+    return '-1';
   end;
 
   /*
@@ -69,14 +73,24 @@ create or replace type body class_spis_spread is
         главная цель - минимизировать операции обращения к базе и парсинга XML"
   */
 
-  member procedure mark_to_spread is
+
+/*******************************************************************************************/  
+  member procedure mark_to_spread(b number, uch varchar2) is
   begin
-    null;
+    if nvl(b,0)<>1 then
+      raise_application_error(-20001, '!');
+    end if;
+    
+    for Cur in (select * from table(tab)) loop
+      more_attr_SET_ALL#(in_key => Cur.id, in_num => -1, in_txt => uch, in_dat => null);
+    end loop;
   end;
 
+
+/*******************************************************************************************/  
   member procedure spread(x xmltype) is
   begin
-    if flg_spreadable<>'1' then
+    if flg_spreadable<>'-1' then
       raise_application_error(-20001, 'документ не может быть spreadable!');
     end if;
     
@@ -108,6 +122,8 @@ create or replace type body class_spis_spread is
     null;
   end;
   
+
+/*******************************************************************************************/  
   member procedure kol_correction is
   delta number;
   begin
@@ -126,6 +142,7 @@ create or replace type body class_spis_spread is
   end;
   
 
+/*******************************************************************************************/  
   member procedure prepare_out_to_store is
   begin
     for i in 1..tab_out.last loop
@@ -136,12 +153,21 @@ create or replace type body class_spis_spread is
   end;
   
 
+/*******************************************************************************************/  
   member procedure more_attr_set_num#(in_key number, in_val number) is
   begin
     admdba.more_attr_pkg.SET_NUM( 'SPIS_DOK', 'SPREAD', in_key, in_val);
   end;
 
 
+/*******************************************************************************************/  
+  member procedure more_attr_set_all#(in_key number, in_num number, in_txt varchar2, in_dat date) is
+  begin
+    admdba.more_attr_pkg.SET_ALL(in_cat=>'SPIS_DOK', in_name_attr => 'SPREAD', in_key => in_key, in_num => in_num, in_txt => in_txt, in_dat => in_dat);
+  end;
+
+
+/*******************************************************************************************/  
   member procedure prepare_in_to_store is
   begin
     for i in 1..tab.last loop
@@ -153,6 +179,7 @@ create or replace type body class_spis_spread is
   end;
 
 
+/*******************************************************************************************/  
   member procedure store_dok is
   begin
     prepare_out_to_store();
@@ -163,16 +190,21 @@ create or replace type body class_spis_spread is
   end;
 
 
+/*******************************************************************************************/  
   member procedure store_in_minus_recs# is
   begin
     insert into asu_spis_dok(select * from table(tab)); -- добавляем в документ оригинальные строки с минусом
   end;
 
 
+/*******************************************************************************************/  
   member procedure store_out_spread_recs# is
   begin
     insert into asu_spis_dok(select * from table(tab_out));
   end;
+
+
+/*******************************************************************************************/  
   
 
 end;

@@ -12,6 +12,7 @@ create or replace force type class_spis_spread# force under class_spis_spread
   overriding member function get_flg_spreadable#(in_dok_id number) return varchar2,
   overriding member procedure load_dok#(in_dok_id number),
   overriding member procedure more_attr_set_num#(in_key number, in_val number),
+  overriding member procedure more_attr_set_all#(in_key number, in_num number, in_txt varchar2, in_dat date),
   overriding member procedure store_in_minus_recs#,
   overriding member procedure store_out_spread_recs#
 
@@ -52,6 +53,11 @@ create or replace type body class_spis_spread# is
     null;
   end;
   
+  overriding member procedure more_attr_set_all#(in_key number, in_num number, in_txt varchar2, in_dat date) is
+  begin
+    dbms_output.put_line('more_attr_set_all#('||in_key||','||in_num||','||in_txt||','||in_dat||')');
+  end;
+
   
   overriding member procedure store_in_minus_recs# is
   begin
