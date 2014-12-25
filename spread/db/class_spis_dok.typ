@@ -1,4 +1,4 @@
-create or replace force type class_spis_dok force as object
+create or replace type class_spis_dok force as object
 (
   -- Author  : Администратор
   -- Created : 21.12.2014 19:27:52

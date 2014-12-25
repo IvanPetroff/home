@@ -1,4 +1,4 @@
-create or replace force type class_spis_spread# force under class_spis_spread
+create or replace type class_spis_spread# force under class_spis_spread
 (
   -- Author  : Администратор
   -- Created : 22.12.2014 21:11:45
