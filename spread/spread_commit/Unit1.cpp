@@ -41,9 +41,13 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
+    OraQuery1->Close();
+    OraQuery2->Close();
     OraQuery1->ParamByName("1")->AsString = Edit1->Text;
+    OraQuery2->ParamByName("1")->AsString = Edit1->Text;
     OraQuery1->Open();
-    
+    OraQuery2->Open();
+
 
 }
 //---------------------------------------------------------------------------
