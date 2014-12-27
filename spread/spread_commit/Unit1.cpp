@@ -42,6 +42,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
     std::auto_ptr<TOraQuery> Q(new TOraQuery(0));
     Q->SQL->Text = "ALTER SESSION SET NLS_NUMERIC_CHARACTERS='.,'";
     Q->ExecSQL();
+    RB_Norma->Checked = true;
+    CurrentState = "N";
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button1Click(TObject *Sender)
@@ -64,7 +66,7 @@ void __fastcall TForm1::Button1Click(TObject *Sender)
 
     sFactMy = sFact;
 
-    RB_NormaClick(0);
+    ShowPrc();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Button2Click(TObject *Sender)
@@ -136,21 +138,58 @@ AnsiString __fastcall TForm1::GetXML()
     XML("ROWSET") {
         for (FraPrcFact1->DS->First(); !FraPrcFact1->DS->Eof; FraPrcFact1->DS->Next()) {
             XML("ROW") {
-                XML("UCH") XML.val = FraPrcFact1->DS->FieldByName("uch")->AsString;
-                XML("UNIZAK") XML.val = FraPrcFact1->DS->FieldByName("unizak")->AsString;
-                XML("PRC") XML.val = FraPrcFact1->DS->FieldByName("prc")->AsString;
+                XML("UCH") XML.val = FraPrcFact1->DS->FieldByName("uch")->AsString.Trim();
+                XML("UNIZAK") XML.val = FraPrcFact1->DS->FieldByName("unizak")->AsString.Trim();
+                XML("PRC") XML.val = FraPrcFact1->DS->FieldByName("prc")->AsString.Trim();
             }
         }
     }
     return xmlString;
 }
 
+
+AnsiString __fastcall TForm1::Check100prc()
+{
+    map<AnsiString,Currency> m;
+
+    for (FraPrcFact1->DS->First(); !FraPrcFact1->DS->Eof; FraPrcFact1->DS->Next()) {
+        AnsiString sUch = FraPrcFact1->DS->FieldByName("uch")->AsString.Trim();
+        Currency d = m[sUch];
+        d = d + FraPrcFact1->DS->FieldByName("prc")->AsCurrency;
+        if (d>100) {
+//            return "Превышение 100 процентов по участку [" + sUch + "] на "+String(d-100) + "%";
+        }
+        m[sUch] = d;
+    }
+    for (map<AnsiString,Currency>::iterator it=m.begin(); it!=m.end(); it++) {
+        if (it->second > 100) {
+            return "Превышение 100 процентов по участку [" + it->first + "] на "+String(it->second-100) + "%";
+        }
+        if (it->second < 100) {
+            return "Недостаток процентов по участку [" + it->first + "] на "+String(it->second-100) + "%";
+        }
+    }
+    return "";
+}
+
 void __fastcall TForm1::RB_NormaClick(TObject *Sender)
 {
-    AnsiString S = "";
-    if (RB_Norma->Checked) S = sNorma;
-    if (RB_Fact->Checked) S = sFact;
+    if (CurrentState=="N" && RB_Norma->Checked) return;
+    if (CurrentState=="F" && RB_Fact->Checked) return;
+    Timer1->Enabled = true;
+}
 
+void __fastcall TForm1::ShowPrc()
+{
+    AnsiString S = "";
+    if (RB_Norma->Checked) {
+        S = sNorma;
+        FraPrcFact1->DBGridEh1->Color = RGB(255,240,240);
+    }
+    if (RB_Fact->Checked) {
+        S = sFact;
+        FraPrcFact1->DBGridEh1->Color = RGB(240,255,240);
+    }
     FraPrcFact1->DS->Close();
     FraSZ1->DS->Close();
     FraPrcFact1->DS->ParamByName("x")->AsMemo = S;
@@ -158,8 +197,48 @@ void __fastcall TForm1::RB_NormaClick(TObject *Sender)
     FraSZ1->DS->ParamByName("1")->AsString = Edit1->Text;
     FraPrcFact1->DS->Open();
     FraSZ1->DS->Open();
-
-    sFact = GetXML();
 }
 
+
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Timer1Timer(TObject *Sender)
+{
+    Timer1->Enabled = false;
+    if (RB_Norma->Checked) {
+        if (CurrentState=="F") {
+            AnsiString err = Check100prc();
+            if (!err.IsEmpty()) {
+//                throw Exception(err);
+                ShowMessage(err);
+                RB_Norma->Checked = false;
+                RB_Fact->Checked = true;
+                return;
+            }
+            sFact = GetXML();
+        }
+        CurrentState = "N";
+        FraPrcFact1->DBGridEh1->ReadOnly = true;
+    }
+    if (RB_Fact->Checked) {
+        CurrentState = "F";
+        FraPrcFact1->DBGridEh1->ReadOnly = false;
+    }
+
+    ShowPrc();
+}
+//---------------------------------------------------------------------------
+void __fastcall TForm1::SpeedButton1Click(TObject *Sender)
+{
+    if (CurrentState=="F") {
+        AnsiString err = Check100prc();
+        if (!err.IsEmpty()) {
+            ShowMessage(err);
+            return;
+        }
+        sFact = GetXML();
+    }
+
+    ShowPrc();
+}
 //---------------------------------------------------------------------------

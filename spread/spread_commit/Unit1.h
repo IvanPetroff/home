@@ -38,13 +38,21 @@ __published:	// IDE-managed Components
         TSpeedButton *SpeedButton1;
         TRadioButton *RB_Norma;
         TRadioButton *RB_Fact;
+        TTimer *Timer1;
+        TSpeedButton *SpeedButton2;
         void __fastcall Button1Click(TObject *Sender);
         void __fastcall Button2Click(TObject *Sender);
         void __fastcall RB_NormaClick(TObject *Sender);
+        void __fastcall Timer1Timer(TObject *Sender);
+        void __fastcall SpeedButton1Click(TObject *Sender);
 private:	// User declarations
     AnsiString sFact;
     AnsiString sNorma;
     AnsiString sFactMy;
+    AnsiString CurrentState;
+    AnsiString __fastcall Check100prc();
+    void __fastcall ShowPrc();
+
 public:		// User declarations
         __fastcall TForm1(TComponent* Owner);
         AnsiString __fastcall GetXML();

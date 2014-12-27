@@ -42,6 +42,14 @@ object Form1: TForm1
       Width = 89
       Height = 22
       Caption = 'Пересчитать'
+      OnClick = SpeedButton1Click
+    end
+    object SpeedButton2: TSpeedButton
+      Left = 464
+      Top = 8
+      Width = 89
+      Height = 22
+      Caption = 'Обновить'
     end
     object GroupBox3: TGroupBox
       Left = 1
@@ -304,5 +312,12 @@ object Form1: TForm1
         DataType = ftUnknown
         Name = '1'
       end>
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 1
+    OnTimer = Timer1Timer
+    Left = 328
+    Top = 32
   end
 end
