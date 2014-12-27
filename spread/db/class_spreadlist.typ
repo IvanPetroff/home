@@ -3,13 +3,13 @@ create or replace force type class_spreadlist force as object
   -- Author  : јдминистратор
   -- Created : 23.12.2014 12:36:05
   -- Purpose : 
-  id number,
-  spis_count number,
-  ceh number,
+  id number, -- регистрационный номер служебной записки
+  spis_count number, -- число позиций списани€ включЄнных в служебную записку
+  ceh number, -- номер цеха, сформировавший служебную записку
   
   
   -- Attributes
-  constructor function class_spreadlist(in_id number:=null, in_d_beg date := null, in_d_end date := null) return self as result,
+  constructor function class_spreadlist(in_id number := null) return self as result,
   member procedure ClearList,
 
   member procedure more_attr_set_num#(in_cat varchar2, in_name_attr varchar2, in_key number, in_val number),
@@ -22,7 +22,9 @@ create or replace force type class_spreadlist force as object
   member procedure FixListNorma(in_ListID number),
   static function get_prc_trud#(in_type varchar2, in_ceh varchar2, in_d_beg date, in_d_end date) return xmltype,  
   static function load_prc_trud#(in_type varchar2, in_ListID number) return xmltype,
-  member procedure store_prc_trud#( in_type varchar2, x xmltype)
+  member procedure store_prc_trud#( in_type varchar2, x xmltype),
+  member function getSpreadList(x xmltype := null) return xmltype
+  
   
   
   
@@ -34,24 +36,21 @@ not final;
 create or replace type body class_spreadlist is
   
   -- Member procedures and functions
-  constructor function class_spreadlist(in_id number:=null, in_d_beg date := null, in_d_end date := null) return self as result is
+  constructor function class_spreadlist(in_id number := null) return self as result is
+  tmp_ceh varchar2(8);
   begin
     if in_id is not null then
-        select count(distinct s.id), max(substr(s.skl,1,instr(s.skl,'.')-1)) 
-        into spis_count, ceh
+        select count(distinct s.id), max(s.skl)
+        into spis_count, tmp_ceh
         from asu_spis_dok s, asu_more_attr m 
         where s.id=m.key and m.val_num=in_id and m.cat='SPIS_DOK' and m.name_attr='SPREAD';
         id := in_id;
+        ceh := substr(tmp_ceh,1,instr(tmp_ceh,'.')-1);
         return;
     end if;
-    if in_d_beg is not null and in_d_end is not null then
-        id := CreateList( in_d_beg, in_d_end);
-        null;
-        return;
-    end if;
-    raise_application_error(-20001, 'Ќе указаны об€зательные параметры!');
     return;
   end;
+
   
   member procedure ClearList is
   begin
@@ -149,28 +148,28 @@ create or replace type body class_spreadlist is
     flg_found_recs boolean := false;
   begin
     ceh := coalesce(get_env_var(user,'CEH'),get_env_var(user,'OTDEL'));
+    self.id := null;
     -- перебираем все списани€, удовлетвор€ющие критери€м и помеченные как "к распределению"
     for Cur in (select s.id from asu_spis_dok s, asu_more_attr m 
       where s.id=m.key and m.cat='SPIS_DOK' and name_attr='SPREAD' and val_num=-1
       and s.d_ceh>=in_d_beg and s.d_ceh <= in_d_end and s.skl like self.ceh||'.%'
-    ) loop
-      if self.id is null then
-        self.id := get_ListID#();
-      end if;
-      more_attr_set_num#('SPIS_DOK', 'SPREAD', Cur.id, self.id); -- запоминаем номер служебки
-      self.more_attr_set_dat#('SPREAD', Cur.id, ListDate); -- запоминаем дату служебки
-      flg_found_recs := true;
-      null;
+    ) 
+    loop
+        if self.id is null then
+          self.id := get_ListID#();
+        end if;
+        more_attr_set_num#('SPIS_DOK', 'SPREAD', Cur.id, self.id); -- запоминаем номер служебки
+        self.more_attr_set_dat#('SPREAD', Cur.id, ListDate); -- запоминаем дату служебки
+        flg_found_recs := true;
     end loop;
     if flg_found_recs=false then
-      raise_application_error(-20001, 'Ќе найдено записей дл€ формировани€ служебной записки!');
+        raise_application_error(-20001, 'Ќе найдено записей дл€ формировани€ служебной записки!');
     end if;
     
     -- в море атрибутов запоминаем текущий список распределени€ трудоЄмкости
     store_prc_trud#( 'N', class_spreadlist.get_prc_trud#('N', self.ceh, in_d_beg, in_d_end));
     store_prc_trud#( 'F', class_spreadlist.get_prc_trud#('F', self.ceh, in_d_beg, in_d_end));
 
-    null;
     return self.id;
   end;
   
@@ -180,6 +179,38 @@ create or replace type body class_spreadlist is
     null;
   end;
   
+  member function getSpreadList(x xmltype := null) return xmltype is
+    x_out xmltype;
+    x_in xmltype;
+  begin
+    x_in := nvl( x, class_spreadlist.load_prc_trud#('F', self.id));
+    select XMLtype(cursor(
+                            select 
+                              t.kod, 
+                              (select naim from asu_slo_mt where m_kod=t.kod) naim,
+                              t.r_sort, 
+                              t.unizak, 
+                              (select pzak from asu_zagzak where unizak=t.unizak) pzak, 
+                              (select izd from asu_zagzak where unizak=t.unizak) izd, 
+                              sum(t.kol) kol, 
+                              sum(t.kol)*t.cena kol_cena
+                            from (
+                            select s.kod, s.r_sort, m2.unizak unizak, s.kol*s.kol_mat*m2.prc/100 kol, s.cena
+                            from asu_more_attr m1, (select extractvalue(column_value,'/ROW/UCH') uch
+                                  ,extractvalue(column_value,'/ROW/UNIZAK') unizak
+                                  ,extractvalue(column_value,'/ROW/PRC') prc
+                            from table(xmlsequence(x_in.extract('/ROWSET/ROW')))
+                            ) m2, asu_spis_dok s
+                            where s.id=m1.key
+                            and m1.cat='SPIS_DOK' and m1.name_attr='SPREAD' and m1.val_num=self.id
+                            and nvl(m1.val_txt,'-')=nvl(m2.uch,'-')
+                            ) t
+                            group by kod,unizak, cena, r_sort    
+                         )
+                   ) 
+    into x_out from dual;
+    return x_out;
+  end;
   
 end;
 /

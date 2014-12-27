@@ -156,7 +156,11 @@ object Form1: TForm1
           item
             EditButtons = <>
             FieldName = 'PRC'
-            Footers = <>
+            Footers = <
+              item
+                FieldName = 'PRC'
+                ValueType = fvtSum
+              end>
             KeyList.Strings = ()
             MRUList.Items.Strings = ()
             PickList.Strings = ()
@@ -275,14 +279,14 @@ object Form1: TForm1
         ParamData = <
           item
             DataType = ftString
-            Name = 'x'
+            Name = '1'
             Value = 
               '<ROWSET><ROW><UNIZAK>123</UNIZAK><UCH>456</UCH><PRC>789</PRC></R' +
               'OW></ROWSET>'
           end
           item
             DataType = ftString
-            Name = '1'
+            Name = 'x'
             Value = 
               '<ROWSET><ROW><UNIZAK>123</UNIZAK><UCH>456</UCH><PRC>789</PRC></R' +
               'OW></ROWSET>'
