@@ -63,7 +63,7 @@ object Form1: TForm1
         Left = 8
         Top = 16
         Width = 121
-        Height = 25
+        Height = 21
         TabOrder = 0
         Text = '8223593'
       end
@@ -71,7 +71,7 @@ object Form1: TForm1
         Left = 134
         Top = 16
         Width = 75
-        Height = 25
+        Height = 22
         Caption = 'Открыть'
         TabOrder = 1
         OnClick = Button1Click
@@ -124,6 +124,7 @@ object Form1: TForm1
             MRUList.Items.Strings = ()
             PickList.Strings = ()
             Title.Caption = 'Участок'
+            Width = 49
           end
           item
             EditButtons = <>
@@ -132,7 +133,7 @@ object Form1: TForm1
             KeyList.Strings = ()
             MRUList.Items.Strings = ()
             PickList.Strings = ()
-            Width = 65
+            Width = 44
           end
           item
             EditButtons = <>
@@ -142,7 +143,7 @@ object Form1: TForm1
             MRUList.Items.Strings = ()
             PickList.Strings = ()
             Title.Caption = 'Заказ'
-            Width = 66
+            Width = 45
           end
           item
             EditButtons = <>
@@ -152,6 +153,7 @@ object Form1: TForm1
             MRUList.Items.Strings = ()
             PickList.Strings = ()
             Title.Caption = 'Изделие'
+            Width = 150
           end
           item
             EditButtons = <>

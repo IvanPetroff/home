@@ -1,4 +1,4 @@
-create or replace force type class_spreadlist force as object
+create or replace type class_spreadlist force under c_spreadlist
 (
   -- Author  : Администратор
   -- Created : 23.12.2014 12:36:05
@@ -18,12 +18,16 @@ create or replace force type class_spreadlist force as object
   member function get_ListID# return number,
   member procedure more_attr_set_prc_trud#( in_type varchar2, in_uch varchar2, in_ListID number, in_Unizak number, in_prc number),
 
-  member function CreateList(self in out class_spreadlist, in_d_beg date, in_d_end date) return number,
+  overriding member function CreateList(self in out class_spreadlist, in_d_beg date, in_d_end date) return number,
   member procedure FixListNorma(in_ListID number),
   static function get_prc_trud#(in_type varchar2, in_ceh varchar2, in_d_beg date, in_d_end date) return xmltype,  
-  static function load_prc_trud#(in_type varchar2, in_ListID number) return xmltype,
+  overriding member function load_prc_trud#(in_type varchar2) return xmltype,
   member procedure store_prc_trud#( in_type varchar2, x xmltype),
-  member function getSpreadList(x xmltype := null) return xmltype
+  overriding member function getSpreadList(x xmltype := null) return xmltype,
+  member procedure SpreadSpisDoks(x xmltype),
+  overriding member function getListOfList return xmltype
+  
+  
   
   
   
@@ -126,7 +130,7 @@ create or replace type body class_spreadlist is
     null;
   end;
 
-  static function load_prc_trud#(in_type varchar2, in_ListID number) return xmltype is
+  overriding member function load_prc_trud#(in_type varchar2) return xmltype is
     x xmltype;
   begin
     select XMLtype(cursor(select 
@@ -134,7 +138,7 @@ create or replace type body class_spreadlist is
                             trim(substr(m.name_attr, 1, instr(m.name_attr,';')-1) ) uch,
                           m.val_num prc
                           from asu_more_attr m
-                          where m.cat='PRC_TR'||'_'||in_type and m.key=in_ListID
+                          where m.cat='PRC_TR'||'_'||in_type and m.key=self.id
                           )) 
     into x from dual;
 
@@ -143,7 +147,7 @@ create or replace type body class_spreadlist is
   end;
 
 /*****************************************************************************************/
-  member function CreateList(self in out class_spreadlist, in_d_beg date, in_d_end date) return number is
+  overriding member function CreateList(self in out class_spreadlist, in_d_beg date, in_d_end date) return number is
     ListDate date          := sysdate;
     flg_found_recs boolean := false;
   begin
@@ -179,11 +183,18 @@ create or replace type body class_spreadlist is
     null;
   end;
   
-  member function getSpreadList(x xmltype := null) return xmltype is
+  member procedure SpreadSpisDoks(x xmltype) is
+  begin
+    
+    
+    null;
+  end;
+
+  overriding member function getSpreadList(x xmltype := null) return xmltype is
     x_out xmltype;
     x_in xmltype;
   begin
-    x_in := nvl( x, class_spreadlist.load_prc_trud#('F', self.id));
+    x_in := nvl( x, load_prc_trud#('F'));
     select XMLtype(cursor(
                             select 
                               t.kod, 
@@ -192,10 +203,12 @@ create or replace type body class_spreadlist is
                               t.unizak, 
                               (select pzak from asu_zagzak where unizak=t.unizak) pzak, 
                               (select izd from asu_zagzak where unizak=t.unizak) izd, 
-                              sum(t.kol) kol, 
-                              sum(t.kol)*t.cena kol_cena
+                              t.kol, 
+                              t.cena,
+                              t.id,
+                              t.dok_id
                             from (
-                            select s.kod, s.r_sort, m2.unizak unizak, s.kol*s.kol_mat*m2.prc/100 kol, s.cena
+                            select s.kod, s.r_sort, m2.unizak unizak, s.kol*s.kol_mat*m2.prc/100 kol, s.cena, s.id, s.dok_id
                             from asu_more_attr m1, (select extractvalue(column_value,'/ROW/UCH') uch
                                   ,extractvalue(column_value,'/ROW/UNIZAK') unizak
                                   ,extractvalue(column_value,'/ROW/PRC') prc
@@ -205,12 +218,33 @@ create or replace type body class_spreadlist is
                             and m1.cat='SPIS_DOK' and m1.name_attr='SPREAD' and m1.val_num=self.id
                             and nvl(m1.val_txt,'-')=nvl(m2.uch,'-')
                             ) t
-                            group by kod,unizak, cena, r_sort    
                          )
                    ) 
     into x_out from dual;
     return x_out;
   end;
+  
+  overriding member function getListOfList return xmltype is
+    my_ceh varchar2(8);
+    x xmltype;
+  begin
+    my_ceh := coalesce(get_env_var(user,'CEH'),get_env_var(user,'OTDEL'));
+my_ceh := '62';
+    
+    select XMLtype(cursor(
+                           select distinct s.dok_id 
+                           from asu_spis_dok s, asu_more_attr m 
+                           where m.cat='SPIS_DOK' and m.name_attr='SPREAD' and s.id=m.key and s.skl like my_ceh||'.%'
+                         )
+                  )
+    into x
+    from dual;
+    return x;
+    exception when others then
+        x := xmltype.createxml('<ROWSET><ROW><DOK_ID></DOK_ID></ROW></ROWSET>');
+        return x;
+  end;
+  
   
 end;
 /

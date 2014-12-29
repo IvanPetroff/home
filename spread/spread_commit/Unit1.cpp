@@ -49,7 +49,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
 void __fastcall TForm1::Button1Click(TObject *Sender)
 {
     std::auto_ptr<TOraQuery> Q(new TOraQuery(0));
-    Q->SQL->Text = "select class_spreadlist.load_prc_trud#(:flg,:1).getstringval() x from dual";
+//    Q->SQL->Text = "select class_spreadlist.load_prc_trud#(:flg,:1).getstringval() x from dual";
+    Q->SQL->Text = "select c_spreadlist.create_obj(:1).load_prc_trud#(:flg).getstringval() x from dual";
     Q->Prepare();
 
     Q->Close();

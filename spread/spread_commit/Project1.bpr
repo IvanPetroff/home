@@ -5,13 +5,13 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="Project1.exe"/>
     <OBJFILES value="Project1.obj Unit1.obj TFraBase.obj TFraSZ.obj TFraPrcFact.obj 
-      TFraFactNew.obj"/>
+      TFraFactNew.obj Unit2.obj"/>
     <RESFILES value="Project1.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Unit1.dfm TFraBase.dfm TFraSZ.dfm TFraPrcFact.dfm 
-      TFraFactNew.dfm"/>
+      TFraFactNew.dfm Unit2.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value=""/>
     <SPARELIBS value="Vcl50.lib Vcldb50.lib DAC50.lib ODAC50.lib VCLBDE50.lib EHLIBB50.lib"/>
