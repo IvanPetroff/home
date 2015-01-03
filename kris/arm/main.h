@@ -3,6 +3,7 @@
 #define MainH
 //----------------------------------------------------------------------------
 #include "ChildWin.h"
+#include "TF_SprQuestion.h"
 #include <vcl\ComCtrls.hpp>
 #include <vcl\ExtCtrls.hpp>
 #include <vcl\Messages.hpp>
@@ -21,6 +22,10 @@
 #include <ImgList.hpp>
 #include <StdActns.hpp>
 #include <ToolWin.hpp>
+#include "DBAccess.hpp"
+#include "OdacVcl.hpp"
+#include "Ora.hpp"
+#include <Db.hpp>
 //----------------------------------------------------------------------------
 class TMainForm : public TForm
 {
@@ -77,10 +82,14 @@ __published:
         TToolButton *ToolButton10;
         TToolButton *ToolButton11;
         TImageList *ImageList1;
+    TOraSession *db;
+    TConnectDialog *ConnectDialog1;
         void __fastcall FileNew1Execute(TObject *Sender);
         void __fastcall FileOpen1Execute(TObject *Sender);
         void __fastcall HelpAbout1Execute(TObject *Sender);
         void __fastcall FileExit1Execute(TObject *Sender);
+    void __fastcall dbAfterConnect(TObject *Sender);
+    void __fastcall dbBeforeConnect(TObject *Sender);
 private:
 	void __fastcall CreateMDIChild(const String Name);
 public:

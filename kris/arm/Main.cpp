@@ -5,6 +5,9 @@
 #include "Main.h"
 #include "About.h"
 //---------------------------------------------------------------------------
+#pragma link "DBAccess"
+#pragma link "OdacVcl"
+#pragma link "Ora"
 #pragma resource "*.dfm"
 TMainForm *MainForm;
 //---------------------------------------------------------------------------
@@ -17,6 +20,8 @@ __fastcall TMainForm::TMainForm(TComponent *Owner)
 
 void __fastcall TMainForm::CreateMDIChild(String Name)
 {
+    TF_SprQuestion* F = new TF_SprQuestion(Application);
+return;
 	TMDIChild *Child;
 
 	//--- create a new MDI child window ----
@@ -49,6 +54,19 @@ void __fastcall TMainForm::HelpAbout1Execute(TObject *Sender)
 void __fastcall TMainForm::FileExit1Execute(TObject *Sender)
 {
 	Close();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::dbAfterConnect(TObject *Sender)
+{
+    db->ExecSQL( "alter session set nls_numeric_characters='.,'", 0, 0);
+}
+//---------------------------------------------------------------------------
+
+
+void __fastcall TMainForm::dbBeforeConnect(TObject *Sender)
+{
+    db->Password = "qwerty";    
 }
 //---------------------------------------------------------------------------
 
