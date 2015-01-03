@@ -20,7 +20,8 @@ __fastcall TMainForm::TMainForm(TComponent *Owner)
 
 void __fastcall TMainForm::CreateMDIChild(String Name)
 {
-    TF_SprQuestion* F = new TF_SprQuestion(Application);
+    TF_Report* F = new TF_Report(Application);
+//    TF_SprQuestion* F = new TF_SprQuestion(Application);
 return;
 	TMDIChild *Child;
 

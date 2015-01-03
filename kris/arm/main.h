@@ -4,6 +4,7 @@
 //----------------------------------------------------------------------------
 #include "ChildWin.h"
 #include "TF_SprQuestion.h"
+#include "TF_Report.h"
 #include <vcl\ComCtrls.hpp>
 #include <vcl\ExtCtrls.hpp>
 #include <vcl\Messages.hpp>
