@@ -22,13 +22,14 @@
 class TF_Report : public TF_MDI
 {
 __published:	// IDE-managed Components
-    TQuickRep *QuickRep1;
     TOraQuery *OraQuery1;
     TOraDataSource *OraDataSource1;
     TDBGridEh *DBGridEh1;
+    TButton *Button1;
+    TPanel *Panel1;
+    TQuickRep *QuickRep1;
     TQRBand *QRBand1;
     TQRDBText *QRDBText1;
-    TButton *Button1;
     void __fastcall Button1Click(TObject *Sender);
 private:	// User declarations
 public:		// User declarations

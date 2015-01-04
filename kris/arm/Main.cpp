@@ -20,9 +20,6 @@ __fastcall TMainForm::TMainForm(TComponent *Owner)
 
 void __fastcall TMainForm::CreateMDIChild(String Name)
 {
-    TF_Report* F = new TF_Report(Application);
-//    TF_SprQuestion* F = new TF_SprQuestion(Application);
-return;
 	TMDIChild *Child;
 
 	//--- create a new MDI child window ----
@@ -67,7 +64,20 @@ void __fastcall TMainForm::dbAfterConnect(TObject *Sender)
 
 void __fastcall TMainForm::dbBeforeConnect(TObject *Sender)
 {
-    db->Password = "qwerty";    
+    db->Password = "qwerty";
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::print1Click(TObject *Sender)
+{
+    TF_Report* F = new TF_Report(Application);
+
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMainForm::SprQuestion1Click(TObject *Sender)
+{
+    TF_SprQuestion* F = new TF_SprQuestion(Application);
 }
 //---------------------------------------------------------------------------
 

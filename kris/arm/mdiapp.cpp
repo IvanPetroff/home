@@ -16,7 +16,6 @@ WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	Application->Initialize();
 	Application->CreateForm(__classid(TMainForm), &MainForm);
          Application->CreateForm(__classid(TAboutBox), &AboutBox);
-         Application->CreateForm(__classid(TF_Report), &F_Report);
          Application->Run();
 
 	return 0;

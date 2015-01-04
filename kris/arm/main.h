@@ -85,12 +85,17 @@ __published:
         TImageList *ImageList1;
     TOraSession *db;
     TConnectDialog *ConnectDialog1;
+    TMenuItem *test1;
+    TMenuItem *print1;
+    TMenuItem *SprQuestion1;
         void __fastcall FileNew1Execute(TObject *Sender);
         void __fastcall FileOpen1Execute(TObject *Sender);
         void __fastcall HelpAbout1Execute(TObject *Sender);
         void __fastcall FileExit1Execute(TObject *Sender);
     void __fastcall dbAfterConnect(TObject *Sender);
     void __fastcall dbBeforeConnect(TObject *Sender);
+    void __fastcall print1Click(TObject *Sender);
+    void __fastcall SprQuestion1Click(TObject *Sender);
 private:
 	void __fastcall CreateMDIChild(const String Name);
 public:
