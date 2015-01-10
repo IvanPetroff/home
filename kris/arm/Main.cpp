@@ -64,7 +64,7 @@ void __fastcall TMainForm::dbAfterConnect(TObject *Sender)
 
 void __fastcall TMainForm::dbBeforeConnect(TObject *Sender)
 {
-    db->Password = "qwerty";
+    db->Password = "adm";
 }
 //---------------------------------------------------------------------------
 

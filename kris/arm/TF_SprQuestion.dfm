@@ -72,24 +72,24 @@ inherited F_SprQuestion: TF_SprQuestion
     SQLInsert.Strings = (
       'begin'
       
-        '  insert into asu_spr_question(name,label,ord) values(:name,:lab' +
+        '  insert into syn_spr_question(name,label,ord) values(:name,:lab' +
         'el,:ord) returning name,label,ord,id,usr,dat into :name, :label,' +
         ' :ord, :id, :usr, :dat;'
       'end;')
     SQLDelete.Strings = (
       'begin'
-      '  delete asu_spr_question where id=:old_id;'
+      '  delete syn_spr_question where id=:old_id;'
       'end;')
     SQLUpdate.Strings = (
       'begin'
-      '  update asu_spr_question set name=:name, label=:label, ord=:ord'
+      '  update syn_spr_question set name=:name, label=:label, ord=:ord'
       '  where id=:old_id'
       
         '  returning name,label,ord,id,usr,dat into :name, :label, :ord, ' +
         ':id, :usr, :dat;'
       'end;')
     SQL.Strings = (
-      'select * from asu_spr_question')
+      'select * from syn_spr_question')
     Options.ReturnParams = True
     Active = True
     Left = 40

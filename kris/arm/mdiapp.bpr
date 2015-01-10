@@ -5,13 +5,13 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="Mdiapp.exe"/>
     <OBJFILES value="mdiapp.obj Main.obj ChildWin.obj about.obj TF_Base.obj TF_MDI.obj 
-      TF_SprQuestion.obj TF_Report.obj"/>
+      TF_SprQuestion.obj TF_Report.obj TF_Person.obj TF_PersonList.obj"/>
     <RESFILES value="mdiapp.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value=""/>
     <RESDEPEN value="$(RESFILES) Main.dfm ChildWin.dfm about.dfm TF_Base.dfm TF_MDI.dfm 
-      TF_SprQuestion.dfm TF_Report.dfm"/>
+      TF_SprQuestion.dfm TF_Report.dfm TF_Person.dfm TF_PersonList.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="Qrpt50.lib EHLIBB50.lib VCLBDE50.lib ODAC50.lib DAC50.lib Vcldb50.lib"/>
     <SPARELIBS value="Vcl50.lib Vcldb50.lib DAC50.lib ODAC50.lib VCLBDE50.lib EHLIBB50.lib 
